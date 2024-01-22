@@ -1,7 +1,7 @@
 {
-    "appId": "app",
+    "appId": "autoatendimento",
     "asar": true,
-    "productName": "app",
+    "productName": "autoatendimento",
     "directories": {
         "buildResources": "assets",
         "output": "release/${version}"
