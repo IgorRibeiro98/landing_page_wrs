@@ -1,11 +1,11 @@
 <template>
   <v-app>
-    <v-main>
+    <v-layout class="rounded rounded-md">
       <router-view />
-    </v-main>
+    </v-layout>
   </v-app>
 </template>
 
 <script lang="ts" setup>
-  //
+//
 </script>

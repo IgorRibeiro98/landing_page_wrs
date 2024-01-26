@@ -1,7 +1,7 @@
 <template>
-    <div style="height:100vh;width: 100%;overflow: auto;">
+    <v-container class="fill" fluid>
         <router-view />
-    </div>
+    </v-container>
 </template>
 
 <script lang="ts" setup>

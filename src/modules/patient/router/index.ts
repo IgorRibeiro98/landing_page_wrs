@@ -3,13 +3,13 @@ import { layouts } from '@/router'
 
 const routes: RouteRecordRaw[] = [
     {
-        path: '/',
-        component: () => layouts.default(),
+        path: '/fluxo-paciente',
+        component: () => layouts.totem(),
         children: [
             {
                 path: '',
                 name: 'Home',
-                component: () => import('@/modules/default/views/Index.vue')
+                component: () => import('@patient/views/Flow.vue')
             }
         ],
     }

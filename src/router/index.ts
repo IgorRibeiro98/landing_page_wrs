@@ -9,6 +9,7 @@ import { RouteRecordRaw, createRouter, createWebHashHistory } from 'vue-router'
 
 export const layouts = {
   default: () => import('@/layouts/Default.vue'),
+  totem: () => import('@/layouts/Totem.vue'),
 }
 
 const routes: RouteRecordRaw[] = []

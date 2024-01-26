@@ -15,7 +15,9 @@
     "noEmit": true,
     "outDir": "electron/dist",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@patient/*": ["src/modules/patient/*"],
+      "@admin/*": ["src/modules/admin/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
