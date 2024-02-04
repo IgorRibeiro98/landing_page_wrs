@@ -1,37 +1,46 @@
 <template>
     <div class="d-flex align-center fill">
         <v-row justify="center" no-gutters>
-            <v-col cols="12" class="d-flex justify-center">
-                <div>
-                    <v-img :src="state.logo" width="150"> </v-img>
-                </div>
+            <v-col cols="3" class="d-flex justify-center align-center">
+                <v-img :src="state.logo" height="200"> </v-img>
             </v-col>
 
-            <v-col cols="12" class="">
+            <v-col cols="7">
                 <p class="text-body-1 text-secondary-1 d-flex justify-center mx-3 my-10">
-                    Olá! Para começar clique no botão abaixo
+                    {{ greeting }}, Inicie seu atendimento clicando no botão abaixo.
                 </p>
+                <hexagonal-btn color="primary" size="x-large" class="w-100" height="5em" @click="emit('next', null)">
+                    <span :class="mobile ? 'text-h4' : 'text-h3'" class="font-weight-bold mb-2">Começar</span>
+                </hexagonal-btn>
             </v-col>
 
-            <v-col cols="8" class="mr-4">
-                <v-btn color="primary" rounded size="x-large" class="w-100" height="7em" @click="emit('next', null)">
-                    <span :class="mobile ? 'text-h5' : 'text-h3'" class="font-weight-bold mb-2">Iniciar atendimento</span>
-                </v-btn>
-            </v-col>
         </v-row>
     </div>
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue';
 import { useDisplay } from 'vuetify';
 import { storeToRefs } from 'pinia'
 
 import useSystemStore from '@/stores/system'
 
-const { state } = storeToRefs(useSystemStore())
+const { state } = storeToRefs<any>(useSystemStore())
 
 const { mobile } = useDisplay();
 
 const emit = defineEmits(['update:modelValue', 'next']);
+
+const greeting = computed(() => {
+    const hour = new Date().getHours();
+
+    if (hour >= 0 && hour < 12) {
+        return 'Bom dia';
+    } else if (hour >= 12 && hour < 18) {
+        return 'Boa tarde';
+    } else {
+        return 'Boa noite';
+    }
+});
 
 </script>

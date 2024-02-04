@@ -3,7 +3,7 @@ import { ref } from "vue";
 
 import logo from '@/assets/logo.png'
 
-export default defineStore('system', () => {
+export default defineStore('system', (): any => {
     const state = ref({
         logo
     })

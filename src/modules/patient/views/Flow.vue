@@ -6,13 +6,13 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn @click="componentIndex = 0">
+        <v-btn @click="firstStep">
             Cancelar
         </v-btn>
     </v-app-bar>
 
     <v-layout class="fill">
-        <component v-model="data" :is="components[component]" @next="nextView" @to="redirect" @start="componentIndex = 0" />
+        <component v-model="data" :is="components[component]" @next="nextView" @to="redirect" @start="firstStep" />
     </v-layout>
 </template>
 
@@ -38,8 +38,16 @@ interface Component {
 
 const components: Component = {}
 
+const defaultData = {
+    identifier: '',
+    patient: {
+        cd_pessoa_fisica: '',
+        nm_pessoa_fisica: '',
+    }
+}
+
 const data = ref({
-    cpf: '',
+    ...defaultData
 })
 
 const totem = {
@@ -51,6 +59,14 @@ const totem = {
         {
             name: 'Identificação Paciente',
             component: 'Identifier'
+        },
+        {
+            name: 'Nascimento',
+            component: 'Birth'
+        },
+        {
+            name: 'Cardápio',
+            component: 'Menu'
         }
     ]
 }
@@ -74,10 +90,17 @@ for (const path in modules) {
         components[`${componentRegexName[0]}`] = modules[path].default;
 }
 
+function firstStep(): void {
+    componentIndex.value = 0;
+    data.value = { ...defaultData };
+
+}
+
 function nextView(): void {
     componentIndex.value++;
 
-    if (componentIndex.value == totem.screens.length) componentIndex.value = 0;
+    if (componentIndex.value == totem.screens.length) firstStep()
+
 }
 
 function redirect(to: string): void {

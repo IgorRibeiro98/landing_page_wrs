@@ -17,10 +17,15 @@ import { createVuetify } from 'vuetify'
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
   aliases: {
-    KeyboardBtn: components.VBtn
+    KeyboardBtn: components.VBtn,
+    HexagonalBtn: components.VBtn
   },
   defaults: {
     KeyboardBtn: { variant: 'outlined', style: 'font-size: 1.2rem; text-transform: unset !important' },
+    HexagonalBtn: {
+      color: 'primary',
+      style: 'clip-path: polygon(25% -30%, 80% -30%, 91% 50%, 79% 140%, 23% 120%, 12% 50%);'
+    }
   },
   display: {
     mobileBreakpoint: 'md'

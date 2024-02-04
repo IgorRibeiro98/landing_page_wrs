@@ -9,6 +9,7 @@
                 </v-chip-group>
             </v-col>
         </v-row>
+
         <v-row dense class="mt-1" v-for="(line, i) in keyboard" :key="i" justify="center">
             <v-col v-for="(item, j) in line" :key="j" :cols="item.col ?? 1">
                 <keyboard-btn class="text-body-2" :rounded="settings.button.rounded" :variant="settings.button.variant"
@@ -364,14 +365,24 @@ watch(name, () => {
     };
 });
 
-document.addEventListener('focusin', ({ target }: FocusEvent) => {
-    setDefaultKeyboard(target);
+document.addEventListener('focusin', (event: FocusEvent) => {
+    setDefaultKeyboard(event.target, event);
 });
 
-document.addEventListener('focusout', ({ target }) => {
-    if (!(target instanceof HTMLInputElement)) return;
+document.addEventListener('focusout', ({ target, preventDefault }) => {
+    if (!(target instanceof HTMLInputElement)) return
+
+    if (event.relatedTarget instanceof HTMLButtonElement) {
+        setTimeout(() => {
+            visible.value = false;
+        }, 100);
+        return;
+
+        return;
+    }
 
     target.scrollIntoView(false);
+
     return (visible.value = false);
 });
 
@@ -380,14 +391,13 @@ onUpdated(() => {
     setDefaultKeyboard(getActiveInputElement());
 });
 
-function setDefaultKeyboard(element: EventTarget | null) {
+function setDefaultKeyboard(element: EventTarget | null, event?: Event) {
     if (!(element instanceof HTMLInputElement)) return;
 
     if (
         element.localName != 'input' ||
         element.getAttribute('keyboard') == 'false'
-    )
-        return;
+    ) return
 
     type.value = element.getAttribute('dtype');
 

@@ -22,13 +22,20 @@
         row-gap: 140px
     }
     height: 4rem;
-    margin-bottom: 18px;
+    margin-bottom: 2.5em;
     .v-field__field {
             font-size:clamp(1.875rem, 1rem + 0.3125vw, 2.125rem) !important;
         }
     
     .v-label {
         font-size: clamp(1rem, 1rem + 0.3125vw, 2.125rem) !important;
-        
     }
+}
+
+.arrow-left {
+    clip-path: polygon(25% 0%, 80% -30%, 80% 50%, 80% 140%, 29% 120%, 15% 50%);
+}
+
+.arrow-right {
+    clip-path: polygon(25% 0%, 80% -30%, 91% 50%, 79% 140%, 25% 120%, 25% 50%);
 }
