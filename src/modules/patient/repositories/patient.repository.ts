@@ -26,7 +26,6 @@ export function findByIdentifier(identifier: string) {
 export function validPatientByBirth(identifier: string, birth: string) {
     return new Promise((res, rej) => {
         setTimeout(() => {
-            console.log({ identifier, birth })
             if (identifier != '1303467' || birth != '02/03/1997') return rej({
                 response: {
                     data: {
@@ -37,7 +36,7 @@ export function validPatientByBirth(identifier: string, birth: string) {
 
             const patient = {
                 prim_nm_pessoa_fisica: 'João',
-                cd_pessoa_fisica: '',
+                cd_pessoa_fisica: '123456',
                 nm_pessoa_fisica: 'João Apostulo Neto',
                 nm_social: null,
                 nm_social_int: null,

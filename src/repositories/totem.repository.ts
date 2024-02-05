@@ -1,11 +1,14 @@
 export function findTotemById(id: string) {
-    return new Promise(res => {
+    return new Promise((res, rej) => {
         const totem = {
             id: 1,
             name: 'Internação',
             description: 'Auto atendimento para internação.',
+            site: {
+                cd_estabelecimento: 1,
+                nm_estabelecimento: 'Hospital Teste',
+            },
             screens: [
-
                 {
                     id: 1,
                     name: 'Início',
@@ -35,7 +38,12 @@ export function findTotemById(id: string) {
                     id: 1,
                     name: 'Cardápio',
                     component: 'Menu'
-                }
+                },
+                {
+                    id: 1,
+                    name: 'Tipo de Prioridade',
+                    component: 'Priority'
+                },
             ],
             queues: [
                 {
@@ -46,6 +54,9 @@ export function findTotemById(id: string) {
                     color: 'primary',
                     action: 'next',
                     to: 'identifier',
+                    nr_seq_fila_comum: '1',
+                    nr_seq_fila_preferencial: '1',
+                    nr_seq_fila_preferencial_80: '1',
                 },
                 {
                     id: 1,
@@ -55,6 +66,9 @@ export function findTotemById(id: string) {
                     color: 'error',
                     action: 'start',
                     to: 'init',
+                    nr_seq_fila_comum: '1',
+                    nr_seq_fila_preferencial: '1',
+                    nr_seq_fila_preferencial_80: '1',
                 },
                 {
                     id: 1,
@@ -64,6 +78,9 @@ export function findTotemById(id: string) {
                     color: 'error',
                     action: 'start',
                     to: 'init',
+                    nr_seq_fila_comum: '1',
+                    nr_seq_fila_preferencial: '1',
+                    nr_seq_fila_preferencial_80: '1',
                 },
                 {
                     id: 1,
@@ -73,11 +90,15 @@ export function findTotemById(id: string) {
                     color: 'error',
                     action: 'start',
                     to: 'init',
+                    nr_seq_fila_comum: '1',
+                    nr_seq_fila_preferencial: '1',
+                    nr_seq_fila_preferencial_80: '1',
                 },
             ]
         }
 
         setTimeout(() => {
+
             res({
                 data: totem
             })

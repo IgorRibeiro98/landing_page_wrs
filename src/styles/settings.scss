@@ -21,11 +21,9 @@
     .v-field__input {
         row-gap: 140px
     }
-    height: 4rem;
-    margin-bottom: 2.5em;
     .v-field__field {
-            font-size:clamp(1.875rem, 1rem + 0.3125vw, 2.125rem) !important;
-        }
+            font-size:clamp(1.10rem, 1rem + 0.3125vw, 2.125rem) !important;
+    }
     
     .v-label {
         font-size: clamp(1rem, 1rem + 0.3125vw, 2.125rem) !important;

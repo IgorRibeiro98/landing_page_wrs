@@ -24,8 +24,8 @@ import { ref, computed, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 
 import { findTotemById } from '@/repositories/totem.repository';
+import { validPatientByBirth } from '@patient/repositories/patient.repository'
 import useAlertStore from '@/stores/alert';
-
 
 interface ComponentInfo {
     __name: string;
@@ -56,11 +56,19 @@ const components: Component = {}
 const isLoading = ref(false)
 
 const defaultData = {
-    identifier: '',
-    birth: '',
+    identifier: '46518973800',
+    birth: '02/03/19977',
     queue: {
-        index: 'nr_seq_fila_comum',
-        type: QueueType.Common,
+        id: 1,
+        name: 'Agendamento de Exame',
+        description: 'Agende um exame para o paciente.',
+        icon: 'mdi-file',
+        color: 'primary',
+        action: 'next',
+        to: 'identifier',
+        nr_seq_fila_comum: '1',
+        nr_seq_fila_preferencial: '1',
+        nr_seq_fila_preferencial_80: '1',
         ds_senha: '',
         dt_entrada: ''
     },
@@ -158,6 +166,11 @@ function redirect(to: string): void {
 onMounted(() => {
     isLoading.value = true;
 
+    validPatientByBirth('1303467', '02/03/1997')
+        .then((res: any) => {
+            data.value.patient = Object.assign(data.value.patient, res.data)
+        })
+
     findTotemById('123')
         .then((res: any) => {
             totem.value = res.data;
@@ -166,11 +179,13 @@ onMounted(() => {
             alert.value = {
                 title: 'Não foi possível carregar as informações do totem',
                 text: error.response?.data?.message,
+                display: true
             };
         })
         .finally(() => {
             isLoading.value = false;
         })
+
 })
 
 </script>
