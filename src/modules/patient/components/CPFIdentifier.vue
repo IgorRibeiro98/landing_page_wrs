@@ -17,18 +17,27 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { required } from '@/rules';
 
 interface Props {
     loading: boolean
+    modelValue: string
 }
 
 const props = defineProps<Props>()
 
-const identifier = ref('');
+const emit = defineEmits(['search', 'update:modelValue'])
 
-const emit = defineEmits(['search'])
+const identifier = computed({
+    get() {
+        return props.modelValue;
+    },
+    set() {
+        emit('update:modelValue', identifier);
+    },
+})
+
 
 function getCPF(value: string) {
     return value.replace(/[-.]/g, '');

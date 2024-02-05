@@ -1,17 +1,17 @@
 <template>
     <div class="d-flex align-center fill">
         <v-row justify="center" no-gutters>
-            <v-col cols="3" class="d-flex justify-center align-center">
+            <v-col cols="4" class="d-flex justify-center align-center">
                 <v-img :src="state.logo" height="200"> </v-img>
             </v-col>
 
-            <v-col cols="7">
-                <p class="text-body-1 text-secondary-1 d-flex justify-center mx-3 my-10">
+            <v-col cols="8">
+                <p class="text-body-1 text-secondary-1 d-flex justify-center align-center mx-3 my-10">
                     {{ greeting }}, Inicie seu atendimento clicando no botão abaixo.
                 </p>
-                <hexagonal-btn color="primary" size="x-large" class="w-100" height="5em" @click="emit('next', null)">
+                <v-btn color="primary" size="x-large" class="w-100" height="5em" @click="emit('next', null)">
                     <span :class="mobile ? 'text-h4' : 'text-h3'" class="font-weight-bold mb-2">Começar</span>
-                </hexagonal-btn>
+                </v-btn>
             </v-col>
 
         </v-row>

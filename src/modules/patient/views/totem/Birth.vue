@@ -7,12 +7,10 @@
         </v-col>
 
         <v-col cols="7">
-            <v-form ref="form" @submit="validate">
-                <v-text-field v-mask="'##/##/####'" number class="f-height-1" autofocus :rules="[required]"
-                    label="Data de Nascimento" :disabled="isLoading" :loading="isLoading" v-model="data.birth"
-                    @update:model-value="validate">
-                </v-text-field>
-            </v-form>
+            <v-text-field v-mask="'##/##/####'" number class="f-height-1" autofocus :rules="[required]"
+                label="Data de Nascimento" :disabled="isLoading" :loading="isLoading" v-model="data.birth"
+                @update:model-value="validate">
+            </v-text-field>
         </v-col>
 
     </v-row>
@@ -53,9 +51,6 @@ function required(v: any) {
 async function validate(value: string) {
     if (value?.length != 10) return
 
-    const { valid } = await form.value.validate()
-
-    if (!valid) return
 
     isLoading.value = true
 

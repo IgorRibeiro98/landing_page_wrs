@@ -6,23 +6,23 @@
             </p>
         </v-col>
 
-        <v-col cols="4">
+        <v-col cols="4" class="mr-8">
             <v-btn @click="setIdentification('cpf')" block height="4em"
-                :color="identificationMethod == 'cpf' ? 'primary' : 'secondary-1'" class="arrow-left">
+                :color="identificationMethod == 'cpf' ? 'primary' : 'secondary-1'">
                 <h2> CPF </h2>
             </v-btn>
         </v-col>
 
         <v-col cols="4">
             <v-btn @click="setIdentification('passport')" block height="4em"
-                :color="identificationMethod == 'passport' ? 'primary' : 'secondary-1'" class="arrow-right">
+                :color="identificationMethod == 'passport' ? 'primary' : 'secondary-1'">
                 <h2 class="ml-4"> Passaporte / RNE </h2>
             </v-btn>
         </v-col>
 
         <v-col cols="12" class="mt-10" v-if="chosenIdentificationMethod">
             <Transition name="fade" mode="out-in">
-                <component :is="identifierComponent" :loading="isLoading" @search="searchPatient">
+                <component :is="identifierComponent" v-model="data.identifier" :loading="isLoading" @search="searchPatient">
                 </component>
             </Transition>
         </v-col>

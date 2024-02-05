@@ -14,6 +14,7 @@
     "skipLibCheck": true,
     "noEmit": true,
     "outDir": "electron/dist",
+    "typeRoots": ["src/types"],
     "paths": {
       "@/*": ["src/*"],
       "@patient/*": ["src/modules/patient/*"],

@@ -12,9 +12,9 @@
                     :loading="loading" v-model="identifier">
                 </v-text-field>
 
-                <hexagonal-btn block size="x-large" type="submit">
+                <v-btn block size="x-large" type="submit" color="primary">
                     CONTINUAR
-                </hexagonal-btn>
+                </v-btn>
             </v-form>
         </v-col>
     </v-row>

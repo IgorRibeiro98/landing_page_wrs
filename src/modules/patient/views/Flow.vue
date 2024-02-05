@@ -12,12 +12,20 @@
     </v-app-bar>
 
     <v-layout class="fill">
-        <component v-model="data" :is="components[component]" @next="nextView" @to="redirect" @start="firstStep" />
+        <component v-model="data" v-model:totem="totem" :is="components[component]" @next="nextView" @to="redirect"
+            @start="firstStep" />
+
+        <v-progress-linear v-if="isLoading" indeterminate color="primary"></v-progress-linear>
     </v-layout>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
+
+import { findTotemById } from '@/repositories/totem.repository';
+import useAlertStore from '@/stores/alert';
+
 
 interface ComponentInfo {
     __name: string;
@@ -36,13 +44,58 @@ interface Component {
     [key: string]: ComponentInfo;
 }
 
+enum QueueType {
+    Common = 'regular',
+    Preferential = 'priority',
+    Late = 'late'
+}
+
+const { alert } = storeToRefs<any>(useAlertStore())
+
 const components: Component = {}
+const isLoading = ref(false)
 
 const defaultData = {
     identifier: '',
+    birth: '',
+    queue: {
+        index: 'nr_seq_fila_comum',
+        type: QueueType.Common,
+        ds_senha: '',
+        dt_entrada: ''
+    },
     patient: {
+        prim_nm_pessoa_fisica: '',
         cd_pessoa_fisica: '',
         nm_pessoa_fisica: '',
+        nm_social: null,
+        nm_social_int: null,
+        dt_nascimento: "",
+        ie_sexo: "",
+        nr_seq_genero: null,
+        nr_identidade: "",
+        nr_cpf: "",
+        cd_nacionalidade: 0,
+        nr_passaporte: null,
+        nr_reg_geral_estrang: null,
+        ie_estado_civil: 0,
+        nr_ddi_telefone: null,
+        nr_ddd_telefone: null,
+        nr_telefone: null,
+        nr_ddd_celular: "",
+        nr_ddi_celular: "",
+        nr_telefone_celular: "",
+        ds_email: "",
+        cd_religiao: 0,
+        ie_tipo_complemento: 0,
+        tipo_endereco: "",
+        ds_endereco: "",
+        nr_endereco: 0,
+        ds_complemento: "",
+        cd_cep: "",
+        ds_municipio: "",
+        cd_estado: 0,
+        agendamentos: []
     }
 }
 
@@ -50,33 +103,24 @@ const data = ref({
     ...defaultData
 })
 
-const totem = {
-    screens: [
-        {
-            name: 'Início',
-            component: 'Init'
-        },
-        {
-            name: 'Identificação Paciente',
-            component: 'Identifier'
-        },
-        {
-            name: 'Nascimento',
-            component: 'Birth'
-        },
-        {
-            name: 'Cardápio',
-            component: 'Menu'
-        }
-    ]
+const defaultTotem = {
+    id: 0,
+    name: '',
+    description: null,
+    screens: [],
+    queues: []
 }
+
+const totem = ref<Totem>({ ...defaultTotem })
 
 const componentIndex = ref(0)
 
 const component: any = computed(() => {
-    const view = totem.screens?.[componentIndex.value].component;
+    if (!totem.value.screens.length) return null;
 
-    if (!view) return;
+    const view = totem.value.screens[componentIndex.value].component;
+
+    if (!view) return null;
 
     return view;
 });
@@ -99,17 +143,35 @@ function firstStep(): void {
 function nextView(): void {
     componentIndex.value++;
 
-    if (componentIndex.value == totem.screens.length) firstStep()
+    if (componentIndex.value == totem.value.screens.length) firstStep()
 
 }
 
 function redirect(to: string): void {
-    const index = totem.screens.findIndex(
+    const index = totem.value.screens.findIndex(
         (view: any) => view.component == to
     );
 
     componentIndex.value = index;
 }
+
+onMounted(() => {
+    isLoading.value = true;
+
+    findTotemById('123')
+        .then((res: any) => {
+            totem.value = res.data;
+        })
+        .catch(error => {
+            alert.value = {
+                title: 'Não foi possível carregar as informações do totem',
+                text: error.response?.data?.message,
+            };
+        })
+        .finally(() => {
+            isLoading.value = false;
+        })
+})
 
 </script>
 
