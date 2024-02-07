@@ -10,6 +10,11 @@ export function findTotemById(id: string) {
             },
             screens: [
                 {
+                  id: 1,
+                  name: 'Gerar informações de atendimento',
+                  component: 'GenerateAttendance',
+                },
+                {
                     id: 1,
                     name: 'Início',
                     component: 'Init'

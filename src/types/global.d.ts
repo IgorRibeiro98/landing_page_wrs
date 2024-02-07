@@ -21,7 +21,6 @@ interface Totem {
     screens: Screens[];
     queues: Queue[]
 }
-
 interface Agendamento {
     nr_sequencia: number;
     cd_usuario_convenio: string;
@@ -54,4 +53,12 @@ interface Agendamento {
     nm_pessoa_fisica: string;
     nr_cpf: string;
     nr_seq_proc_interno: string;
+}
+interface ButtonOption {
+  title: string;
+  id: string;
+  subtitle?: T<string> | string;
+  color: string;
+  action: () => void;
+  show: boolean;
 }
