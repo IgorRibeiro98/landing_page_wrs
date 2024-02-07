@@ -28,9 +28,9 @@
         </v-row>
     </div>
 </template>
-  
+
 <style lang="scss"></style>
-  
+
 <script setup lang="ts">
 interface Keyboard extends Array<Array<LineKeyboard>> { }
 
@@ -71,6 +71,10 @@ interface Settings {
         height?: number;
     };
 }
+
+const props = defineProps<{
+    target?: string;
+}>();
 
 const emit = defineEmits(['open']);
 
@@ -393,13 +397,15 @@ onUpdated(() => {
 
 function setDefaultKeyboard(element: EventTarget | null, event?: Event) {
     if (!(element instanceof HTMLInputElement)) return;
-
+    const keyboardId = element.getAttribute('keyboard');
     if (
         element.localName != 'input' ||
-        element.getAttribute('keyboard') == 'false'
+        keyboardId == 'false'
     ) return
 
-    type.value = element.getAttribute('dtype');
+    if(keyboardId && keyboardId !== props.target) return;
+
+    type.value =  element.getAttribute('dtype');
 
     if (element.type == 'number' || element.getAttribute('number') != null)
         setKeyboard(numericKeyboard);
@@ -548,4 +554,3 @@ function backspaceSelection(element: HTMLInputElement): void {
     element.dispatchEvent(new InputEvent('input'));
 }
 </script>
-  
