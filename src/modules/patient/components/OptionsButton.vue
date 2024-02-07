@@ -2,14 +2,8 @@
   <v-row justify="space-around">
     <template v-for="option in filteredOptions">
       <v-col :md="md" cols="12" class="d-flex align-center">
-        <v-btn
-          height="8em"
-          block
-          rounded="0"
-          variant="tonal"
-          :color="option.color"
-          @click="emit('click', option)"
-        >
+        <v-btn height="8em" block rounded="0" variant="tonal" :color="option.color" :disabled="loading"
+          @click="emit('click', option)">
           <div>
             <h2 class="text-h4 font-weight-bold">
               {{ option.title }}
@@ -28,6 +22,7 @@ import { defineProps, defineEmits, computed } from "vue";
 
 const props = defineProps<{
   options: ButtonOption[];
+  loading: boolean
 }>();
 
 const filteredOptions = computed(() => props.options.filter(opt => opt.show));
@@ -39,6 +34,4 @@ const emit = defineEmits<{
 }>();
 
 </script>
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

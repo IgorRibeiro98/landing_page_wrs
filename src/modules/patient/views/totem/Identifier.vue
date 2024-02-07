@@ -87,7 +87,7 @@ function searchPatient(identifier: string) {
         .catch(err => {
             alert.value = {
                 display: true,
-                title: 'Falha na validação',
+                title: 'Cadastro não localizado',
                 text: err.response.data.message
             }
             emit('to', 'Menu')

@@ -19,9 +19,9 @@
                 </v-sheet>
 
                 <div class="d-flex" :class="{ 'py-2': !queue.description }">
-                    <v-icon v-if="queue.description" icon="mdi-information" color="info" class="mr-2" />
+                    <v-icon v-if="queue.description" size="x-large" icon="mdi-information" color="info" class="mr-2" />
 
-                    <p v-if="queue.description" class="text-body text-secondary font-weight-bold"
+                    <p v-if="queue.description" class="text-body text-secondary font-weight-bold text-h5"
                         v-html="queue.description">
                     </p>
                 </div>

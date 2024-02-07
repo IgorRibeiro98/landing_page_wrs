@@ -31,7 +31,7 @@ export function openAttendance(sequences: number[]) {
             return res({
                 data
             })
-        }, 1000)
+        }, 2000)
     })
 }
 

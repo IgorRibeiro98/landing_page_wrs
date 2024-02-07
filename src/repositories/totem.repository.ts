@@ -10,11 +10,6 @@ export function findTotemById(id: string) {
             },
             screens: [
                 {
-                  id: 1,
-                  name: 'Gerar informações de atendimento',
-                  component: 'GenerateAttendance',
-                },
-                {
                     id: 1,
                     name: 'Início',
                     component: 'Init'
@@ -64,12 +59,22 @@ export function findTotemById(id: string) {
                     name: 'Tipo de Prioridade',
                     component: 'Priority'
                 },
+                {
+                    id: 1,
+                    name: 'Gerar informações de atendimento',
+                    component: 'SendPassword',
+                },
+                {
+                    id: 1,
+                    name: 'Início',
+                    component: 'PasswordSuccess'
+                },
             ],
             queues: [
                 {
                     id: 1,
                     name: 'Agendamento de Exame',
-                    description: 'Agende um exame para o paciente.',
+                    description: 'Exames de imagem, laboratório e outros.',
                     icon: 'mdi-file',
                     color: 'primary',
                     action: 'next',
@@ -122,7 +127,7 @@ export function findTotemById(id: string) {
             res({
                 data: totem
             })
-        }, 1000)
+        }, 1)
 
     })
 }

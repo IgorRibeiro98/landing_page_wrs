@@ -21,7 +21,7 @@ interface PropsWithDefaults extends Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    time: 10,
+    time: 15,
     hideNumber: false,
 })
 const emit = defineEmits(['timerEnd'])

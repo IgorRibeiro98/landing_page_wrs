@@ -10,3 +10,26 @@ export function pushQueue(body: any) {
         }, 1000)
     })
 }
+
+export function sendSMSQueue(phone: string, queue: any) {
+    return new Promise((res) => {
+        setTimeout(() => {
+
+            return res({
+                data: `Encaminhado SMS para o ${phone}, senha: ${queue.ds_senha}`
+            })
+        }, 2000)
+    })
+}
+
+export function printQueue(queue: any) {
+    return new Promise((res) => {
+        setTimeout(() => {
+
+            return res({
+                data: `imprimido a senha: ${queue.ds_senha}`
+            })
+        }, 2000)
+    })
+}
+

@@ -8,7 +8,7 @@
             </v-col>
 
             <v-col cols="6" v-for="(priority, index) in priorities" :key="index">
-                <v-btn height="8em" rounded="0" block color="primary" :variant="priority.variant"
+                <v-btn height="8em" rounded="0" block color="primary" :variant="priority.variant" v-if="priority.show()"
                     @click="generatePass(priority)" :disabled="isLoading">
                     <div>
                         <h2 class="text-h4">
@@ -47,6 +47,7 @@ interface PriorityBtn {
     key: string;
     variant: any;
     icons: string[]
+    show(): boolean
 }
 
 const isLoading = ref(false)
@@ -56,7 +57,10 @@ const priorities = ref<PriorityBtn[]>([
         type: 'regular',
         variant: 'flat',
         key: 'nr_seq_fila_comum',
-        icons: []
+        icons: [],
+        show() {
+            return true
+        }
     },
     {
         title: 'Preferencial',
@@ -67,14 +71,26 @@ const priorities = ref<PriorityBtn[]>([
             'mdi-human-cane',
             'mdi-human-wheelchair',
             'mdi-human-pregnant',
-        ]
+        ],
+        show() {
+            return true
+        }
     },
     {
         title: 'Preferencial +80',
         type: 'priority',
         variant: 'flat',
         key: 'nr_seq_fila_preferencial_80',
-        icons: []
+        icons: [],
+        show() {
+            if (data.value.patient.dt_nascimento) {
+                const birth = new Date(data.value.patient.dt_nascimento)
+                const today = new Date()
+                const age = today.getFullYear() - birth.getFullYear()
+                return age >= 80
+            }
+            return true
+        }
     },
 ])
 
@@ -102,7 +118,7 @@ function generatePass({ type, key }: PriorityBtn) {
     isLoading.value = true
 
     pushQueue(body)
-        .then(res => {
+        .then((res: any) => {
             data.value.queue = Object.assign(data.value.queue, res.data)
             emit('next')
         })

@@ -4,15 +4,16 @@
       <v-card-text>
         <h2 class="text-h3 text-center">Confira seu número abaixo:</h2>
         <v-divider thickness="3" length="90%" color="primary" class="mt-4 mb-8 d-flex ma-auto"></v-divider>
-        <v-text-field :prefix="countryCode" number="true" v-mask="'(##) #####-####'" keyboard="phone" :disabled="disabled" label="Celular" v-model="phoneNumber"></v-text-field>
+        <v-text-field class="f-height-1" :prefix="countryCode" number="true" v-mask="'(##) #####-####'" keyboard="phone"
+          :disabled="disabled" label="Celular" v-model="phoneNumber"></v-text-field>
       </v-card-text>
       <v-card-actions>
         <v-row>
           <v-col cols="12" md="6">
-            <v-btn block variant="tonal" color="primary" class="pa-8" @click="disabled = false">Alterar</v-btn>
+            <v-btn block variant="tonal" color="primary" class="pa-8 text-h5" @click="disabled = false">Alterar</v-btn>
           </v-col>
           <v-col cols="12" md="6">
-            <v-btn block variant="tonal" color="secondary" class="pa-8" @click="send">Enviar</v-btn>
+            <v-btn block variant="tonal" color="secondary" class="pa-8 text-h5" @click="send">Enviar</v-btn>
           </v-col>
           <v-col cols="12">
             <p class="text-h4 text-center text-success">
@@ -23,7 +24,7 @@
         </v-row>
       </v-card-actions>
     </v-card>
-      <VirtualKeyboard target="phone" class="bottom-container mt-4" />
+    <VirtualKeyboard target="phone" class="bottom-container mt-4" />
   </v-dialog>
 </template>
 <script lang="ts" setup>
@@ -64,10 +65,9 @@ onMounted(() => {
 })
 
 watch(() => props.modelValue, (value: boolean) => {
-  if(value) {
+  if (value) {
     setPhoneNumber();
   }
 });
 </script>
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

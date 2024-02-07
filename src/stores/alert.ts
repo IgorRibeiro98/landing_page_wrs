@@ -8,7 +8,17 @@ export default defineStore('alert', (): any => {
         text: ''
     })
 
+    function openAlert(title: string, text: string) {
+        alert.value = {
+            display: true,
+            title,
+            text
+        }
+    }
+
     return {
-        alert
+        alert,
+
+        openAlert
     }
 })

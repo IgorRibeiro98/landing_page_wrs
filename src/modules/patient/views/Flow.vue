@@ -12,11 +12,13 @@
     </v-app-bar>
 
     <v-layout class="fill">
-        <component v-model="data" v-model:totem="totem" :is="components[component]" @next="nextView" @to="redirect"
-            @start="firstStep" />
+        <component v-model="data" v-model:totem="totem" v-model:loading="loadingFlowDialog" :is="components[component]"
+            @next="nextView" @to="redirect" @start="firstStep" />
 
         <v-progress-linear v-if="isLoading" indeterminate color="primary"></v-progress-linear>
     </v-layout>
+
+    <FlowLoading v-model="loadingFlowDialog" />
 </template>
 
 <script lang="ts" setup>
@@ -26,6 +28,8 @@ import { storeToRefs } from 'pinia';
 import { findTotemById } from '@/repositories/totem.repository';
 import { validPatientByBirth } from '@patient/repositories/patient.repository'
 import useAlertStore from '@/stores/alert';
+
+import FlowLoading from '@patient/components/FlowLoading.vue';
 
 interface ComponentInfo {
     __name: string;
@@ -69,7 +73,7 @@ const defaultData = {
         nr_seq_fila_comum: '1',
         nr_seq_fila_preferencial: '1',
         nr_seq_fila_preferencial_80: '1',
-        ds_senha: '',
+        ds_senha: 'ACT957',
         dt_entrada: ''
     },
     patient: {
@@ -106,6 +110,12 @@ const defaultData = {
         agendamentos: []
     }
 }
+
+const loadingFlowDialog = ref({
+    display: false,
+    title: '',
+    text: ''
+})
 
 const data = ref({
     ...defaultData
@@ -166,10 +176,10 @@ function redirect(to: string): void {
 onMounted(() => {
     isLoading.value = true;
 
-    validPatientByBirth('1303467', '02/03/1997')
-        .then((res: any) => {
-            data.value.patient = Object.assign(data.value.patient, res.data)
-        })
+    // validPatientByBirth('1234', '02/03/1997')
+    //     .then((res: any) => {
+    //         data.value.patient = Object.assign(data.value.patient, res.data)
+    //     })
 
     findTotemById('123')
         .then((res: any) => {

@@ -10,12 +10,12 @@
       </v-col>
 
       <v-col cols="12" class="my-5 pa-0">
-        <OptionsButton :options="options" @click="$event.action()"></OptionsButton>
+        <OptionsButton :options="options" :loading="isLoading" @click="$event.action()"></OptionsButton>
       </v-col>
       <v-col cols="12">
         <p class="text-h4 text-left text-success">
           <v-icon>mdi-leaf-circle</v-icon>
-          Contribua para a sustentabilidade escolhendo o QRcode, e assim estará
+          Contribua para a sustentabilidade escolhendo o SMS, e assim estará
           ajudando o meio ambiente.
         </p>
       </v-col>
@@ -25,10 +25,18 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import OptionsButton from "@/modules/patient/components/OptionsButton.vue";
 import ConfirmPhoneDialog from "@/modules/patient/components/ConfirmPhoneDialog.vue";
-import Msisid from '@/valueObjects/Msisid'
+
+import useAlertStore from '@/stores/alert'
+import Msisid from "@/valueObjects/Msisid";
+
+const { openAlert } = useAlertStore()
+
+import { sendSMSQueue, printQueue } from '@patient/repositories/queue.repository'
+
+const emit = defineEmits(['update:modelValue', 'next', 'to', 'start'])
 
 const props = defineProps<{
   modelValue: any;
@@ -36,23 +44,31 @@ const props = defineProps<{
 }>();
 
 const phoneDialog = ref(false);
+const isLoading = ref(false)
 const msisid = new Msisid();
 const phone = computed(() => {
   const { nr_ddi_celular, nr_telefone_celular, nr_ddd_celular } = data.value.patient;
 
-  if(nr_ddi_celular && nr_ddd_celular && nr_telefone_celular) {
+  if (nr_ddi_celular && nr_ddd_celular && nr_telefone_celular) {
     msisid.setPhone(nr_ddi_celular, nr_ddd_celular, nr_telefone_celular);
   }
   return msisid;
 });
 
-const data = computed(() => props.modelValue);
+const data = computed({
+  get() {
+    return props.modelValue;
+  },
+  set() {
+    emit('update:modelValue', data);
+  },
+})
 
 const formattedPhone = computed(() => {
   const { nr_telefone_celular, nr_ddd_celular } = data.value.patient;
-  if(!nr_ddd_celular || !nr_telefone_celular) return '';
+  if (!nr_ddd_celular || !nr_telefone_celular) return '';
 
-  const number = `${nr_telefone_celular.substr(0,5)}-${nr_telefone_celular.substr(5, nr_telefone_celular.length)}`;
+  const number = `${nr_telefone_celular.substr(0, 5)}-${nr_telefone_celular.substr(5, nr_telefone_celular.length)}`;
   return `(${nr_ddd_celular}) ${number}`;
 });
 
@@ -79,13 +95,45 @@ const options = ref<ButtonOption[]>([
     id: 'print',
     color: "secondary",
     action: () => {
-      console.log('print');
+      print()
     },
     show: true,
   },
 ]);
 
-function generateSMS(number: string) {
-  console.log(number);
+function print() {
+  isLoading.value = true
+
+  printQueue(data.value.queue)
+    .then(res => {
+      data.value.queue.send_type = 'print'
+      emit('next')
+    })
+    .catch((error: any) => {
+      console.log({ error })
+      openAlert('Não foi possível imprimir a senha', error?.response?.data?.message)
+    }).finally(() => {
+      isLoading.value = false
+    });
 }
+
+function generateSMS(number: string) {
+  isLoading.value = true
+  sendSMSQueue(number, data.value?.queue)
+    .then(res => {
+      data.value.queue.send_type = 'sms'
+      emit('next')
+    })
+    .catch((error: any) => {
+      console.log({ error })
+      openAlert('Não foi possível enviar o SMS', error?.response?.data?.message)
+    })
+    .finally(() => {
+      isLoading.value = false
+    });
+}
+
+onMounted(() => {
+  if (!data.value.patient.cd_pessoa_fisica) print()
+})
 </script>

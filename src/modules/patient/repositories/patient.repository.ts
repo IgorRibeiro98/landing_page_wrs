@@ -8,7 +8,7 @@ const patients: any = {
         cd_pessoa_fisica: '1235',
         prim_nm_pessoa_fisica: 'Luiz',
         dt_nascimento: '02/03/1997',
-        nm_pessoa_fisica: 'João Apostulo Neto',
+        nm_pessoa_fisica: 'Luiz Silva',
         nm_social: null,
         nm_social_int: null,
         ie_sexo: "M",
@@ -73,7 +73,7 @@ const patients: any = {
     },
     '46518973803': {
         cd_pessoa_fisica: '1234',
-        prim_nm_pessoa_fisica: 'Joãoo',
+        prim_nm_pessoa_fisica: 'João',
         dt_nascimento: '02/03/1997',
         nm_pessoa_fisica: 'João Apostulo Neto',
         nm_social: null,
@@ -130,7 +130,7 @@ export function findByIdentifier(identifier: any) {
 export function validPatientByBirth(identifier: string, birth: string) {
     return new Promise((res, rej) => {
         setTimeout(() => {
-            const patient = Object.values(patients).find((item) => {
+            const patient = Object.values(patients).find((item: any) => {
                 return item.cd_pessoa_fisica == identifier && item.dt_nascimento == birth
             })
 
@@ -165,6 +165,6 @@ export function updatePatient(patient: any) {
             return res({
                 data: patient
             })
-        }, 2000)
+        }, 1000)
     })
 }

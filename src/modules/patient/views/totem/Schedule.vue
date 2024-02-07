@@ -14,7 +14,7 @@
                 </v-col>
 
                 <v-col cols="12">
-                    <v-text-field v-for="(convenant, index) in convenants" :key="index"
+                    <v-text-field v-for="(convenant, index) in convenants" :key="index" class="f-height-1"
                         :label="`Carteirinha ${convenant.ds_convenio}`" v-model="convenant.cd_usuario_convenio"
                         type="number" @click="convenants[index].edited = true" :rules="[required]"></v-text-field>
                 </v-col>
@@ -26,7 +26,6 @@
                     </v-btn>
                 </v-col>
             </v-row>
-            <!-- <LoadingFlow /> -->
         </v-form>
     </v-container>
 </template>
@@ -39,9 +38,8 @@ import { required } from '@/rules'
 import useAlertStore from '@/stores/alert'
 
 import ScheduleCarousel from '@patient/components/ScheduleCarousel.vue'
-// import LoadingFlow from '@/components/LoadingFlow.vue';
 
-import { openAttendance } from '../../repositories/attendance.repository'
+import { openAttendance } from '../../repositories/schedule.repository'
 
 interface Convenant {
     ds_convenio: string;
@@ -53,16 +51,16 @@ interface Convenant {
     edited: boolean;
 }
 
-const { alert } = storeToRefs<any>(useAlertStore())
 
 const props = defineProps<{
     modelValue: any;
-    totem: any
+    totem: any;
+    loading: any
 }>();
 
 const isLoading = ref(false)
 
-const emit = defineEmits(['update:modelValue', 'next', 'to', 'start'])
+const emit = defineEmits(['update:modelValue', 'update:loading', 'next', 'to', 'start'])
 
 const data = computed({
     get() {
@@ -78,18 +76,36 @@ const convenants = ref<Convenant[]>([])
 function open() {
     isLoading.value = true
 
+    emit('update:loading', {
+        display: true,
+        title: 'Aguarde um momento',
+        text: 'Estamos verificando a sua elegibilidade e abrindo o seu atendimento...'
+    })
+
     const sequences = data.value.patient.agendamentos.map((schedule: any) => schedule.nr_sequencia)
 
     openAttendance(sequences)
         .then(res => {
+            closeLoading()
             emit('next')
         })
         .catch((error) => {
+            closeLoading()
+
             emit('to', 'Menu')
         })
         .finally(() => {
+            closeLoading()
             isLoading.value = false
         })
+}
+
+function closeLoading() {
+    emit('update:loading', {
+        display: false,
+        title: '',
+        text: ''
+    })
 }
 
 function setGroupConvenant() {
@@ -105,7 +121,7 @@ function setGroupConvenant() {
                     cd_plano,
                     cd_produto,
                     cd_categoria,
-                }) => {
+                }: any) => {
                     return {
                         cd_convenio,
                         ds_convenio,
@@ -131,12 +147,11 @@ function setGroupConvenant() {
             }, [] as Convenant[]) ?? [];
 }
 
-watch(() => data.value.patient.agendamentos, () => {
-    setGroupConvenant();
-});
 
 onMounted(() => {
     if (!data.value.patient.agendamentos.length) emit('to', 'Menu')
+
+    setGroupConvenant();
 })
 
 </script>
