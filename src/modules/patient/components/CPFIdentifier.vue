@@ -29,15 +29,7 @@ const props = defineProps<Props>()
 
 const emit = defineEmits(['search', 'update:modelValue'])
 
-const identifier = computed({
-    get() {
-        return props.modelValue;
-    },
-    set() {
-        emit('update:modelValue', identifier);
-    },
-})
-
+const identifier = ref('')
 
 function getCPF(value: string) {
     return value.replace(/[-.]/g, '');

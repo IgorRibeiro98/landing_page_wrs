@@ -56,8 +56,8 @@ const components: Component = {}
 const isLoading = ref(false)
 
 const defaultData = {
-    identifier: '46518973800',
-    birth: '02/03/19977',
+    identifier: '',
+    birth: '',
     queue: {
         id: 1,
         name: 'Agendamento de Exame',

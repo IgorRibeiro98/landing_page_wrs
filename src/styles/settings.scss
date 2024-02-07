@@ -37,3 +37,7 @@
 .arrow-right {
     clip-path: polygon(25% 0%, 80% -30%, 91% 50%, 79% 140%, 25% 120%, 25% 50%);
 }
+
+.progress {
+    transition: all 1s linear;
+}

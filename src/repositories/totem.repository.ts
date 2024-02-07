@@ -36,6 +36,21 @@ export function findTotemById(id: string) {
                 },
                 {
                     id: 1,
+                    name: 'Início',
+                    component: 'Schedule'
+                },
+                {
+                    id: 1,
+                    name: 'Início',
+                    component: 'Guide'
+                },
+                {
+                    id: 1,
+                    name: 'Início',
+                    component: 'SignatureSuccess'
+                },
+                {
+                    id: 1,
                     name: 'Cardápio',
                     component: 'Menu'
                 },
