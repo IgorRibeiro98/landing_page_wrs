@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="pa-5 d-flex align-center justify-center">
+  <div class="pa-5 d-flex align-center justify-center fill-height">
     <v-row>
       <v-col cols="12">
         <p class="text-h2 text-secondary-1 text-center">
@@ -21,7 +21,7 @@
       </v-col>
     </v-row>
     <ConfirmPhoneDialog @submit="generateSMS" v-model="phoneDialog" :msisid="phone"></ConfirmPhoneDialog>
-  </v-container>
+  </div>
 </template>
 
 <script lang="ts" setup>

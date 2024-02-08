@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex align-center fill">
+    <div class="d-flex align-center justify-center fill-height">
         <v-row justify="center" no-gutters>
             <v-col cols="4" class="d-flex justify-center align-center">
                 <v-img :src="state.logo" height="200"> </v-img>
@@ -29,7 +29,7 @@ const { state } = storeToRefs<any>(useSystemStore())
 
 const { mobile } = useDisplay();
 
-const emit = defineEmits(['update:modelValue', 'next']);
+const emit = defineEmits(['update:modelValue', 'next', 'update:loading']);
 
 const greeting = computed(() => {
     const hour = new Date().getHours();

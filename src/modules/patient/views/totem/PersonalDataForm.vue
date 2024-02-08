@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid>
+    <div class="fill-height">
         <v-row>
             <v-col>
                 <p class="text-body-1 text-secondary-1">
@@ -105,7 +105,7 @@
                 </v-form>
             </v-col>
         </v-row>
-    </v-container>
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -127,14 +127,14 @@ const props = defineProps<{
 
 onMounted(() => {
     Object.entries(collection.value)
-        .forEach(([key, value]) => {
+        .forEach(([key, value]: any) => {
             collection.value[key].loading = true
 
             value.request()
-                .then(res => {
+                .then((res: any) => {
                     collection.value[key].data = res.data
                 })
-                .catch(error => {
+                .catch((error: any) => {
                     alert.value = {
                         display: true,
                         title: 'Erro ao carregar informações pessoais',
@@ -147,7 +147,7 @@ onMounted(() => {
         })
 })
 
-const { alert } = storeToRefs(useAlertStore())
+const { alert } = storeToRefs<any>(useAlertStore())
 
 const isLoading = ref(false)
 
@@ -166,7 +166,7 @@ const data = computed({
 
 const showGenderField = ref(false);
 
-const collection = ref({
+const collection = ref<any>({
     gender: {
         loading: false,
         data: [],

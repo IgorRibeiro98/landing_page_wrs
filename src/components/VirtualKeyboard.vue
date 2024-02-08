@@ -1,5 +1,5 @@
 <template>
-    <div @pointerdown.prevent v-show="visible" style="width: 100%">
+    <div @pointerdown.prevent v-show="visible">
         <v-row v-if="type == 'email'">
             <v-col cols="12" class="d-flex justify-center">
                 <v-chip-group column>
@@ -10,7 +10,7 @@
             </v-col>
         </v-row>
 
-        <v-row dense class="mt-1" v-for="(line, i) in keyboard" :key="i" justify="center">
+        <v-row dense class="ma-0" v-for="(line, i) in keyboard" :key="i" justify="center">
             <v-col v-for="(item, j) in line" :key="j" :cols="item.col ?? 1">
                 <keyboard-btn class="text-body-2" :rounded="settings.button.rounded" :variant="settings.button.variant"
                     :size="settings.button.size ?? 'small'" :key="j" :disabled="item.disabled" @click.native="
@@ -403,9 +403,9 @@ function setDefaultKeyboard(element: EventTarget | null, event?: Event) {
         keyboardId == 'false'
     ) return
 
-    if(keyboardId && keyboardId !== props.target) return;
+    if (keyboardId && keyboardId !== props.target) return;
 
-    type.value =  element.getAttribute('dtype');
+    type.value = element.getAttribute('dtype');
 
     if (element.type == 'number' || element.getAttribute('number') != null)
         setKeyboard(numericKeyboard);

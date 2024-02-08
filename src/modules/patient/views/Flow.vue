@@ -11,12 +11,12 @@
         </v-btn>
     </v-app-bar>
 
-    <v-layout class="fill">
+    <div style="height: 100%;" class="pa-5">
         <component v-model="data" v-model:totem="totem" v-model:loading="loadingFlowDialog" :is="components[component]"
             @next="nextView" @to="redirect" @start="firstStep" />
 
         <v-progress-linear v-if="isLoading" indeterminate color="primary"></v-progress-linear>
-    </v-layout>
+    </div>
 
     <FlowLoading v-model="loadingFlowDialog" />
 </template>
@@ -26,7 +26,7 @@ import { ref, computed, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 
 import { findTotemById } from '@/repositories/totem.repository';
-import { validPatientByBirth } from '@patient/repositories/patient.repository'
+
 import useAlertStore from '@/stores/alert';
 
 import FlowLoading from '@patient/components/FlowLoading.vue';
@@ -155,7 +155,6 @@ for (const path in modules) {
 function firstStep(): void {
     componentIndex.value = 0;
     data.value = { ...defaultData };
-
 }
 
 function nextView(): void {

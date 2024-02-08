@@ -1,11 +1,11 @@
 <template>
-    <v-main class="fill-height" fluid>
-        <div class="layout-container fill-height">
-            <v-container class="top-container" fluid>
-                <router-view />
-            </v-container>
+    <v-main class="layout-container">
+        <div class="top-container">
+            <router-view />
+        </div>
 
-            <VirtualKeyboard class="bottom-container" />
+        <div class="bottom-container">
+            <VirtualKeyboard />
         </div>
     </v-main>
 </template>
@@ -18,14 +18,18 @@ import VirtualKeyboard from '@/components/VirtualKeyboard.vue'
 .layout-container {
     display: flex;
     flex-direction: column;
+    height: 100vh;
 }
 
 .top-container {
     flex-grow: 1;
+    flex-shrink: 1;
     overflow: auto;
 }
 
 .bottom-container {
+    flex-grow: 0;
     flex-shrink: 0;
+    overflow: auto
 }
 </style>

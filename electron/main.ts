@@ -31,9 +31,9 @@ export class Main {
 
         app.on('ready', (): void => {
             try {
-                const fullscreen: boolean = false
+                const fullscreen: boolean = true
                 const autoHideMenuBar: boolean = true
-                const openDevTools: boolean = true
+                const openDevTools: boolean = false
 
                 this.createProtocol('app')
                 this.createFileProtocol('storage')

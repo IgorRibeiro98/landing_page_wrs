@@ -1,6 +1,6 @@
 <template>
-    <v-row justify="center">
-        <v-col cols="12" class="overflow-auto">
+    <v-row justify="center" dense no-gutters class="fill-height">
+        <v-col cols="12">
             <p class="text-center text-body-1 text-secondary-1 mb-6">
                 Por favor informe a sua identificação para encontrarmos seu cadastro
             </p>

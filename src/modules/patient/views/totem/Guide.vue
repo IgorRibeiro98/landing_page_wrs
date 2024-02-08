@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid>
+    <div class="fill-height">
         <p class="text-body-1 text-secondary-1">
             Guia de Serviço
         </p>
@@ -14,7 +14,7 @@
                 Clique para assinar a guia do convênio
             </v-btn>
         </div>
-    </v-container>
+    </div>
 
     <HelpToSign v-model="showSignatureHelp" @end="signature" />
 </template>

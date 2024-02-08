@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid>
+    <div>
         <v-row>
             <v-col>
                 <p class="text-body-1 text-secondary-1">
@@ -77,7 +77,7 @@
                 </v-form>
             </v-col>
         </v-row>
-    </v-container>
+    </div>
 </template>
 
 <script lang="ts" setup>

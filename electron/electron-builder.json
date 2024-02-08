@@ -27,7 +27,6 @@
         "artifactName": "${productName} v${version}.${ext}"
     },
     "nsis": {
-        "include": "installer.nsi",
         "oneClick": false,
         "perMachine": false,
         "allowToChangeInstallationDirectory": false,

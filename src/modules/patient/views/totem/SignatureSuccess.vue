@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid class="d-flex align-center justify-center">
+    <div class="d-flex align-center justify-center fill-height">
         <v-row>
             <v-col cols="12">
                 <p class="text-body-1 text-center">
@@ -24,7 +24,7 @@
                 </ul>
             </v-col>
         </v-row>
-    </v-container>
+    </div>
 </template>
 
 <script lang="ts" setup>

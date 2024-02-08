@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid class="d-flex align-center justify-center">
+    <div class="d-flex align-center justify-center fill-height">
         <v-row>
             <v-col cols="12">
                 <p class="text-body-1 text-secondary-1">
@@ -24,7 +24,7 @@
                 </v-btn>
             </v-col>
         </v-row>
-    </v-container>
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -123,11 +123,14 @@ function generatePass({ type, key }: PriorityBtn) {
             emit('next')
         })
         .catch((error) => {
+            console.log('err')
+
             alert.value = {
                 title: '',
                 text: error.response?.data?.message,
                 display: true
             }
+            emit('next')
         })
         .finally(() => {
             isLoading.value = false
