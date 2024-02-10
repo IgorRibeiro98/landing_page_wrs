@@ -7,7 +7,7 @@
         </v-col>
 
         <v-col cols="7">
-            <v-text-field v-mask="'##/##/####'" number class="f-height-1" autofocus :rules="[required]"
+            <v-text-field v-mask="'##/##/####'" number class="f-height-1 required" autofocus :rules="[required]"
                 label="Data de Nascimento" :disabled="isLoading" :loading="isLoading" v-model="data.birth"
                 @update:model-value="validate">
             </v-text-field>

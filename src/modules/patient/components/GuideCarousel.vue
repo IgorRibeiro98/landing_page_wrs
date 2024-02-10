@@ -12,8 +12,8 @@
             <v-carousel class="fill-height" :show-arrows="false" hide-delimiters hide-delimiter-background
                 v-model="carousel">
                 <v-carousel-item v-for="(url, index) in urls" :key="index">
-                    <iframe :src="url + '?page=hsn#toolbar=0'" width="100%" height="100%" style="border: none;"></iframe>
-
+                    <IframeVue :src="url + '?page=hsn#toolbar=0'" width="100%" height="100%" style="border: none;">
+                    </IframeVue>
                 </v-carousel-item>
             </v-carousel>
             <v-btn :color="disabledNext ? '' : 'primary'" size="large" icon="mdi-chevron-right" :disabled="disabledNext"
@@ -22,9 +22,10 @@
         </div>
     </div>
 </template>
-  
+
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
+import IframeVue from '@/components/IFrameVue.vue'
 
 interface Props {
     urls: any[];
@@ -49,4 +50,3 @@ const disabledPrevious = computed(() => {
     return carousel.value === 0;
 });
 </script>
-  

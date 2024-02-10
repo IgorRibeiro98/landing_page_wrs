@@ -8,7 +8,7 @@
 
         <v-col cols="7">
             <v-form ref="form">
-                <v-text-field @update:modelValue="validate" class="f-height-1" autofocus :rules="[required]" label="CPF"
+                <v-text-field @update:modelValue="validate" class="f-height-1 required" autofocus :rules="[required]" label="CPF"
                     v-mask="'###.###.###-##'" :disabled="loading" :loading="loading" v-model="identifier" number>
                 </v-text-field>
             </v-form>
@@ -31,6 +31,7 @@ defineProps<{
 const emit = defineEmits(['search', 'update:modelValue'])
 
 const identifier = ref('')
+const form = ref();
 
 function getCPF(value: string) {
     return value.replace(/[-.]/g, '');

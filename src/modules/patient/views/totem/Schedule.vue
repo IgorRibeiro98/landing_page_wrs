@@ -6,7 +6,7 @@
             sua
             carteirinha
         </p>
-        <v-form @submit.prevent="open">
+        <v-form ref="form" @submit.prevent="open">
             <v-row>
                 <v-col cols="12">
                     <ScheduleCarousel v-model="data.patient!.agendamentos">
@@ -14,7 +14,7 @@
                 </v-col>
 
                 <v-col cols="12">
-                    <v-text-field v-for="(convenant, index) in convenants" :key="index" class="f-height-1"
+                    <v-text-field v-for="(convenant, index) in convenants" :key="index" class="f-height-1 required"
                         :label="`Carteirinha ${convenant.ds_convenio}`" v-model="convenant.cd_usuario_convenio"
                         type="number" @click="convenants[index].edited = true" :rules="[required]"></v-text-field>
                 </v-col>
@@ -59,7 +59,7 @@ const props = defineProps<{
 
 const { openAlert } = useAlertStore()
 const { title } = useResponsive()
-
+const form = ref();
 const isLoading = ref(false)
 
 const emit = defineEmits(['update:modelValue', 'update:loading', 'next', 'to', 'start'])
@@ -75,7 +75,10 @@ const data = computed({
 
 const convenants = ref<Convenant[]>([])
 
-function open() {
+async function open() {
+    await form.value.resetValidation();
+    const { valid } = await form.value.validate()
+    if (!valid) return
     isLoading.value = true
 
     emit('update:loading', {

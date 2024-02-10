@@ -16,49 +16,49 @@
 
                         <v-col cols="12" sm="6" md="3">
                             <v-text-field :disabled="isLoading" v-mask="'(##) ####-####'" number @blur="applyCellPhone"
-                                :rules="[required]" v-model="cellPhone" label="DDD + Celular" class="f-height-1" />
+                                :rules="[required]" v-model="cellPhone" label="DDD + Celular" class="f-height-1 required" />
                         </v-col>
 
                         <v-col cols="12" sm="6" md="6">
                             <v-text-field v-model="data.patient!.ds_email" :disabled="isLoading" :rules="[required, email]"
-                                label="E-mail" class="f-height-1" />
+                                label="E-mail" class="f-height-1 required" />
                         </v-col>
 
                         <v-col cols="12" sm="6" md="4">
                             <v-select :keyboard="false" label="Tipo de endereço" :items="['Hospedagem', 'Residencial']"
-                                v-model="data.patient!.tipo_endereco" :disabled="isLoading" class="f-height-1"
+                                v-model="data.patient!.tipo_endereco" :disabled="isLoading" class="f-height-1 required"
                                 :rules="[required]">
                             </v-select>
                         </v-col>
 
                         <v-col cols="12" sm="6" md="4">
                             <v-text-field label="CEP" number :disabled="isLoading" :rules="[required]" v-mask="'#####-###'"
-                                v-model="data.patient!.cd_cep" @update:model-value="findAddressByCEP" class="f-height-1" />
+                                v-model="data.patient!.cd_cep" @update:model-value="findAddressByCEP" class="f-height-1 required" />
                         </v-col>
 
                         <v-col cols="12" sm="6" md="4">
                             <v-select label="UF" :keyboard="false" :rules="[required]"
                                 :disabled="addressLoading || isLoading" :loading="addressLoading || collection.uf.loading"
                                 item-title="ds_valor_dominio" item-value="vl_dominio" v-model="data.patient!.cd_estado"
-                                :items="collection.uf.data" class="f-height-1">
+                                :items="collection.uf.data" class="f-height-1 required">
 
                             </v-select>
                         </v-col>
 
                         <v-col cols="12" sm="6" md="3">
                             <v-text-field label="Endereço" :rules="[required]" v-model="data.patient!.ds_endereco"
-                                :disabled="addressLoading || isLoading" :loading="addressLoading" class="f-height-1" />
+                                :disabled="addressLoading || isLoading" :loading="addressLoading" class="f-height-1 required" />
                         </v-col>
 
                         <v-col cols="12" sm="6" md="3">
                             <v-text-field label="Cidade" :rules="[required]" :disabled="addressLoading || isLoading"
-                                :loading="addressLoading" v-model="data.patient!.ds_municipio" class="f-height-1">
+                                :loading="addressLoading" v-model="data.patient!.ds_municipio" class="f-height-1 required">
                             </v-text-field>
                         </v-col>
 
                         <v-col cols="12" sm="6" md="2">
                             <v-text-field label="Nº" number :rules="[required]" :disabled="isLoading"
-                                v-model="data.patient!.nr_endereco" class="f-height-1" />
+                                v-model="data.patient!.nr_endereco" class="f-height-1 required" />
                         </v-col>
 
                         <v-col cols="12" sm="6" md="4">
@@ -135,6 +135,7 @@ const collection = ref<Collection>({
 })
 
 async function validate() {
+    await form.value!.resetValidation()
     const { valid } = await form.value!.validate()
 
     if (!valid) return

@@ -50,3 +50,43 @@
 .progress {
     transition: all 1s linear;
 }
+
+.v-input.required .v-label:not(.v-label--clickable)::after {
+    content: "*";
+    color: red;
+}
+
+@keyframes shake {
+    0% {
+        transform: translatex(0); }
+    15% {
+        transform: translatex(0.375rem); }
+    30% {
+        transform: translatex(-0.375rem); }
+    45% {
+        transform: translatex(0.375rem); }
+    60% {
+        transform: translatex(-0.375rem); }
+    75% {
+        transform: translatex(0.375rem); }
+    90% {
+        transform: translatex(-0.375rem); }
+    100% {
+        transform: translatex(0); } 
+}
+  
+.v-input--error {
+animation-name: shake;
+animation-fill-mode: forwards;
+animation-duration: .6s;
+animation-timing-function: ease-in-out;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}

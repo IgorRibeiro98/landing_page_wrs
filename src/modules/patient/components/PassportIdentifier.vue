@@ -8,7 +8,7 @@
 
         <v-col cols="7">
             <v-form ref="form" @submit="validate">
-                <v-text-field class="f-height-1" autofocus :rules="[required]" label="Passaporte" :disabled="loading"
+                <v-text-field class="f-height-1 required" autofocus :rules="[required]" label="Passaporte" :disabled="loading"
                     :loading="loading" v-model="identifier">
                 </v-text-field>
 
@@ -39,11 +39,9 @@ const emit = defineEmits(['search'])
 
 
 async function validate(event: Event) {
-    event.preventDefault()
+    await form.value!.resetValidation()
 
-    if (!form.value) return
-
-    const { valid } = await form.value.validate()
+    const { valid } = await form.value!.validate()
 
     if (!valid) return
 
