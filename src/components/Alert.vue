@@ -1,19 +1,16 @@
 <template>
-    <v-dialog v-model="alert.display" width="800">
+    <v-dialog v-model="alert.display" width="auto">
         <v-card>
-            <v-card-title class="d-flex text-body-1 font-weight-bold text-secondary">
+            <v-card-title :class="title" class="font-weight-bold">
                 {{ alert.title }}
-                <v-spacer />
             </v-card-title>
 
-            <v-card-text v-html="alert.text" class="text-secondary text-h5">
+            <v-card-text v-html="alert.text" :class="subtitle">
             </v-card-text>
 
             <v-card-actions class="d-flex justify-center">
-                <v-btn @click="close" variant="tonal" block color="primary">
-                    <h2>
-                        Fechar
-                    </h2>
+                <v-btn @click="close" variant="tonal" :size="btnSize" block color="primary">
+                    Fechar
                 </v-btn>
             </v-card-actions>
         </v-card>
@@ -24,8 +21,10 @@
 import { storeToRefs } from 'pinia';
 
 import useAlertStore from '@/stores/alert';
+import useResponsive from '@patient/helpers/responsives';
 
-const { alert } = storeToRefs<any>(useAlertStore());
+const { alert } = storeToRefs(useAlertStore());
+const { title, subtitle, btnSize } = useResponsive()
 
 function close() {
     alert.value.display = false;

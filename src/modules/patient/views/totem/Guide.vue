@@ -1,19 +1,13 @@
 <template>
     <div class="fill-height">
-        <p class="text-body-1 text-secondary-1">
-            Guia de Serviço
-        </p>
+        <p :class="title"> Guia de Serviço </p>
 
-        <div class="fill-height mt-8 ">
-            <GuideCarousel :urls="urls" />
-        </div>
+        <GuideCarousel class="fill-height" :urls="urls" />
 
-        <div>
-            <v-btn block :disabled="isLoading" :loading="isLoading" size="x-large" height="3.5em" color="primary"
-                style="position: absolute; bottom: 2em" @click="showSignatureHelp = true">
-                Clique para assinar a guia do convênio
-            </v-btn>
-        </div>
+        <v-btn block :disabled="isLoading" :loading="isLoading" size="x-large" height="3.5em" color="primary"
+            style="position: absolute; bottom: 2em" @click="showSignatureHelp = true">
+            Clique para assinar a guia do convênio
+        </v-btn>
     </div>
 
     <HelpToSign v-model="showSignatureHelp" @end="signature" />
@@ -21,31 +15,23 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
-import { storeToRefs } from 'pinia'
 
 import GuideCarousel from '@patient/components/GuideCarousel.vue';
 
 import HelpToSign from '@patient/components/HelpSignatureFlow.vue';
 
 import useAlertStore from '@/stores/alert'
+import useResponsive from '@patient/helpers/responsives';
 
 import { signatureGuide } from '@patient/repositories/schedule.repository'
 
-const { alert } = storeToRefs<any>(useAlertStore())
+const { openAlert } = useAlertStore()
+const { title } = useResponsive()
 
 const props = defineProps<{
-    modelValue: any;
-    totem: any
+    modelValue: Data;
+    totem: Totem
 }>();
-
-
-interface PriorityBtn {
-    title: string;
-    type: 'regular' | 'priority';
-    key: string;
-    variant: any;
-    icons: string[]
-}
 
 const urls = ref([
     'https://drive.google.com/file/d/1-K9QNOdOmcPNOSR1hfbxGCo04OkOERZ4/preview'
@@ -69,17 +55,13 @@ function signature() {
     isLoading.value = true
 
     signatureGuide()
-        .then(res => {
+        .then(() => {
             emit('next')
         })
         .catch(error => {
             showSignatureHelp.value = false
 
-            alert.value = {
-                display: true,
-                title: 'Falha na assinatura da guia',
-                text: error.response.data.message,
-            }
+            openAlert('Falha na assinatura da guia', error.response.data.message)
         })
         .finally(() => {
             isLoading.value = false

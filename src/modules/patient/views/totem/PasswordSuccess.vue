@@ -3,24 +3,24 @@
         <v-row>
             <v-col cols="12" class="text-center">
                 <h1 class="text-h2 font-weight-bold">
-                    {{ data.queue.ds_senha }}
+                    {{ data.password.ds_senha }}
                 </h1>
 
-                <p class="text-body-1 mt-4">
+                <p :class="title">
                     {{ phrase }}
                 </p>
 
-                <p class="text-h4 text-success" v-if="data.queue.send_type == 'sms'">
-                    <v-icon>mdi-leaf-circle</v-icon>
-                    Parabéns pela iniciativa!
+                <p :class="subtitle">
+
+                    Acompanhe sua senha, você será chamado(a) em breve.
                 </p>
             </v-col>
 
             <v-col class="text-body-1">
                 <Timer :timer="defaultTimer" @timer-end="emit('to', 'Init')" />
-
-                <p class="mt-5">
-                    Acompanhe sua senha, você será chamado(a) em breve.
+                <p class="text-h4 text-success text-center" v-if="data.password_send_type == 'sms'">
+                    <v-icon>mdi-leaf-circle</v-icon>
+                    Parabéns pela iniciativa!
                 </p>
             </v-col>
         </v-row>
@@ -31,15 +31,16 @@
 import { ref, computed } from 'vue'
 
 import Timer from '@patient/components/Timer.vue'
+import useResponsive from '../../helpers/responsives';
+
+const { title, subtitle } = useResponsive()
 
 const props = defineProps<{
-    modelValue: any;
-    totem: any
+    modelValue: Data;
+    totem: Totem
 }>();
 
 const defaultTimer = ref(20)
-
-const isLoading = ref(false)
 
 const emit = defineEmits(['update:modelValue', 'next', 'to', 'start'])
 
@@ -53,7 +54,7 @@ const data = computed({
 })
 
 const phrase = computed(() => {
-    switch (data.value.queue.send_type) {
+    switch (data.value.password_send_type) {
         case 'sms':
             return 'Senha enviada via SMS!'
         case 'email':

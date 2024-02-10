@@ -5,10 +5,10 @@
         <v-btn height="8em" block rounded="0" variant="tonal" :color="option.color" :disabled="loading"
           @click="emit('click', option)">
           <div>
-            <h2 class="text-h4 font-weight-bold">
+            <h2 :class="title" class="font-weight-bold">
               {{ option.title }}
             </h2>
-            <p class="text-body-1 text-secondary-1">
+            <p :class="subtitle" class="text-secondary-1">
               {{ option.subtitle }}
             </p>
           </div>
@@ -19,6 +19,10 @@
 </template>
 <script lang="ts" setup>
 import { defineProps, defineEmits, computed } from "vue";
+
+import useResponsive from "../helpers/responsives";
+
+const { title, subtitle } = useResponsive();
 
 const props = defineProps<{
   options: ButtonOption[];

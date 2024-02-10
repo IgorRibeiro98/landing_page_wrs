@@ -1,7 +1,7 @@
 <template>
     <v-dialog v-model="dialog" @update:model-value="start" width="100%" persistent>
         <v-card>
-            <v-card-title class="text-center text-body-1 text-secondary font-weight-bold" style="text-wrap: wrap;">
+            <v-card-title :class="title" class="text-center" style="text-wrap: wrap;">
                 Assinatura de Guia
             </v-card-title>
 
@@ -12,14 +12,14 @@
                 <Transition name="slide-up" mode="out-in">
                     <div v-if="!show">
 
-                        <p class="text-h5 text-center text-secondary" v-html="step.text">
+                        <p :class="subtitle" class="text-center" v-html="step.text">
                         </p>
 
                         <v-img :src="step.image" height="400" />
                     </div>
 
                     <div v-else>
-                        <p class="text-h5 text-center text-secondary" v-html="step.text">
+                        <p :class="subtitle" class="text-center" v-html="step.text">
                         </p>
 
                         <v-img :src="step.image" height="400"> </v-img>
@@ -55,9 +55,9 @@ import {
 import totem from '@/assets/totem.png'
 import totemTabletFocus from '@/assets/totem-tablet-focus.png'
 import tablet from '@/assets/tablet.svg'
-import { mdiChevronLeft, mdiChevronRight } from '@mdi/js';
 
 import Timer from './Timer.vue';
+import useResponsive from '@patient/helpers/responsives';
 
 interface Props {
     modelValue: boolean
@@ -65,6 +65,10 @@ interface Props {
 
 const props = defineProps<Props>()
 const emit = defineEmits(['update:modelValue', 'end'])
+
+const { title, subtitle } = useResponsive()
+
+const hasCalledSignature = ref(false)
 
 const steps = [
     {
@@ -88,7 +92,10 @@ const stepIndex = ref(0)
 const timeout = ref<any>(null)
 
 watch(stepIndex, (current) => {
-    if (current == steps.length - 1) emit('end', true)
+    if (current == steps.length - 1 && !hasCalledSignature.value) {
+        hasCalledSignature.value = true
+        emit('end', true)
+    }
 })
 
 const disabledPrev = computed(() => {
@@ -137,29 +144,13 @@ function start(value: boolean) {
 function setStepTimeout(time: number) {
     console.log(`Step: ${step.value.text} \n reading time second: ${(time / 1000)}s`)
     if (steps.length - 1 == stepIndex.value) {
-        // stepIndex.value = 0
         return
     }
 
     show.value = !show.value;
     stepIndex.value++
 
-    // timeout.value = setTimeout(() => {
-    //     if (steps.length -1 == stepIndex.value) {
-    //         // stepIndex.value = 0
-    //         return
-    //     }
-
-    //     stepIndex.value++
-    //     setStepTimeout(timer.value)
-    // }, time)
 }
-
-
-// onMounted(() => {
-//     setStepTimeout(timer.value)
-// })
-
 </script>
 
 <style>

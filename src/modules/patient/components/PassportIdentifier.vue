@@ -1,7 +1,7 @@
 <template>
     <v-row justify="center">
         <v-col cols="12" class="overflow-auto mt-10">
-            <p class="text-center text-body-1 text-secondary-1 mb-6">
+            <p :class="subtitle" class="text-center">
                 Por favor informe a sua identificação para encontrarmos seu cadastro e clique em <b>CONTINUAR</b>
             </p>
         </v-col>
@@ -23,12 +23,13 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { required } from '@/rules';
+import useResponsive from '@patient/helpers/responsives';
 
-interface Props {
+const { subtitle } = useResponsive()
+
+defineProps<{
     loading: boolean
-}
-
-const props = defineProps<Props>()
+}>()
 
 const identifier = ref('');
 
@@ -41,7 +42,6 @@ async function validate(event: Event) {
     event.preventDefault()
 
     if (!form.value) return
-
 
     const { valid } = await form.value.validate()
 

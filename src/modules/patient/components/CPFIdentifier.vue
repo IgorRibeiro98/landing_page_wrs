@@ -1,7 +1,7 @@
 <template>
     <v-row justify="center" dense no-gutters class="fill-height">
         <v-col cols="12">
-            <p class="text-center text-body-1 text-secondary-1 mb-6">
+            <p :class="subtitle" class="text-center">
                 Por favor informe a sua identificação para encontrarmos seu cadastro
             </p>
         </v-col>
@@ -17,15 +17,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import { required } from '@/rules';
+import useResponsive from '@patient/helpers/responsives';
 
-interface Props {
+const { subtitle } = useResponsive()
+
+defineProps<{
     loading: boolean
     modelValue: string
-}
-
-const props = defineProps<Props>()
+}>()
 
 const emit = defineEmits(['search', 'update:modelValue'])
 

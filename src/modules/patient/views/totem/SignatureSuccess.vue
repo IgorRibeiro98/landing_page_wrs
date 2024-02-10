@@ -2,12 +2,12 @@
     <div class="d-flex align-center justify-center fill-height">
         <v-row>
             <v-col cols="12">
-                <p class="text-body-1 text-center">
+                <p :class="title" class="text-center">
                     Seu atendimento foi aberto com sucesso!
                 </p>
             </v-col>
 
-            <v-col class="text-body-1">
+            <v-col :class="subtitle">
                 <Timer :timer="defaultTimer" @timer-end="emit('to', 'Init')" />
 
                 <p class="mt-5">
@@ -31,15 +31,15 @@
 import { ref, computed } from 'vue'
 
 import Timer from '@patient/components/Timer.vue'
+import useResponsive from '@patient/helpers/responsives';
 
 const props = defineProps<{
-    modelValue: any;
-    totem: any
+    modelValue: Data;
+    totem: Totem
 }>();
 
+const { title, subtitle } = useResponsive()
 const defaultTimer = ref(20)
-
-const isLoading = ref(false)
 
 const emit = defineEmits(['update:modelValue', 'next', 'to', 'start'])
 

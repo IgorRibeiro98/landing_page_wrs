@@ -1,7 +1,7 @@
 export function findTotemById(id: string) {
     return new Promise((res, rej) => {
         const totem = {
-            id: 1,
+            id: parseInt(id),
             name: 'Internação',
             description: 'Auto atendimento para internação.',
             site: {

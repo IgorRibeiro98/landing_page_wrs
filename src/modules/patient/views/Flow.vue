@@ -11,10 +11,9 @@
         </v-btn>
     </v-app-bar>
 
-    <div style="height: 100%;" class="pa-5">
+    <div class="pa-5 h-100">
         <component v-model="data" v-model:totem="totem" v-model:loading="loadingFlowDialog" :is="components[component]"
             @next="nextView" @to="redirect" @start="firstStep" />
-
         <v-progress-linear v-if="isLoading" indeterminate color="primary"></v-progress-linear>
     </div>
 
@@ -23,13 +22,16 @@
 
 <script lang="ts" setup>
 import { ref, computed, onMounted } from 'vue';
-import { storeToRefs } from 'pinia';
 
 import { findTotemById } from '@/repositories/totem.repository';
 
 import useAlertStore from '@/stores/alert';
 
+import router from '@/router'
+
 import FlowLoading from '@patient/components/FlowLoading.vue';
+import defaultData from '@patient/views/default-data'
+
 
 interface ComponentInfo {
     __name: string;
@@ -48,68 +50,10 @@ interface Component {
     [key: string]: ComponentInfo;
 }
 
-enum QueueType {
-    Common = 'regular',
-    Preferential = 'priority',
-    Late = 'late'
-}
-
-const { alert } = storeToRefs<any>(useAlertStore())
+const { openAlert } = useAlertStore()
 
 const components: Component = {}
 const isLoading = ref(false)
-
-const defaultData = {
-    identifier: '',
-    birth: '',
-    queue: {
-        id: 1,
-        name: 'Agendamento de Exame',
-        description: 'Agende um exame para o paciente.',
-        icon: 'mdi-file',
-        color: 'primary',
-        action: 'next',
-        to: 'identifier',
-        nr_seq_fila_comum: '1',
-        nr_seq_fila_preferencial: '1',
-        nr_seq_fila_preferencial_80: '1',
-        ds_senha: 'ACT957',
-        dt_entrada: ''
-    },
-    patient: {
-        prim_nm_pessoa_fisica: '',
-        cd_pessoa_fisica: '',
-        nm_pessoa_fisica: '',
-        nm_social: null,
-        nm_social_int: null,
-        dt_nascimento: "",
-        ie_sexo: "",
-        nr_seq_genero: null,
-        nr_identidade: "",
-        nr_cpf: "",
-        cd_nacionalidade: 0,
-        nr_passaporte: null,
-        nr_reg_geral_estrang: null,
-        ie_estado_civil: 0,
-        nr_ddi_telefone: null,
-        nr_ddd_telefone: null,
-        nr_telefone: null,
-        nr_ddd_celular: "",
-        nr_ddi_celular: "",
-        nr_telefone_celular: "",
-        ds_email: "",
-        cd_religiao: 0,
-        ie_tipo_complemento: 0,
-        tipo_endereco: "",
-        ds_endereco: "",
-        nr_endereco: 0,
-        ds_complemento: "",
-        cd_cep: "",
-        ds_municipio: "",
-        cd_estado: 0,
-        agendamentos: []
-    }
-}
 
 const loadingFlowDialog = ref({
     display: false,
@@ -117,19 +61,12 @@ const loadingFlowDialog = ref({
     text: ''
 })
 
-const data = ref({
-    ...defaultData
+const data = ref<Data>(structuredClone(defaultData.data))
+const totem = ref<Totem>(structuredClone(defaultData.totem))
+
+const id = computed(() => {
+    return router.currentRoute.value.params.id as string;
 })
-
-const defaultTotem = {
-    id: 0,
-    name: '',
-    description: null,
-    screens: [],
-    queues: []
-}
-
-const totem = ref<Totem>({ ...defaultTotem })
 
 const componentIndex = ref(0)
 
@@ -144,24 +81,17 @@ const component: any = computed(() => {
 });
 
 const modules: Record<string, any> = import.meta.glob('@patient/views/totem/*.vue', { eager: true });
-
-for (const path in modules) {
-    const componentRegexName = path.match(/([A-Z])\w+/g);
-
-    if (componentRegexName)
-        components[`${componentRegexName[0]}`] = modules[path].default;
-}
+importModules()
 
 function firstStep(): void {
     componentIndex.value = 0;
-    data.value = { ...defaultData };
+    data.value = structuredClone(defaultData.data);
 }
 
 function nextView(): void {
     componentIndex.value++;
 
     if (componentIndex.value == totem.value.screens.length) firstStep()
-
 }
 
 function redirect(to: string): void {
@@ -172,24 +102,25 @@ function redirect(to: string): void {
     componentIndex.value = index;
 }
 
+function importModules() {
+
+    for (const path in modules) {
+        const componentRegexName = path.match(/([A-Z])\w+/g);
+
+        if (componentRegexName)
+            components[`${componentRegexName[0]}`] = modules[path].default;
+    }
+}
+
 onMounted(() => {
     isLoading.value = true;
 
-    // validPatientByBirth('1234', '02/03/1997')
-    //     .then((res: any) => {
-    //         data.value.patient = Object.assign(data.value.patient, res.data)
-    //     })
-
-    findTotemById('123')
+    findTotemById(id.value)
         .then((res: any) => {
             totem.value = res.data;
         })
         .catch(error => {
-            alert.value = {
-                title: 'Não foi possível carregar as informações do totem',
-                text: error.response?.data?.message,
-                display: true
-            };
+            openAlert('Não foi possível carregar as informações do totem', error.response?.data?.message)
         })
         .finally(() => {
             isLoading.value = false;
@@ -198,14 +129,3 @@ onMounted(() => {
 })
 
 </script>
-
-<style>
-.fill-width {
-    width: 100%
-}
-
-.fill {
-    width: 100%;
-    height: 100%
-}
-</style>

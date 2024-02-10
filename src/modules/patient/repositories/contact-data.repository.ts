@@ -124,15 +124,14 @@ export function getUF() {
     }))
 }
 
-export function findCEP(cep: string) {
+export function findCEP(cep: string): Promise<any> {
     return new Promise((res) => {
         setTimeout(() => {
             const item = {
-                "cd_cep": "00000-000",
-                "ds_log": "Avenida Teste",
-                "ds_loc": "São Caetano do Súl",
+                "ds_log": "Avenida Brasil",
+                "ds_loc": "São Paulo",
                 "ds_uf": "SP",
-                "ds_bairro": "Teste"
+                "ds_bairro": "Jardim São Paulo"
             }
 
             res({ data: item })

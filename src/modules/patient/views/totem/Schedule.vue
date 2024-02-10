@@ -1,15 +1,15 @@
 <template>
-    <v-container fluid>
+    <div class="fill-height">
+        <p :class="title">
+            Você possui <b>{{ data.patient!.agendamentos.length }}</b> agendamentos neste setor. <br /> Por favor, confirme
+            a
+            sua
+            carteirinha
+        </p>
         <v-form @submit.prevent="open">
             <v-row>
                 <v-col cols="12">
-                    <p class="text-body-1">
-                        Você possui <b>{{ data.patient.agendamentos.length }}</b> agendamentos neste setor
-                    </p>
-                </v-col>
-
-                <v-col cols="12">
-                    <ScheduleCarousel v-model="data.patient.agendamentos">
+                    <ScheduleCarousel v-model="data.patient!.agendamentos">
                     </ScheduleCarousel>
                 </v-col>
 
@@ -27,19 +27,19 @@
                 </v-col>
             </v-row>
         </v-form>
-    </v-container>
+    </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch, onMounted } from 'vue'
-import { storeToRefs } from 'pinia'
+import { ref, computed, onMounted } from 'vue'
 import { required } from '@/rules'
 
 import useAlertStore from '@/stores/alert'
+import useResponsive from '@patient/helpers/responsives'
 
 import ScheduleCarousel from '@patient/components/ScheduleCarousel.vue'
 
-import { openAttendance } from '../../repositories/schedule.repository'
+import { openAttendance } from '@patient/repositories/schedule.repository'
 
 interface Convenant {
     ds_convenio: string;
@@ -51,12 +51,14 @@ interface Convenant {
     edited: boolean;
 }
 
-
 const props = defineProps<{
-    modelValue: any;
-    totem: any;
+    modelValue: Data;
+    totem: Totem;
     loading: any
 }>();
+
+const { openAlert } = useAlertStore()
+const { title } = useResponsive()
 
 const isLoading = ref(false)
 
@@ -82,19 +84,21 @@ function open() {
         text: 'Estamos verificando a sua elegibilidade e abrindo o seu atendimento...'
     })
 
-    const sequences = data.value.patient.agendamentos.map((schedule: any) => schedule.nr_sequencia)
+    const sequences = data.value.patient!.agendamentos.map((schedule: any) => schedule.nr_sequencia)
 
     openAttendance(sequences)
-        .then(res => {
+        .then((res) => {
+            data.value.patient!.aberturaAtendimento = res.data
             closeLoading()
             emit('next')
         })
         .catch((error) => {
+            openAlert('Não foi possível abrir o atendimento', error.response?.data?.message)
             closeLoading()
-
             emit('to', 'Menu')
         })
         .finally(() => {
+            console.log('finally')
             closeLoading()
             isLoading.value = false
         })
@@ -130,7 +134,7 @@ function setGroupConvenant() {
                         cd_produto,
                         cd_categoria,
                         edited: false,
-                        totem_id: props.totem._id,
+                        totem_id: props.totem.id,
                     };
                 }
             )
@@ -149,7 +153,7 @@ function setGroupConvenant() {
 
 
 onMounted(() => {
-    if (!data.value.patient.agendamentos.length) emit('to', 'Menu')
+    if (!data.value.patient?.agendamentos.length) emit('to', 'Menu')
 
     setGroupConvenant();
 })

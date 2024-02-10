@@ -4,7 +4,7 @@ export default class Msisid {
   private sn: string = '';
 
   constructor(cc: string = '', ndc: string = '', sn: string = '') {
-    if(!cc || !ndc || !sn) return
+    if (!cc || !ndc || !sn) return
     this.setPhone(cc, ndc, sn);
   }
 
@@ -22,7 +22,7 @@ export default class Msisid {
     if (!/^\d{6,10}$/.test(sn)) {
       throw new Error('SN deve ser uma string contendo de seis a dez dígitos');
     }
-    this.cc = cc;
+    this.cc = `+${cc}`;
     this.ndc = ndc;
     this.sn = sn;
   }

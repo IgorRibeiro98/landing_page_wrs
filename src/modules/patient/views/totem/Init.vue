@@ -1,33 +1,35 @@
 <template>
     <div class="d-flex align-center justify-center fill-height">
         <v-row justify="center" no-gutters>
-            <v-col cols="4" class="d-flex justify-center align-center">
-                <v-img :src="state.logo" height="200"> </v-img>
+            <v-col cols="4" class="d-flex justify-center align-center" v-if="!mobile">
+                <v-img :src="state.logo" height="400"> </v-img>
             </v-col>
 
-            <v-col cols="8">
-                <p class="text-body-1 text-secondary-1 d-flex justify-center align-center mx-3 my-10">
-                    {{ greeting }}, Inicie seu atendimento clicando no botão abaixo.
-                </p>
-                <v-btn color="primary" size="x-large" class="w-100" height="5em" @click="emit('next', null)">
-                    <span :class="mobile ? 'text-h4' : 'text-h3'" class="font-weight-bold mb-2">Começar</span>
-                </v-btn>
-            </v-col>
+            <v-col cols="8" class="d-flex align-center justify-center flex-column">
+                <div>
+                    <p :class="title">
+                        {{ greeting }}, Inicie seu atendimento clicando no botão abaixo.
+                    </p>
 
+                    <v-btn class="font-weight-bold text-h3" color="primary" height="4rem" block @click="emit('next', null)">
+                        Começar
+                    </v-btn>
+                </div>
+            </v-col>
         </v-row>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { useDisplay } from 'vuetify';
 import { storeToRefs } from 'pinia'
 
+import useResponsive from '@patient/helpers/responsives';
 import useSystemStore from '@/stores/system'
 
-const { state } = storeToRefs<any>(useSystemStore())
+const { title, mobile } = useResponsive()
 
-const { mobile } = useDisplay();
+const { state } = storeToRefs<any>(useSystemStore())
 
 const emit = defineEmits(['update:modelValue', 'next', 'update:loading']);
 

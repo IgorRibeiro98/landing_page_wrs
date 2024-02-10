@@ -2,18 +2,19 @@
   <div class="pa-5 d-flex align-center justify-center fill-height">
     <v-row>
       <v-col cols="12">
-        <p class="text-h2 text-secondary-1 text-center">
+        <p :class="title" class="text-center">
           Como deseja obter as informações do seu atendimento?
         </p>
         <v-divider thickness="3" length="80%" color="primary" class="my-4 d-flex ma-auto"></v-divider>
-        <p class="text-h4">Escolha uma das opções:</p>
+        <p :class="subtitle">Escolha uma das opções:</p>
       </v-col>
 
       <v-col cols="12" class="my-5 pa-0">
         <OptionsButton :options="options" :loading="isLoading" @click="$event.action()"></OptionsButton>
       </v-col>
+
       <v-col cols="12">
-        <p class="text-h4 text-left text-success">
+        <p :class="subtitle" class="text-left text-success">
           <v-icon>mdi-leaf-circle</v-icon>
           Contribua para a sustentabilidade escolhendo o SMS, e assim estará
           ajudando o meio ambiente.
@@ -30,23 +31,27 @@ import OptionsButton from "@/modules/patient/components/OptionsButton.vue";
 import ConfirmPhoneDialog from "@/modules/patient/components/ConfirmPhoneDialog.vue";
 
 import useAlertStore from '@/stores/alert'
+import useResponsive from "@patient/helpers/responsives";
 import Msisid from "@/valueObjects/Msisid";
 
 const { openAlert } = useAlertStore()
+const { title, subtitle } = useResponsive()
 
 import { sendSMSQueue, printQueue } from '@patient/repositories/queue.repository'
 
 const emit = defineEmits(['update:modelValue', 'next', 'to', 'start'])
 
 const props = defineProps<{
-  modelValue: any;
-  totem: any;
+  modelValue: Data;
+  totem: Totem;
 }>();
 
 const phoneDialog = ref(false);
 const isLoading = ref(false)
 const msisid = new Msisid();
 const phone = computed(() => {
+  if (!data.value.patient) return ''
+
   const { nr_ddi_celular, nr_telefone_celular, nr_ddd_celular } = data.value.patient;
 
   if (nr_ddi_celular && nr_ddd_celular && nr_telefone_celular) {
@@ -65,6 +70,8 @@ const data = computed({
 })
 
 const formattedPhone = computed(() => {
+  if (!data.value.patient) return ''
+
   const { nr_telefone_celular, nr_ddd_celular } = data.value.patient;
   if (!nr_ddd_celular || !nr_telefone_celular) return '';
 
@@ -93,7 +100,7 @@ const options = ref<ButtonOption[]>([
   {
     title: "Imprimir",
     id: 'print',
-    color: "secondary",
+    color: "primary",
     action: () => {
       print()
     },
@@ -106,7 +113,7 @@ function print() {
 
   printQueue(data.value.queue)
     .then(res => {
-      data.value.queue.send_type = 'print'
+      data.value.password_send_type = 'print'
       emit('next')
     })
     .catch((error: any) => {
@@ -121,11 +128,10 @@ function generateSMS(number: string) {
   isLoading.value = true
   sendSMSQueue(number, data.value?.queue)
     .then(res => {
-      data.value.queue.send_type = 'sms'
+      data.value.password_send_type = 'sms'
       emit('next')
     })
     .catch((error: any) => {
-      console.log({ error })
       openAlert('Não foi possível enviar o SMS', error?.response?.data?.message)
     })
     .finally(() => {
@@ -134,6 +140,6 @@ function generateSMS(number: string) {
 }
 
 onMounted(() => {
-  if (!data.value.patient.cd_pessoa_fisica) print()
+  if (!data.value.patient?.cd_pessoa_fisica) print()
 })
 </script>

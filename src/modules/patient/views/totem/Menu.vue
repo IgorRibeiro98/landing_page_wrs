@@ -1,8 +1,8 @@
 <template>
-    <div class="d-flex align-center fill">
+    <div class="d-flex align-center justify-center fill-height">
         <v-row justify="center" no-gutters>
             <v-col cols="12" class="">
-                <p class="text-body-1 text-secondary-1 d-flex justify-center mx-3 my-10">
+                <p :class="title" class="text-center">
                     Selecione uma das opções abaixo.
                 </p>
             </v-col>
@@ -31,18 +31,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
-import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
 
-import useAlertStore from '@/stores/alert'
+import useResponsive from '@patient/helpers/responsives';
 
-const isLoading = ref(false)
-
-const { alert } = storeToRefs<any>(useAlertStore())
+const { title } = useResponsive()
 
 interface Props {
-    modelValue: any;
-    totem: any
+    modelValue: Data;
+    totem: Totem
 }
 
 const props = defineProps<Props>();

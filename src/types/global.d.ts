@@ -4,14 +4,25 @@ interface Screens {
     component: string
 }
 
+interface Data {
+    identifier: string;
+    birth: string;
+    password_send_type: string;
+    patient?: Patient;
+    queue?: Queue;
+    password: Password;
+}
+
 interface Queue {
     id: number;
     name: string;
-    description: string | null;
+    description: string;
     icon: string;
     color: string;
-    action: string;
-    to: string;
+    nr_seq_fila_comum: string;
+    nr_seq_fila_preferencial: string;
+    nr_seq_fila_preferencial_80: string;
+    [key: string]: any;
 }
 
 interface Totem {
@@ -19,8 +30,15 @@ interface Totem {
     name: string;
     description: string | null;
     screens: Screens[];
-    queues: Queue[]
+    queues: Queue[];
+    site: Site
 }
+
+interface Site {
+    cd_estabelecimento;
+    ds_estabelecimento;
+}
+
 interface Agendamento {
     nr_sequencia: number;
     cd_usuario_convenio: string;
@@ -54,11 +72,65 @@ interface Agendamento {
     nr_cpf: string;
     nr_seq_proc_interno: string;
 }
+
+interface Patient {
+    cd_pessoa_fisica: string;
+    prim_nm_pessoa_fisica: string;
+    dt_nascimento: string;
+    nm_pessoa_fisica: string;
+    nm_social: string | null;
+    nm_social_int: string | null;
+    ie_sexo: string;
+    nr_seq_genero: number | null;
+    nr_identidade: string;
+    nr_cpf: string;
+    cd_nacionalidade: number;
+    nr_passaporte: string | null;
+    nr_reg_geral_estrang: string | null;
+    ie_estado_civil: number;
+    nr_ddi_telefone: string | null;
+    nr_ddd_telefone: string | null;
+    nr_telefone: string | null;
+    nr_ddd_celular: string;
+    nr_ddi_celular: string;
+    nr_telefone_celular: string;
+    ds_email: string;
+    cd_religiao: number;
+    ie_tipo_complemento: number;
+    tipo_endereco: string;
+    ds_endereco: string;
+    nr_endereco: number | null;
+    ds_complemento: string | null;
+    cd_cep: string;
+    ds_municipio: string;
+    cd_estado: number;
+    sg_estado: string;
+    agendamentos: Agendamento[];
+    aberturaAtendimento?: Elegibilidade
+}
+
+interface Atendimento {
+    nr_atendimento: number
+    nr_prescricao: number
+}
+
+interface Elegibilidade {
+    elegivel: boolean;
+    carteirinha: string;
+    nr_seq_autor: string
+    atendimento: Atendimento
+}
+
+interface Password {
+    ds_senha: string;
+    dt_entrada: string;
+}
+
 interface ButtonOption {
-  title: string;
-  id: string;
-  subtitle?: T<string> | string;
-  color: string;
-  action: () => void;
-  show: boolean;
+    title: string;
+    id: string;
+    subtitle?: T<string> | string;
+    color: string;
+    action: () => void;
+    show: boolean;
 }

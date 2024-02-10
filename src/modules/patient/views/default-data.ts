@@ -1,0 +1,65 @@
+const totem = {
+    id: 0,
+    name: '',
+    description: null,
+    screens: [],
+    queues: []
+}
+
+const data = {
+    identifier: '',
+    birth: '',
+    password_send_type: 'print',
+    queue: {
+        id: 0,
+        name: '',
+        description: '',
+        icon: '',
+        color: '',
+        nr_seq_fila_comum: '',
+        nr_seq_fila_preferencial: '',
+        nr_seq_fila_preferencial_80: '',
+    },
+    patient: {
+        prim_nm_pessoa_fisica: '',
+        cd_pessoa_fisica: '',
+        nm_pessoa_fisica: '',
+        nm_social: null,
+        nm_social_int: null,
+        dt_nascimento: "",
+        ie_sexo: "",
+        nr_seq_genero: null,
+        nr_identidade: "",
+        nr_cpf: "",
+        cd_nacionalidade: 0,
+        nr_passaporte: null,
+        nr_reg_geral_estrang: null,
+        ie_estado_civil: 0,
+        nr_ddi_telefone: null,
+        nr_ddd_telefone: null,
+        nr_telefone: null,
+        nr_ddd_celular: "",
+        nr_ddi_celular: "",
+        nr_telefone_celular: "",
+        ds_email: "",
+        cd_religiao: 0,
+        ie_tipo_complemento: 0,
+        tipo_endereco: "",
+        ds_endereco: "",
+        nr_endereco: 0,
+        ds_complemento: "",
+        cd_cep: "",
+        ds_municipio: "",
+        cd_estado: 0,
+        agendamentos: []
+    },
+    password: {
+        ds_senha: '',
+        dt_entrada: '',
+    }
+}
+
+export default {
+    totem,
+    data
+}

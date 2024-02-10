@@ -8,10 +8,10 @@
                     </h2>
 
                     <h3 class="text-h6">
-                        Dr(a). {{ schedule?.medico }}
+                        Dr(a). {{ doctorName }}
                     </h3>
 
-                    <ul class="text-h6 no-bullets mt-8" :class="smAndDown ? 'd-flex justify-space-between' : ''">
+                    <ul class="text-h6 no-bullets " :class="smAndDown ? 'd-flex justify-space-between' : ''">
                         <li>
                             Convênio: <span class="text-primary">{{ schedule?.ds_convenio }}</span>
                         </li>
@@ -25,7 +25,7 @@
                 </v-col>
 
                 <v-col cols="12" sm="12" md="5" class="d-flex align-center flex-column justify-center">
-                    <h1 class="text-h1 font-weight-bold text-primary">
+                    <h1 :class="{ 'text-h1': !mobile, 'text-h2': mobile }" class="font-weight-bold text-primary">
                         {{ hour }}
                     </h1>
 
@@ -33,7 +33,7 @@
                         {{ location }}
                     </h2>
 
-                    <p class="text-h5 mt-2">
+                    <p class="text-h6 mt-2">
                         <span v-if="!isLate">
                             Sua consulta será em {{ currentDateDiffInMinutes }}
                         </span>
@@ -52,6 +52,9 @@
 import { computed } from 'vue'
 import { useDisplay } from 'vuetify'
 
+import useResponsive from '../helpers/responsives';
+
+const { title, mobile } = useResponsive()
 const { smAndDown } = useDisplay()
 
 const props = defineProps<{
@@ -87,10 +90,15 @@ const isLate = computed(() => {
     return date.getTime() < currentDate.getTime()
 })
 
-const classes = computed(() => {
-    return {
-        'text-error': !smAndDown
-    }
+const doctorName = computed(() => {
+    if (!mobile.value) return schedule.value.medico
+
+    const splittedName = schedule.value.medico.split(' ')
+    const name = splittedName.map((item: string, index) => {
+        return index == 0 || index == splittedName.length - 1 ? item : `${item[0]}.`
+    }).join(' ')
+
+    return name
 })
 
 </script>

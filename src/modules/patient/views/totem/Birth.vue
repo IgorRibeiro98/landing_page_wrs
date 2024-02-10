@@ -1,7 +1,7 @@
 <template>
     <v-row no-gutters justify="center" align-content="center" class="fill-height">
         <v-col cols="12" class="overflow-auto">
-            <p class="text-center text-body-1 text-secondary-1 mb-6">
+            <p :class="title" class="text-center">
                 <b>{{ data.patient.prim_nm_pessoa_fisica }}</b>, para a sua segurança insira a sua data de nascimento
             </p>
         </v-col>
@@ -18,19 +18,20 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
-import { storeToRefs } from 'pinia'
 
 import useAlertStore from '@/stores/alert'
 
-import { findByIdentifier, validPatientByBirth } from '@patient/repositories/patient.repository'
+import { validPatientByBirth } from '@patient/repositories/patient.repository'
+import useResponsive from '@patient/helpers/responsives'
 
 const isLoading = ref(false)
-const form = ref<HTMLFormElement>()
 
-const { alert } = storeToRefs<any>(useAlertStore())
+const { title } = useResponsive()
+
+const { openAlert } = useAlertStore()
 
 interface Props {
-    modelValue: any;
+    modelValue: Data;
 }
 const props = defineProps<Props>();
 const emit = defineEmits(['update:modelValue', 'next', 'to', 'start']);
@@ -59,12 +60,8 @@ async function validate(value: string) {
             data.value.patient = Object.assign(data.value.patient, res.data)
             emit('next', null)
         })
-        .catch(err => {
-            alert.value = {
-                display: true,
-                title: 'Falha na validação',
-                text: err.response.data.message
-            }
+        .catch(error => {
+            openAlert('Não foi possível prosseguir', error.response.data.message)
             emit('to', 'Menu')
         })
         .finally(() => {

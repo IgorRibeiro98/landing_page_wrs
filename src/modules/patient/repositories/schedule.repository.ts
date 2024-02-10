@@ -1,31 +1,23 @@
-export function openAttendance(sequences: number[]) {
+export function openAttendance(sequences: number[]): Promise<any> {
     return new Promise((res, rej) => {
 
         setTimeout(() => {
+            // rej({
+            //     response: {
+            //         data: {
+            //             message: 'Não foi possível abrir seu atendimento'
+            //         }
+            //     }
+            // })
             const data = {
-                "elegibilidade": {
-                    "cabecalhoRetorno": {
-                        "codigoOperadora": "4",
-                        "sucesso": true
-                    },
-                    "retornoElegibilidade": {
-                        "carteirinha": "55500444000158370010",
-                        "nomePaciente": "EDERSON MANARIN",
-                        "plano": "OSWALDOCRUZ100 - 582 - ADMINISTRADO AHO POS LEI",
-                        "elegivel": true,
-                        "filename": "elegibilidade-sulamerica-55500444000158370010-1707304216231"
-                    }
+                elegivel: true,
+                carteirinha: "88888459653390018",
+                nr_seq_autorizacao: 6546748,
+                atendimento: {
+                    nr_atendimento: 5087294,
+                    nr_prescricao: 19828424,
                 },
-                "nr_sequencia_autor": "6546748",
-                "atendimento": {
-                    "nr_atendimento": 5087294,
-                    "nr_prescricao": 19828424,
-                    "codigomensagem": "0",
-                    "ds_mensagem": "Atendimento aberto e vinculado na agenda_consulta"
-                },
-                guia: {
-
-                }
+                guia: {}
             }
 
             return res({

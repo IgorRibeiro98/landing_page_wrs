@@ -2,7 +2,7 @@
     <div class="d-flex align-center justify-center fill-height">
         <v-row>
             <v-col cols="12">
-                <p class="text-body-1 text-secondary-1">
+                <p :class="title">
                     Selecione uma das opções abaixo e aguarde a recepção chamá-lo (a)
                 </p>
             </v-col>
@@ -29,16 +29,17 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
-import { storeToRefs } from 'pinia'
 import { pushQueue } from '@patient/repositories/queue.repository'
 
 import useAlertStore from '@/stores/alert'
+import useResponsive from '@patient/helpers/responsives'
 
-const { alert } = storeToRefs<any>(useAlertStore())
+const { openAlert } = useAlertStore()
+const { title } = useResponsive()
 
 const props = defineProps<{
-    modelValue: any;
-    totem: any
+    modelValue: Data;
+    totem: Totem
 }>();
 
 interface PriorityBtn {
@@ -83,7 +84,7 @@ const priorities = ref<PriorityBtn[]>([
         key: 'nr_seq_fila_preferencial_80',
         icons: [],
         show() {
-            if (data.value.patient.dt_nascimento) {
+            if (data.value.patient?.dt_nascimento) {
                 const birth = new Date(data.value.patient.dt_nascimento)
                 const today = new Date()
                 const age = today.getFullYear() - birth.getFullYear()
@@ -107,29 +108,28 @@ const data = computed({
 
 
 function generatePass({ type, key }: PriorityBtn) {
+    if (!data.value?.queue) {
+        openAlert('Não foi possivel gerar a senha', 'A tela de filas não foi selecionada para o totem atual.')
+        emit('to', 'Init')
+        return
+    }
 
     const body = {
         nr_seq_fila: data.value.queue[key],
         tipo_senha: type,
         cd_estabelecimento: props.totem.site.cd_estabelecimento,
-        cd_pessoa_fisica: data.value.patient.cd_pessoa_fisica
+        cd_pessoa_fisica: data.value.patient?.cd_pessoa_fisica
     }
 
     isLoading.value = true
 
     pushQueue(body)
-        .then((res: any) => {
-            data.value.queue = Object.assign(data.value.queue, res.data)
+        .then((res) => {
+            data.value.password = res.data
             emit('next')
         })
         .catch((error) => {
-            console.log('err')
-
-            alert.value = {
-                title: '',
-                text: error.response?.data?.message,
-                display: true
-            }
+            openAlert('Não foi possível gerar a senha', error.response.data.message)
             emit('next')
         })
         .finally(() => {

@@ -1,25 +1,24 @@
 <template>
-    <v-dialog v-model="display" persistent width="800">
-        <v-sheet class="pa-5 text-secondary" width="800">
-            <div class="d-flex justify-center flex-column align-center">
-                <div class="d-flex justify-center text-h2 font-weight-bold">
-                    {{ modelValue.title }}
-                    <div style="display: flex">
-                        <div class="dot dot1" style="">.</div>
-                        <div class="dot dot2">.</div>
-                        <div class="dot dot3">.</div>
-                    </div>
-                </div>
-
-                <div class="text-body-1 mt-4">
-                    {{ modelValue.text }}
+    <v-dialog v-model="display" persistent width="auto">
+        <v-sheet width="auto" class="pa-4">
+            <div :class="title" class="d-flex justify-center font-weight-bold">
+                {{ modelValue.title }}
+                <div class="d-flex">
+                    <div class="dot dot1">.</div>
+                    <div class="dot dot2">.</div>
+                    <div class="dot dot3">.</div>
                 </div>
             </div>
+
+            <div :class="subtitle" v-html="modelValue.text"></div>
         </v-sheet>
     </v-dialog>
 </template>
   
 <script lang="ts" setup>
+import { computed } from 'vue';
+import useResponsive from '@patient/helpers/responsives';
+
 const props = defineProps<{
     modelValue: {
         display: boolean;
@@ -28,7 +27,7 @@ const props = defineProps<{
     };
 }>();
 
-import { computed } from 'vue';
+const { title, subtitle } = useResponsive()
 
 const display = computed({
     get() {
@@ -41,10 +40,6 @@ const display = computed({
 </script>
   
 <style scoped>
-.image {
-    animation: spin 2s infinite linear;
-}
-
 @keyframes spin {
     from {
         transform: rotate(0deg);

@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-export default defineStore('alert', (): any => {
+export const alertStore = defineStore('alert', () => {
     const alert = ref({
         display: false,
         title: '',
@@ -22,3 +22,5 @@ export default defineStore('alert', (): any => {
         openAlert
     }
 })
+
+export default alertStore

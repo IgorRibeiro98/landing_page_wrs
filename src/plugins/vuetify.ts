@@ -42,10 +42,8 @@ export default createVuetify({
     themes: {
       saludti: {
         colors: {
-          primary: '#706dff',
-          secondary: '#222390',
-          'secondary-1': '#222390',
-          'secondary-2': '#e4f6f7',
+          primary: '#f94c07',
+          secondary: '#243859',
           grey: '#abacac'
         }
       }
