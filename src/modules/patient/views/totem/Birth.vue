@@ -1,13 +1,13 @@
 <template>
-    <v-row no-gutters justify="center" align-content="center" class="fill-height">
+    <v-row justify="center" align-content="center" class="fill-height">
         <v-col cols="12" class="overflow-auto">
-            <p :class="title" class="text-center">
+            <h1 class="text-center">
                 <b>{{ data.patient.prim_nm_pessoa_fisica }}</b>, para a sua segurança insira a sua data de nascimento
-            </p>
+            </h1>
         </v-col>
 
         <v-col cols="7">
-            <v-text-field v-mask="'##/##/####'" number class="f-height-1 required" autofocus :rules="[required]"
+            <v-text-field v-mask="'##/##/####'" number class="required" autofocus :rules="[required]"
                 label="Data de Nascimento" :disabled="isLoading" :loading="isLoading" v-model="data.birth"
                 @update:model-value="validate">
             </v-text-field>

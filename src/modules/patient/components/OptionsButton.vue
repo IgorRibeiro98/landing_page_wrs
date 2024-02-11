@@ -2,15 +2,18 @@
   <v-row justify="space-around">
     <template v-for="option in filteredOptions">
       <v-col :md="md" cols="12" class="d-flex align-center">
-        <v-btn height="8em" block rounded="0" variant="tonal" :color="option.color" :disabled="loading"
+        <v-btn class="pa-2" height="100%" block rounded="0" variant="tonal" :color="option.color" :disabled="loading"
           @click="emit('click', option)">
           <div>
-            <h2 :class="title" class="font-weight-bold">
+            <h2 class="font-weight-bold">
               {{ option.title }}
             </h2>
-            <p :class="subtitle" class="text-secondary-1">
+            <p v-if="option.subtitle" class="font-weight-regular">
               {{ option.subtitle }}
             </p>
+            <v-icon v-if="option.icons" v-for="(icon, index) in option.icons" :key="index" :icon="icon" size="45" class="mx-2"
+                  color="secondary">
+            </v-icon>
           </div>
         </v-btn>
       </v-col>
@@ -26,7 +29,7 @@ const { title, subtitle } = useResponsive();
 
 const props = defineProps<{
   options: ButtonOption[];
-  loading: boolean
+  loading?: boolean
 }>();
 
 const filteredOptions = computed(() => props.options.filter(opt => opt.show));

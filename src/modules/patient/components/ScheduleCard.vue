@@ -1,42 +1,42 @@
 <template>
-    <v-card variant="tonal" :color="isLate ? 'error' : 'secondary'">
+    <v-card variant="tonal" :color="isLate ? 'error' : 'primary'">
         <v-card-text>
             <v-row>
                 <v-col cols="12" sm="12" md="7" :class="{ 'border-right': !smAndDown }">
-                    <h2 class="text-h5 text-primary text-decoration-underline">
+                    <h2 class="text-secondary text-decoration-underline">
                         {{ schedule?.procedimento }}
                     </h2>
 
-                    <h3 class="text-h6">
+                    <p class="mt-3 text-secondary">
                         Dr(a). {{ doctorName }}
-                    </h3>
+                    </p>
 
-                    <ul class="text-h6 no-bullets " :class="smAndDown ? 'd-flex justify-space-between' : ''">
+                    <ul class="no-bullets mt-4" :class="smAndDown ? 'd-flex justify-space-between' : ''">
                         <li>
-                            Convênio: <span class="text-primary">{{ schedule?.ds_convenio }}</span>
+                            <p>Convênio: <span class="text-secondary">{{ schedule?.ds_convenio }}</span></p>
                         </li>
                         <li>
-                            Plano: <span class="text-primary">{{ schedule?.ds_plano }}</span>
+                            <p>Plano: <span class="text-secondary">{{ schedule?.ds_plano }}</span></p>
                         </li>
                         <li>
-                            Produto: <span class="text-primary">{{ schedule?.ds_produto }}</span>
+                            <p>Produto: <span class="text-secondary">{{ schedule?.ds_produto }}</span></p>
                         </li>
                     </ul>
                 </v-col>
 
                 <v-col cols="12" sm="12" md="5" class="d-flex align-center flex-column justify-center">
-                    <h1 :class="{ 'text-h1': !mobile, 'text-h2': mobile }" class="font-weight-bold text-primary">
+                    <span class="text-h2 font-weight-bold text-secondary">
                         {{ hour }}
-                    </h1>
+                    </span>
 
-                    <h2 class="text-h5 text-primary">
+                    <h2 class="text-secondary">
                         {{ location }}
                     </h2>
 
-                    <p class="text-h6 mt-2">
-                        <span v-if="!isLate">
+                    <p class="mt-2">
+                        <b v-if="!isLate">
                             Sua consulta será em {{ currentDateDiffInMinutes }}
-                        </span>
+                        </b>
 
                         <span v-else class="text-error font-weight-bold">
                             Atendimento atrasado

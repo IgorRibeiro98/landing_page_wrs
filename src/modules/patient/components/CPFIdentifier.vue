@@ -1,9 +1,9 @@
 <template>
-    <v-row justify="center" dense no-gutters class="fill-height">
+    <v-row justify="center" class="fill-height">
         <v-col cols="12">
-            <p :class="subtitle" class="text-center">
+            <h1 class="text-center mb-4">
                 Por favor informe a sua identificação para encontrarmos seu cadastro
-            </p>
+            </h1>
         </v-col>
 
         <v-col cols="7">

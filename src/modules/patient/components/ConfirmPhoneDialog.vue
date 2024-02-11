@@ -1,27 +1,27 @@
 <template>
-  <v-dialog width="100%" v-model="dialog">
+  <v-dialog width="100%" v-model="dialog" class="totem">
     <v-card class="pa-8 ma-auto" width="80%">
       <v-card-text>
-        <h2 class="text-center" :class="title">Confira seu número abaixo</h2>
+        <h1 class="text-center">Confira seu número abaixo</h1>
 
 
         <v-divider thickness="3" length="90%" color="primary" class="mt-4 mb-8 d-flex ma-auto"></v-divider>
-        <v-text-field class="f-height-1" :prefix="countryCode" number="true" v-mask="'(##) #####-####'" keyboard="phone"
+        <v-text-field :prefix="countryCode" number="true" v-mask="'(##) #####-####'" keyboard="phone"
           label="Celular" v-model="phoneNumber"></v-text-field>
 
-        <p :class="subtitle">
+        <h2>
           Se necessário altere o número de celular, caso contrário clique em <b>enviar</b>.
-        </p>
+        </h2>
       </v-card-text>
 
 
       <v-card-actions>
         <v-row>
           <v-col cols="12">
-            <v-btn block variant="tonal" color="primary" class="pa-8 text-h5" @click="send">Enviar</v-btn>
+            <v-btn block variant="tonal" color="primary" class="pa-1" @click="send">Enviar</v-btn>
           </v-col>
           <v-col cols="12">
-            <p :class="subtitle" class="text-center text-success">
+            <p class="text-center text-success">
               <v-icon>mdi-leaf-circle</v-icon>
               Parabéns pela iniciativa!
             </p>

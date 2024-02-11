@@ -11,7 +11,7 @@
         </v-btn>
     </v-app-bar>
 
-    <div class="pa-5 h-100">
+    <div class="pa-5 h-100 totem">
         <component v-model="data" v-model:totem="totem" v-model:loading="loadingFlowDialog" :is="components[component]"
             @next="nextView" @to="redirect" @start="firstStep" />
         <v-progress-linear v-if="isLoading" indeterminate color="primary"></v-progress-linear>
@@ -129,3 +129,9 @@ onMounted(() => {
 })
 
 </script>
+
+<style scoped>
+::v-deep .v-card > .v-card-text {
+  line-height:1.5rem;
+}
+</style>

@@ -2,19 +2,19 @@
   <div class="pa-5 d-flex align-center justify-center fill-height">
     <v-row>
       <v-col cols="12">
-        <p :class="title" class="text-center">
+        <h1 class="text-center">
           Como deseja obter as informações do seu atendimento?
-        </p>
+        </h1>
         <v-divider thickness="3" length="80%" color="primary" class="my-4 d-flex ma-auto"></v-divider>
-        <p :class="subtitle">Escolha uma das opções:</p>
+        <h2>Escolha uma das opções:</h2>
       </v-col>
 
       <v-col cols="12" class="my-5 pa-0">
-        <OptionsButton :options="options" :loading="isLoading" @click="$event.action()"></OptionsButton>
+        <OptionsButton :options="options" :loading="isLoading" @click="$event.action ? $event.action() : null"></OptionsButton>
       </v-col>
 
       <v-col cols="12">
-        <p :class="subtitle" class="text-left text-success">
+        <p class="text-left text-success">
           <v-icon>mdi-leaf-circle</v-icon>
           Contribua para a sustentabilidade escolhendo o SMS, e assim estará
           ajudando o meio ambiente.

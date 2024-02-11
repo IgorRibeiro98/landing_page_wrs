@@ -1,10 +1,10 @@
 <template>
     <div class="fill-height position-relative">
-        <p :class="title"> Guia de Serviço </p> <v-btn @click="show = !show">R</v-btn>
+        <p :class="title"> Guia de Serviço </p>
 
-        <GuideCarousel v-if="show" class="fill-height" :urls="urls" />
+        <GuideCarousel class="fill-height" :urls="urls" />
 
-        <v-btn block :disabled="isLoading" :loading="isLoading" size="x-large" height="3.5em" color="primary"
+        <v-btn class="pa-1" block :disabled="isLoading" :loading="isLoading" color="primary"
             style="position: absolute; bottom: 0.5em" @click="showSignatureHelp = true">
             Clique para assinar a guia do convênio
         </v-btn>
@@ -39,7 +39,6 @@ const urls = ref([
 
 const isLoading = ref(false)
 const showSignatureHelp = ref(false)
-const show = ref(false);
 const emit = defineEmits(['update:modelValue', 'next', 'to', 'start'])
 
 const data = computed({

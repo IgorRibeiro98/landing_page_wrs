@@ -1,20 +1,20 @@
 <template>
-    <v-dialog v-model="display" persistent width="auto">
+    <v-dialog v-model="display" persistent width="auto" class="totem">
         <v-sheet width="auto" class="pa-4">
-            <div :class="title" class="d-flex justify-center font-weight-bold">
+            <h1 class="d-flex justify-center font-weight-bold">
                 {{ modelValue.title }}
                 <div class="d-flex">
                     <div class="dot dot1">.</div>
                     <div class="dot dot2">.</div>
                     <div class="dot dot3">.</div>
                 </div>
-            </div>
+            </h1>
 
-            <div :class="subtitle" v-html="modelValue.text"></div>
+            <h2 v-html="modelValue.text"></h2>
         </v-sheet>
     </v-dialog>
 </template>
-  
+
 <script lang="ts" setup>
 import { computed } from 'vue';
 import useResponsive from '@patient/helpers/responsives';
@@ -38,7 +38,7 @@ const display = computed({
     },
 });
 </script>
-  
+
 <style scoped>
 @keyframes spin {
     from {
@@ -76,4 +76,3 @@ const display = computed({
     }
 }
 </style>
-  

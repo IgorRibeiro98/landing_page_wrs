@@ -2,10 +2,10 @@
   <div class="fill-height">
     <v-row>
       <v-col>
-        <p :class="title">
+        <h1>
           <b>{{ data.patient!.prim_nm_pessoa_fisica }}</b
           >, por favor revise suas informações pessoais
-        </p>
+        </h1>
       </v-col>
       <v-col cols="12">
         <v-form ref="form" @submit.prevent="validate">
@@ -17,7 +17,7 @@
                 disabled
                 label="CPF"
                 required
-                class="f-height-1"
+                class="required"
               />
             </v-col>
 
@@ -28,7 +28,7 @@
                 v-model="data.patient!.nm_pessoa_fisica"
                 label="Nome"
                 required
-                class="f-height-1 required"
+                class="required"
               />
             </v-col>
 
@@ -37,7 +37,6 @@
                 :disabled="isLoading"
                 v-model="data.patient!.nm_social"
                 label="Nome Social"
-                class="f-height-1"
               />
             </v-col>
 
@@ -53,7 +52,7 @@
                   <span class="text-secondary text-h5 required">Sexo</span>
                 </template>
                 <v-radio
-                  class="mr-4 f-height-1 text-black"
+                  class="mr-4  text-black"
                   value="M"
                   label="Masculino"
                   color="primary"
@@ -64,7 +63,7 @@
                 </v-radio>
 
                 <v-radio
-                  class="f-height-1 text-black"
+                  class=" text-black"
                   value="F"
                   label="Feminino"
                   color="primary"
@@ -82,7 +81,7 @@
                 :disabled="isLoading"
                 v-model="showGenderField"
                 inline
-                class="f-height-1 text-opacity-1 text-black"
+                class=" text-opacity-1 text-black"
               >
                 <template #label>
                   <div class="text-secondary mr-2">
@@ -92,7 +91,7 @@
 
                 <v-radio
                   :value="true"
-                  class="mr-4 f-height-1"
+                  class="mr-4 "
                   color="primary"
                   label="Sim"
                   true-icon="mdi-radiobox-marked"
@@ -104,7 +103,7 @@
                 <v-radio
                   :value="false"
                   color="primary"
-                  class="f-height-1"
+                  class=""
                   label="Não"
                   true-icon="mdi-radiobox-marked"
                   false-icon="mdi-radiobox-blank"
@@ -116,7 +115,7 @@
               <v-select
                 :keyboard="false"
                 v-else
-                class="f-height-1 required"
+                class=" required"
                 variant="outlined"
                 label="Gênero"
                 :rules="[required]"
@@ -151,7 +150,7 @@
                 v-model="data.patient!.ie_estado_civil"
                 :items="collection.meritalStatus.data"
                 :disabled="isLoading || collection.meritalStatus.loading"
-                class="f-height-1"
+                class=""
                 :loading="collection.meritalStatus.loading"
               >
               </v-select>
@@ -160,7 +159,7 @@
             <v-col cols="6" sm="4">
               <v-select
                 :keyboard="false"
-                label="Nacionalidade required"
+                label="Nacionalidade"
                 :rules="[required]"
                 :disabled="isLoading || collection.nationality.loading"
                 item-title="ds_nacionalidade"
@@ -168,7 +167,7 @@
                 v-model="data.patient!.cd_nacionalidade"
                 :items="collection.nationality.data"
                 :loading="collection.nationality.loading"
-                class="f-height-1"
+                class=" required"
               >
               </v-select>
             </v-col>
@@ -184,18 +183,17 @@
                 v-model="data.patient!.cd_religiao"
                 :items="collection.religion.data"
                 :loading="collection.religion.loading"
-                class="f-height-1 required"
+                class=" required"
               >
               </v-select>
             </v-col>
 
             <v-col cols="12">
               <v-btn
+                class="pa-1"
                 block
                 :disabled="isLoading"
                 :loading="isLoading"
-                size="x-large"
-                height="3.5em"
                 color="primary"
                 type="submit"
               >

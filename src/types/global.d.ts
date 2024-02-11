@@ -131,6 +131,8 @@ interface ButtonOption {
     id: string;
     subtitle?: T<string> | string;
     color: string;
-    action: () => void;
+    action?: () => void;
+    icons?: string[]
     show: boolean;
+    [key: string]: any;
 }

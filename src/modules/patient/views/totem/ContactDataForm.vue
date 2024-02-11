@@ -2,9 +2,9 @@
     <div>
         <v-row>
             <v-col>
-                <p :class="title">
+                <h1>
                     <b>{{ data.patient!.prim_nm_pessoa_fisica }}</b>, por favor revise suas informações de contato
-                </p>
+                </h1>
             </v-col>
             <v-col cols="12">
                 <v-form ref="form" @submit.prevent="validate">
@@ -68,7 +68,7 @@
 
 
                         <v-col cols="12">
-                            <v-btn block :disabled="isLoading" :loading="isLoading" size="x-large" height="3.5em"
+                            <v-btn class="pa-1" block :disabled="isLoading" :loading="isLoading"
                                 color="primary" type="submit">
                                 Continuar
                             </v-btn>

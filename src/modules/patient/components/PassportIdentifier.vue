@@ -1,14 +1,14 @@
 <template>
     <v-row justify="center">
-        <v-col cols="12" class="overflow-auto mt-10">
-            <p :class="subtitle" class="text-center">
+        <v-col cols="12" class="overflow-auto">
+            <h1 class="text-center">
                 Por favor informe a sua identificação para encontrarmos seu cadastro e clique em <b>CONTINUAR</b>
-            </p>
+            </h1>
         </v-col>
 
         <v-col cols="7">
             <v-form ref="form" @submit="validate">
-                <v-text-field class="f-height-1 required" autofocus :rules="[required]" label="Passaporte" :disabled="loading"
+                <v-text-field class="required" autofocus :rules="[required]" label="Passaporte" :disabled="loading"
                     :loading="loading" v-model="identifier">
                 </v-text-field>
 

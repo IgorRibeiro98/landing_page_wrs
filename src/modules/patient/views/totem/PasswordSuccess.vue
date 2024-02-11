@@ -1,27 +1,30 @@
 <template>
     <div class="d-flex align-center justify-center fill-height">
-        <v-row>
+        <v-row justify="center">
             <v-col cols="12" class="text-center">
-                <h1 class="text-h2 font-weight-bold">
+                <h1 class="font-weight-bold">
                     {{ data.password.ds_senha }}
                 </h1>
 
-                <p :class="title">
+                <h2>
                     {{ phrase }}
-                </p>
+                </h2>
 
-                <p :class="subtitle">
+                <h2>
 
                     Acompanhe sua senha, você será chamado(a) em breve.
-                </p>
+                </h2>
             </v-col>
 
-            <v-col class="text-body-1">
-                <Timer :timer="defaultTimer" @timer-end="emit('to', 'Init')" />
-                <p class="text-h4 text-success text-center" v-if="data.password_send_type == 'sms'">
+            <v-col cols="12" class="text-body-1">
+                <Timer :timer="defaultTimer" @timer-end="emit('to', 'Init')"  />
+                <p class="text-success text-center" v-if="data.password_send_type == 'sms'">
                     <v-icon>mdi-leaf-circle</v-icon>
                     Parabéns pela iniciativa!
                 </p>
+            </v-col>
+            <v-col cols="6">
+              <PrintPassword v-if="false"></PrintPassword>
             </v-col>
         </v-row>
     </div>
@@ -32,7 +35,7 @@ import { ref, computed } from 'vue'
 
 import Timer from '@patient/components/Timer.vue'
 import useResponsive from '../../helpers/responsives';
-
+import PrintPassword from '@/components/PrintPassword.vue';
 const { title, subtitle } = useResponsive()
 
 const props = defineProps<{

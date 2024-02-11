@@ -24,21 +24,6 @@
 //     }
 // }
 
-
-
-.f-height-1 {
-    .v-field__input {
-        row-gap: 140px
-    }
-    .v-field__field {
-            font-size:clamp(1.10rem, 1rem + 0.3125vw, 2.125rem) !important;
-    }
-    
-    .v-label {
-        font-size: clamp(1rem, 1rem + 0.3125vw, 2.125rem) !important;
-    }
-}
-
 .arrow-left {
     clip-path: polygon(25% 0%, 80% -30%, 80% 50%, 80% 140%, 29% 120%, 15% 50%);
 }
@@ -89,4 +74,50 @@ animation-timing-function: ease-in-out;
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+
+$font-size-h1:clamp(2rem, 2.5vw, 4rem) !important;
+$font-size-h2:clamp(1.5rem, 2vw, 3rem) !important;
+$font-size:clamp(1.3rem, 1.7vw, 2.7rem) !important;
+
+.totem {
+    h1 {
+        font-size: $font-size-h1;
+        font-weight: normal;
+    }
+    h2 {
+        font-size: $font-size-h2;
+        font-weight: normal;
+    }
+    p {
+        font-size: $font-size;
+    }
+
+    .v-btn {
+        font-size: $font-size-h1;
+        height: auto;
+        font-weight: 700 !important;
+    }
+
+    .v-text-field {
+        .v-field__input {
+            row-gap: 140px
+        }
+        .v-field__field {
+                font-size:clamp(1.10rem, 1rem + 0.3125vw, 2.125rem) !important;
+        }
+        
+        .v-label {
+            font-size: clamp(1rem, 1rem + 0.3125vw, 2.125rem) !important;
+        }
+    }
+
+    .v-input {
+        .v-input__details {
+            padding-bottom: 5px;
+        }
+        .v-messages__message {
+            font-size: clamp(1rem, 1vw, 1.5rem);
+        }
+    }
 }

@@ -2,26 +2,12 @@
     <div class="d-flex align-center justify-center fill-height">
         <v-row>
             <v-col cols="12">
-                <p :class="title">
+                <h1>
                     Selecione uma das opções abaixo e aguarde a recepção chamá-lo (a)
-                </p>
+                </h1>
             </v-col>
-
-            <v-col cols="6" v-for="(priority, index) in priorities" :key="index">
-                <v-btn height="8em" rounded="0" block color="primary" :variant="priority.variant" v-if="priority.show()"
-                    @click="generatePass(priority)" :disabled="isLoading">
-                    <div>
-                        <h2 class="text-h4">
-                            {{ priority.title }}
-                        </h2>
-
-                        <div>
-                            <v-icon v-for="(icon, index) in priority.icons" :key="index" :icon="icon" size="45" class="mx-2"
-                                color="secondary">
-                            </v-icon>
-                        </div>
-                    </div>
-                </v-btn>
+            <v-col cols="12">
+              <OptionsButton @click="generatePass" :options="prioritiesOptions"></OptionsButton>
             </v-col>
         </v-row>
     </div>
@@ -30,7 +16,7 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 import { pushQueue } from '@patient/repositories/queue.repository'
-
+import OptionsButton from '@patient/components/OptionsButton.vue'
 import useAlertStore from '@/stores/alert'
 import useResponsive from '@patient/helpers/responsives'
 
@@ -47,6 +33,7 @@ interface PriorityBtn {
     type: 'regular' | 'priority';
     key: string;
     variant: any;
+    color: string
     icons: string[]
     show(): boolean
 }
@@ -57,6 +44,7 @@ const priorities = ref<PriorityBtn[]>([
         title: 'Comum',
         type: 'regular',
         variant: 'flat',
+        color: 'primary',
         key: 'nr_seq_fila_comum',
         icons: [],
         show() {
@@ -67,6 +55,7 @@ const priorities = ref<PriorityBtn[]>([
         title: 'Preferencial',
         type: 'priority',
         variant: 'outlined',
+        color: 'secondary',
         key: 'nr_seq_fila_preferencial',
         icons: [
             'mdi-human-cane',
@@ -81,6 +70,7 @@ const priorities = ref<PriorityBtn[]>([
         title: 'Preferencial +80',
         type: 'priority',
         variant: 'flat',
+        color: 'secondary',
         key: 'nr_seq_fila_preferencial_80',
         icons: [],
         show() {
@@ -95,6 +85,19 @@ const priorities = ref<PriorityBtn[]>([
     },
 ])
 
+const prioritiesOptions = computed<ButtonOption[]>(() => {
+    return priorities.value.map((priority) => {
+        return {
+            title: priority.title,
+            id: priority.key,
+            color: priority.color,
+            icons: priority.icons,
+            show: priority.show(),
+            type: priority.type,
+        };
+    });
+});
+
 const emit = defineEmits(['update:modelValue', 'next', 'to', 'start'])
 
 const data = computed({
@@ -107,7 +110,7 @@ const data = computed({
 })
 
 
-function generatePass({ type, key }: PriorityBtn) {
+function generatePass({ type, id }: ButtonOption) {
     if (!data.value?.queue) {
         openAlert('Não foi possivel gerar a senha', 'A tela de filas não foi selecionada para o totem atual.')
         emit('to', 'Init')
@@ -115,7 +118,7 @@ function generatePass({ type, key }: PriorityBtn) {
     }
 
     const body = {
-        nr_seq_fila: data.value.queue[key],
+        nr_seq_fila: data.value.queue[id],
         tipo_senha: type,
         cd_estabelecimento: props.totem.site.cd_estabelecimento,
         cd_pessoa_fisica: data.value.patient?.cd_pessoa_fisica
