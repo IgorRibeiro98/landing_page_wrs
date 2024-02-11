@@ -119,10 +119,9 @@
                 variant="outlined"
                 label="Gênero"
                 :rules="[required]"
-                :disabled="isLoading || collection.gender.loading"
+                :disabled="isLoading"
                 v-model="data.patient!.nr_seq_genero"
-                :items="collection.gender.data"
-                :loading="collection.gender.loading"
+                :items="genders"
                 item-title="ds_genero"
                 item-value="nr_sequencia"
               >
@@ -148,10 +147,9 @@
                 item-title="ds_valor_dominio"
                 item-value="vl_dominio"
                 v-model="data.patient!.ie_estado_civil"
-                :items="collection.meritalStatus.data"
-                :disabled="isLoading || collection.meritalStatus.loading"
+                :items="meritalStatuses"
+                :disabled="isLoading"
                 class=""
-                :loading="collection.meritalStatus.loading"
               >
               </v-select>
             </v-col>
@@ -161,12 +159,11 @@
                 :keyboard="false"
                 label="Nacionalidade"
                 :rules="[required]"
-                :disabled="isLoading || collection.nationality.loading"
+                :disabled="isLoading"
                 item-title="ds_nacionalidade"
                 item-value="cd_nacionalidade"
                 v-model="data.patient!.cd_nacionalidade"
-                :items="collection.nationality.data"
-                :loading="collection.nationality.loading"
+                :items="nationalities"
                 class=" required"
               >
               </v-select>
@@ -177,12 +174,11 @@
                 :keyboard="false"
                 label="Religião"
                 :rules="[required]"
-                :disabled="isLoading || collection.religion.loading"
+                :disabled="isLoading"
                 item-title="ds_religiao"
                 item-value="cd_religiao"
                 v-model="data.patient!.cd_religiao"
-                :items="collection.religion.data"
-                :loading="collection.religion.loading"
+                :items="religions"
                 class=" required"
               >
               </v-select>
@@ -212,12 +208,7 @@ import { ref, computed, onMounted } from "vue";
 import { required } from "@/rules";
 
 import { updatePatient } from "@patient/repositories/patient.repository";
-import {
-  getNationality,
-  getReligion,
-  getMaritalStatus,
-  getGender,
-} from "@patient/repositories/personal-data.repository";
+
 
 import useAlertStore from "@/stores/alert";
 import useResponsive from "@patient/helpers/responsives";
@@ -233,6 +224,10 @@ interface Collection {
 const props = defineProps<{
   modelValue: Data;
   totem: Totem;
+  genders: any[];
+  nationalities: any[];
+  religions: any[];
+  meritalStatuses: any[];
 }>();
 
 const { openAlert } = useAlertStore();
@@ -255,28 +250,28 @@ const data = computed({
 
 const showGenderField = ref(false);
 
-const collection = ref<Collection>({
-  gender: {
-    loading: false,
-    data: [],
-    request: getGender,
-  },
-  nationality: {
-    loading: false,
-    data: [],
-    request: getNationality,
-  },
-  religion: {
-    loading: false,
-    data: [],
-    request: getReligion,
-  },
-  meritalStatus: {
-    loading: false,
-    data: [],
-    request: getMaritalStatus,
-  },
-});
+// const collection = ref<Collection>({
+//   gender: {
+//     loading: false,
+//     data: [],
+//     request: getGender,
+//   },
+//   nationality: {
+//     loading: false,
+//     data: [],
+//     request: getNationality,
+//   },
+//   religion: {
+//     loading: false,
+//     data: [],
+//     request: getReligion,
+//   },
+//   meritalStatus: {
+//     loading: false,
+//     data: [],
+//     request: getMaritalStatus,
+//   },
+// });
 
 async function validate() {
   await form.value!.resetValidation();
@@ -302,24 +297,24 @@ async function validate() {
 }
 
 onMounted(() => {
-  Object.entries(collection.value).forEach(([key, value]: any) => {
-    collection.value[key].loading = true;
+  // Object.entries(collection.value).forEach(([key, value]: any) => {
+  //   collection.value[key].loading = true;
 
-    value
-      .request()
-      .then((res: any) => {
-        collection.value[key].data = res.data;
-      })
-      .catch((error: any) => {
-        openAlert(
-          "Erro ao carregar informações pessoais",
-          error.response.data.message
-        );
-      })
-      .finally(() => {
-        collection.value[key].loading = false;
-      });
-  });
+  //   value
+  //     .request()
+  //     .then((res: any) => {
+  //       collection.value[key].data = res.data;
+  //     })
+  //     .catch((error: any) => {
+  //       openAlert(
+  //         "Erro ao carregar informações pessoais",
+  //         error.response.data.message
+  //       );
+  //     })
+  //     .finally(() => {
+  //       collection.value[key].loading = false;
+  //     });
+  // });
 });
 </script>
 
