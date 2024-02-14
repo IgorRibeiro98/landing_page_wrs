@@ -14,27 +14,13 @@
         <v-col cols="12">
           <h2>Por favor, confirme a sua carteirinha</h2>
 
-          <v-text-field
-            v-for="(convenant, index) in convenants"
-            :key="index"
-            class="required mt-4"
-            :label="`Carteirinha ${convenant.ds_convenio}`"
-            v-model="convenant.cd_usuario_convenio"
-            type="number"
-            @click="convenants[index].edited = true"
-            :rules="[required]"
-          ></v-text-field>
+          <v-text-field v-for="(convenant, index) in convenants" :key="index" class="required mt-4"
+            :label="`Carteirinha ${convenant.ds_convenio}`" v-model="convenant.cd_usuario_convenio" type="number"
+            @click="convenants[index].edited = true" :rules="[required]"></v-text-field>
         </v-col>
 
         <v-col cols="12">
-          <v-btn
-            class="pa-1"
-            block
-            :disabled="isLoading"
-            :loading="isLoading"
-            color="primary"
-            type="submit"
-          >
+          <v-btn class="pa-1" block :disabled="isLoading" :loading="isLoading" color="primary" type="submit">
             Continuar
           </v-btn>
         </v-col>
@@ -113,7 +99,6 @@ async function open() {
   openAttendance(sequences)
     .then((res) => {
       data.value.patient!.aberturaAtendimento = res.data;
-      closeLoading();
       emit("next");
     })
     .catch((error) => {
@@ -121,12 +106,9 @@ async function open() {
         "Não foi possível abrir o atendimento",
         error.response?.data?.message
       );
-      closeLoading();
       emit("to", "Menu");
     })
     .finally(() => {
-      console.log("finally");
-      closeLoading();
       isLoading.value = false;
     });
 }

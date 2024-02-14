@@ -2,19 +2,12 @@
   <div class="d-flex align-center justify-center fill-height">
     <v-row justify="center" no-gutters>
       <v-col cols="12" class="">
-        <h1 :class="title" class="text-center">
+        <h1 class="text-center">
           Selecione uma das opções abaixo:
         </h1>
       </v-col>
 
-      <v-col
-        cols="12"
-        md="6"
-        lg="3"
-        v-for="(queue, index) in totem.queues"
-        :key="index"
-        class="pa-2"
-      >
+      <v-col cols="12" md="6" lg="3" v-for="(queue, index) in totem.queues" :key="index" class="pa-2">
         <v-card variant="tonal" color="primary" height="100%" class="cursor-pointer" @click="pushQueue(queue)">
           <v-card-title class="d-flex justify-center">
             <v-icon :icon="queue.icon" size="60" />
@@ -39,11 +32,8 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
-
-import useResponsive from "@patient/helpers/responsives";
-
-const { title } = useResponsive();
+import { computed, onMounted } from "vue";
+import { findQueueBySchedule } from '@patient/repositories/schedule.repository'
 
 interface Props {
   modelValue: Data;
@@ -51,9 +41,9 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-const emit = defineEmits(["update:modelValue", "next", "to", "start"]);
+const emit = defineEmits(["update:modelValue", 'update:loading', "next", "to", "start"]);
 
-const data: any = computed({
+const data = computed({
   get() {
     return props.modelValue;
   },
@@ -66,4 +56,35 @@ function pushQueue(queue: Queue) {
   data.value.queue = queue;
   emit("next", null);
 }
+
+function checkScheduleQueue() {
+  if (!data.value.patient?.agendamentos.length) return
+
+  emit('update:loading', {
+    display: true,
+    title: 'Aguarde um momento',
+    text: 'Buscando informações...'
+  })
+
+  const scheduleIds = data.value.patient?.agendamentos.map((schedule) => schedule.cd_agenda)
+
+  findQueueBySchedule(props.totem.id, scheduleIds)
+    .then((res) => {
+      data.value.queue = res.data;
+      emit("next", null);
+    })
+    .finally(() => closeLoading())
+}
+
+function closeLoading() {
+  emit('update:loading', {
+    display: false,
+    title: '',
+    text: ''
+  })
+}
+
+onMounted(() => {
+  checkScheduleQueue()
+})
 </script>

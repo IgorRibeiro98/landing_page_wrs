@@ -8,16 +8,8 @@
   </v-app-bar>
 
   <div class="pa-5 h-100 totem">
-    <component
-      v-model="data"
-      v-model:totem="totem"
-      v-model:loading="loadingFlowDialog"
-      :is="components[component]"
-      v-bind="componentBinds"
-      @next="nextView"
-      @to="redirect"
-      @start="firstStep"
-    />
+    <component v-model="data" v-model:totem="totem" v-model:loading="loadingFlowDialog" :is="components[component]"
+      v-bind="componentBinds" @next="nextView" @to="redirect" @start="firstStep" />
   </div>
   <v-dialog fullscreen :model-value="isLoading">
     <v-row justify="center" align="center">
@@ -144,17 +136,23 @@ const modules: Record<string, any> = import.meta.glob(
 importModules();
 
 function firstStep(): void {
+  checkLoadingDialog()
+
   componentIndex.value = 0;
   data.value = structuredClone(defaultData.data);
 }
 
 function nextView(): void {
+  checkLoadingDialog()
+
   componentIndex.value++;
 
   if (componentIndex.value == totem.value.screens.length) firstStep();
 }
 
 function redirect(to: string): void {
+  checkLoadingDialog()
+
   const index = totem.value.screens.findIndex(
     (view: any) => view.component == to
   );
@@ -198,6 +196,16 @@ function loadBaseTotemData() {
     isLoading.value = false;
   });
 }
+function checkLoadingDialog() {
+  if (loadingFlowDialog.value.display) {
+    loadingFlowDialog.value = {
+      display: false,
+      title: '',
+      text: ''
+    }
+  }
+}
+
 onMounted(() => {
   isLoading.value = true;
 
@@ -206,7 +214,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-::v-deep .v-card > .v-card-text {
+:deep(.v-card>.v-card-text) {
   line-height: 1.5rem;
 }
 </style>

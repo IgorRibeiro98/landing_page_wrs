@@ -47,3 +47,24 @@ export function signatureGuide() {
         }, 4000)
     })
 }
+
+export function findQueueBySchedule(totemId: number, scheduleIds: number[]): Promise<any> {
+    return new Promise((res, rej) => {
+        setTimeout(() => {
+            const data = {
+                id: 1,
+                name: 'Agendamento de Exame',
+                description: 'Exames de imagem, laboratório e outros.',
+                icon: 'mdi-file',
+                color: 'primary',
+                action: 'next',
+                to: 'identifier',
+                nr_seq_fila_comum: '1',
+                nr_seq_fila_preferencial: '1',
+                nr_seq_fila_preferencial_80: '1',
+            }
+
+            res({ data })
+        }, 500)
+    })
+}

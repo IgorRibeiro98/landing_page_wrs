@@ -1,6 +1,10 @@
 const totem = {
     id: 0,
     name: '',
+    site: {
+        cd_estabelecimento: 0,
+        ds_estabelecimento: '',
+    },
     description: null,
     screens: [],
     queues: []
@@ -50,6 +54,7 @@ const data = {
         ds_complemento: "",
         cd_cep: "",
         ds_municipio: "",
+        sg_estado: '',
         cd_estado: 0,
         agendamentos: []
     },

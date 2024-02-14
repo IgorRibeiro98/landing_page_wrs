@@ -6,39 +6,22 @@
       </v-col>
 
       <v-col cols="12" md="4">
-        <v-btn
-          class="pa-1"
-          @click="setIdentification('cpf')"
-          block
-          rounded="0"
-          variant="tonal"
-          :color="identificationMethod == 'cpf' ? 'primary' : 'secondary'"
-        >
+        <v-btn class="pa-1" @click="setIdentification('cpf')" block rounded="0" variant="tonal"
+          :color="identificationMethod == 'cpf' ? 'primary' : 'secondary'">
           CPF
         </v-btn>
       </v-col>
 
       <v-col cols="12" md="4">
-        <v-btn
-          class="pa-1"
-          @click="setIdentification('passport')"
-          block
-          rounded="0"
-          variant="tonal"
-          :color="identificationMethod == 'passport' ? 'primary' : 'secondary'"
-        >
+        <v-btn class="pa-1" @click="setIdentification('passport')" block rounded="0" variant="tonal"
+          :color="identificationMethod == 'passport' ? 'primary' : 'secondary'">
           Passaporte / RNE
         </v-btn>
       </v-col>
 
       <v-col cols="12" class="mt-10" v-if="chosenIdentificationMethod">
         <Transition name="fade" mode="out-in">
-          <component
-            :is="identifierComponent"
-            v-model="data.identifier"
-            :loading="isLoading"
-            @search="searchPatient"
-          >
+          <component :is="identifierComponent" v-model="data.identifier" :loading="isLoading" @search="searchPatient">
           </component>
         </Transition>
       </v-col>
@@ -49,8 +32,6 @@
 <script lang="ts" setup>
 import { ref, computed } from "vue";
 
-import useResponsive from "@patient/helpers/responsives";
-
 import CPFIdentifier from "@patient/components/CPFIdentifier.vue";
 import PassportIdentifier from "@patient/components/PassportIdentifier.vue";
 
@@ -58,7 +39,19 @@ import useAlertStore from "@/stores/alert";
 
 import { findByIdentifier } from "@patient/repositories/patient.repository";
 
-const { btnSize, title } = useResponsive();
+interface Props {
+  modelValue: Data;
+}
+
+const isLoading = ref(false);
+
+const { openAlert } = useAlertStore();
+
+const props = defineProps<Props>();
+const emit = defineEmits(["update:modelValue", 'update:loading', "next", "to", "start"]);
+
+const chosenIdentificationMethod = ref(false);
+const identificationMethod = ref<string | null>(null);
 
 const identifierComponent = computed(() => {
   if (identificationMethod.value == "cpf") {
@@ -67,19 +60,6 @@ const identifierComponent = computed(() => {
     return PassportIdentifier;
   }
 });
-
-const isLoading = ref(false);
-
-const { openAlert } = useAlertStore();
-
-interface Props {
-  modelValue: Data;
-}
-const props = defineProps<Props>();
-const emit = defineEmits(["update:modelValue", "next", "to", "start"]);
-
-const chosenIdentificationMethod = ref(false);
-const identificationMethod = ref<string | null>(null);
 
 const data: any = computed({
   get() {
@@ -97,6 +77,12 @@ function setIdentification(value: string) {
 
 function searchPatient(identifier: string) {
   isLoading.value = true;
+
+  emit('update:loading', {
+    display: true,
+    title: 'Aguarde um momento',
+    text: 'Estamos buscando seu cadastro'
+  })
 
   findByIdentifier(identifier)
     .then((res: any) => {

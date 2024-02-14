@@ -23,14 +23,13 @@
 import { computed } from 'vue';
 import { storeToRefs } from 'pinia'
 
-import useResponsive from '@patient/helpers/responsives';
 import useSystemStore from '@/stores/system'
+import useResponsive from '@patient/helpers/responsives';
 
-const { title, mobile } = useResponsive()
+const { state } = storeToRefs(useSystemStore())
+const { mobile } = useResponsive()
 
-const { state } = storeToRefs<any>(useSystemStore())
-
-const emit = defineEmits(['update:modelValue', 'next', 'update:loading']);
+const emit = defineEmits(['update:modelValue', 'next']);
 
 const greeting = computed(() => {
     const hour = new Date().getHours();
@@ -43,5 +42,4 @@ const greeting = computed(() => {
         return 'Boa noite';
     }
 });
-
 </script>
