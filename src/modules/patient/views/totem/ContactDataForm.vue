@@ -33,7 +33,8 @@
 
                         <v-col cols="12" sm="6" md="4">
                             <v-text-field label="CEP" number :disabled="isLoading" :rules="[required]" v-mask="'#####-###'"
-                                v-model="data.patient!.cd_cep" @update:model-value="findAddressByCEP" class="f-height-1 required" />
+                                v-model="data.patient!.cd_cep" @update:model-value="findAddressByCEP"
+                                class="f-height-1 required" />
                         </v-col>
 
                         <v-col cols="12" sm="6" md="4">
@@ -47,7 +48,8 @@
 
                         <v-col cols="12" sm="6" md="3">
                             <v-text-field label="Endereço" :rules="[required]" v-model="data.patient!.ds_endereco"
-                                :disabled="addressLoading || isLoading" :loading="addressLoading" class="f-height-1 required" />
+                                :disabled="addressLoading || isLoading" :loading="addressLoading"
+                                class="f-height-1 required" />
                         </v-col>
 
                         <v-col cols="12" sm="6" md="3">
@@ -68,8 +70,8 @@
 
 
                         <v-col cols="12">
-                            <v-btn class="pa-1" block :disabled="isLoading" :loading="isLoading"
-                                color="primary" type="submit">
+                            <v-btn class="pa-1" block :disabled="isLoading" :loading="isLoading" color="primary"
+                                type="submit">
                                 Continuar
                             </v-btn>
                         </v-col>
@@ -88,7 +90,6 @@ import { updatePatient } from '@patient/repositories/patient.repository'
 import { getUF, findCEP } from '@patient/repositories/contact-data.repository'
 
 import useAlertStore from '@/stores/alert'
-import useResponsive from '@patient/helpers/responsives'
 
 interface Collection {
     [key: string]: {
@@ -104,7 +105,6 @@ const props = defineProps<{
 }>();
 
 const { openAlert } = useAlertStore()
-const { title } = useResponsive()
 
 const cellPhone = ref('');
 const phone = ref('');
@@ -113,7 +113,7 @@ const addressLoading = ref(false);
 
 const isLoading = ref(false)
 
-const emit = defineEmits(['update:modelValue', 'next', 'to', 'start']);
+const emit = defineEmits(['update:modelValue', 'update:loading', 'next', 'to', 'start']);
 
 const form = ref<HTMLFormElement>()
 
@@ -142,19 +142,25 @@ async function validate() {
 
     isLoading.value = true
 
+    emit('update:loading', {
+        display: true,
+        title: 'Aguarde um momento',
+        text: 'Estamos atualizando suas informações'
+    })
+
     updatePatient(data.value.patient)
-        .then(() => {
-            emit('next')
-        })
         .catch(error => {
             openAlert('Erro ao atualizar informações pessoais', error.response.data.message)
         })
         .finally(() => {
+            emit('next')
             isLoading.value = false
         })
 }
 
 async function findAddressByCEP(cep: string) {
+    if (data.value.patient!.cd_cep === cep) return;
+
     if (cep.length < 9) return;
 
     addressLoading.value = true;

@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="display" persistent width="auto" class="totem">
+    <v-dialog v-model="display" persistent width="auto" min-width="700" class="totem">
         <v-sheet width="auto" class="pa-4">
             <h1 class="d-flex justify-center font-weight-bold">
                 {{ modelValue.title }}

@@ -84,17 +84,23 @@ const modules: Record<string, any> = import.meta.glob('@patient/views/totem/*.vu
 importModules()
 
 function firstStep(): void {
+    checkLoadingDialog()
+
     componentIndex.value = 0;
     data.value = structuredClone(defaultData.data);
 }
 
 function nextView(): void {
+    checkLoadingDialog()
+
     componentIndex.value++;
 
     if (componentIndex.value == totem.value.screens.length) firstStep()
 }
 
 function redirect(to: string): void {
+    checkLoadingDialog()
+
     const index = totem.value.screens.findIndex(
         (view: any) => view.component == to
     );
@@ -109,6 +115,16 @@ function importModules() {
 
         if (componentRegexName)
             components[`${componentRegexName[0]}`] = modules[path].default;
+    }
+}
+
+function checkLoadingDialog() {
+    if (loadingFlowDialog.value.display) {
+        loadingFlowDialog.value = {
+            display: false,
+            title: '',
+            text: ''
+        }
     }
 }
 
@@ -131,7 +147,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-::v-deep .v-card > .v-card-text {
-  line-height:1.5rem;
+:deep(.v-card>.v-card-text) {
+    line-height: 1.5rem;
 }
 </style>

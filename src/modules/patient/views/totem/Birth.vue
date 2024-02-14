@@ -22,11 +22,8 @@ import { ref, computed } from 'vue'
 import useAlertStore from '@/stores/alert'
 
 import { validPatientByBirth } from '@patient/repositories/patient.repository'
-import useResponsive from '@patient/helpers/responsives'
 
 const isLoading = ref(false)
-
-const { title } = useResponsive()
 
 const { openAlert } = useAlertStore()
 
@@ -34,7 +31,7 @@ interface Props {
     modelValue: Data;
 }
 const props = defineProps<Props>();
-const emit = defineEmits(['update:modelValue', 'next', 'to', 'start']);
+const emit = defineEmits(['update:modelValue', 'update:loading', 'next', 'to', 'start']);
 
 const data: any = computed({
     get() {
@@ -52,6 +49,11 @@ function required(v: any) {
 async function validate(value: string) {
     if (value?.length != 10) return
 
+    emit('update:loading', {
+        display: true,
+        title: 'Aguarde um momento',
+        text: 'Estamos validando os seus dados'
+    })
 
     isLoading.value = true
 
