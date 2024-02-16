@@ -11,8 +11,12 @@ const totem = {
 }
 
 const data = {
-    identifier: '',
-    birth: '',
+    identifier: {
+        id: '',
+        generic_id: '',
+        first_name: '',
+        birth_date: ''
+    },
     password_send_type: 'print',
     queue: {
         id: 0,
@@ -25,7 +29,6 @@ const data = {
         nr_seq_fila_preferencial_80: '',
     },
     patient: {
-        prim_nm_pessoa_fisica: '',
         cd_pessoa_fisica: '',
         nm_pessoa_fisica: '',
         nm_social: null,

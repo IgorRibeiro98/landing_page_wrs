@@ -3,7 +3,7 @@
         <v-row>
             <v-col>
                 <h1>
-                    <b>{{ data.patient!.prim_nm_pessoa_fisica }}</b>, por favor revise suas informações de contato
+                    <b>{{ data.identifier.first_name }}</b>, por favor revise suas informações de contato
                 </h1>
             </v-col>
             <v-col cols="12">
@@ -158,10 +158,12 @@ async function validate() {
         })
 }
 
-async function findAddressByCEP(cep: string) {
-    if (data.value.patient!.cd_cep === cep) return;
+const searchAddress = ref(false)
 
-    if (cep.length < 9) return;
+async function findAddressByCEP(cep: string) {
+    if (cep.length < 8) searchAddress.value = true
+
+    if (cep.length < 9 || !searchAddress.value) return;
 
     addressLoading.value = true;
 

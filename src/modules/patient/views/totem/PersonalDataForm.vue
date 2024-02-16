@@ -3,7 +3,7 @@
     <v-row>
       <v-col>
         <h1>
-          <b>{{ data.patient!.prim_nm_pessoa_fisica }}</b>, por favor revise suas informações pessoais
+          <b>{{ data.identifier.first_name }}</b>, por favor revise suas informações pessoais
         </h1>
       </v-col>
       <v-col cols="12">
@@ -105,9 +105,6 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted } from "vue";
 import { required } from "@/rules";
-
-import { updatePatient } from "@patient/repositories/patient.repository";
-
 
 import useAlertStore from "@/stores/alert";
 

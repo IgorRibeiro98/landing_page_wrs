@@ -5,6 +5,10 @@ scheduleDate.setHours(scheduleDate.getHours() + 1)
 
 const patients: any = {
     '46518973800': {
+        identifier: {
+            id: '1235',
+            first_name: 'Luiz'
+        },
         cd_pessoa_fisica: '1235',
         prim_nm_pessoa_fisica: 'Luiz',
         dt_nascimento: '02/03/1997',
@@ -72,6 +76,10 @@ const patients: any = {
         ]
     },
     '46518973803': {
+        identifier: {
+            id: '1234',
+            first_name: 'João'
+        },
         cd_pessoa_fisica: '1234',
         prim_nm_pessoa_fisica: 'João',
         dt_nascimento: '02/03/1997',
@@ -96,7 +104,7 @@ const patients: any = {
         cd_religiao: 4,
         ie_tipo_complemento: 1,
         tipo_endereco: "Residencial",
-        ds_endereco: "Avenida Brasil",
+        ds_endereco: "Avenida dos Estados",
         nr_endereco: 1000,
         ds_complemento: "",
         cd_cep: "09631111",
@@ -105,7 +113,7 @@ const patients: any = {
     },
 }
 
-export function findByIdentifier(identifier: any) {
+export function findByIdentifier(identifier: any): Promise<{ data: PatientIdentifier }> {
     return new Promise((res, rej) => {
         setTimeout(() => {
             const cpfs = ['46518973800', '46518973803']
@@ -121,16 +129,16 @@ export function findByIdentifier(identifier: any) {
             const patient: any = patients[identifier]
 
             return res({
-                data: patient
+                data: patient.identifier
             })
         }, 2000)
     })
 }
 
-export function validPatientByBirth(identifier: string, birth: string) {
+export function validPatientByBirth(identifier: string, birth: string): Promise<{ data: Patient }> {
     return new Promise((res, rej) => {
         setTimeout(() => {
-            const patient = Object.values(patients).find((item: any) => {
+            const patient: any = Object.values(patients).find((item: any) => {
                 return item.cd_pessoa_fisica == identifier && item.dt_nascimento == birth
             })
 

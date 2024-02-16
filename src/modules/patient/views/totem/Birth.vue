@@ -2,13 +2,13 @@
     <v-row justify="center" align-content="center" class="fill-height">
         <v-col cols="12" class="overflow-auto">
             <h1 class="text-center">
-                <b>{{ data.patient.prim_nm_pessoa_fisica }}</b>, para a sua segurança insira a sua data de nascimento
+                <b>{{ data.identifier.first_name }}</b>, para a sua segurança insira a sua data de nascimento
             </h1>
         </v-col>
 
         <v-col cols="7">
             <v-text-field v-mask="'##/##/####'" number class="required" autofocus :rules="[required]"
-                label="Data de Nascimento" :disabled="isLoading" :loading="isLoading" v-model="data.birth"
+                label="Data de Nascimento" :disabled="isLoading" :loading="isLoading" v-model="data.identifier.birth_date"
                 @update:model-value="validate">
             </v-text-field>
         </v-col>
@@ -33,7 +33,7 @@ interface Props {
 const props = defineProps<Props>();
 const emit = defineEmits(['update:modelValue', 'update:loading', 'next', 'to', 'start']);
 
-const data: any = computed({
+const data = computed({
     get() {
         return props.modelValue;
     },
@@ -57,9 +57,9 @@ async function validate(value: string) {
 
     isLoading.value = true
 
-    validPatientByBirth(data.value.patient.cd_pessoa_fisica, value)
+    validPatientByBirth(data.value.identifier.id, value)
         .then((res: any) => {
-            data.value.patient = Object.assign(data.value.patient, res.data)
+            data.value.patient = res.data
             emit('next', null)
         })
         .catch(error => {

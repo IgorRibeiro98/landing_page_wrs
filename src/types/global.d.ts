@@ -5,8 +5,12 @@ interface Screens {
 }
 
 interface Data {
-    identifier: string;
-    birth: string;
+    identifier: {
+        id: string;
+        generic_id: string;
+        first_name: string
+        birth_date: string;
+    }
     password_send_type: string;
     patient?: Patient;
     queue?: Queue;
@@ -73,9 +77,13 @@ interface Agendamento {
     nr_seq_proc_interno: string;
 }
 
+interface PatientIdentifier {
+    id: string;
+    first_name: string;
+}
+
 interface Patient {
     cd_pessoa_fisica: string;
-    prim_nm_pessoa_fisica: string;
     dt_nascimento: string;
     nm_pessoa_fisica: string;
     nm_social: string | null;

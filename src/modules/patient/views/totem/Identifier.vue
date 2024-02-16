@@ -21,7 +21,8 @@
 
       <v-col cols="12" class="mt-10" v-if="chosenIdentificationMethod">
         <Transition name="fade" mode="out-in">
-          <component :is="identifierComponent" v-model="data.identifier" :loading="isLoading" @search="searchPatient">
+          <component :is="identifierComponent" v-model="data.identifier.generic_id" :loading="isLoading"
+            @search="searchPatient">
           </component>
         </Transition>
       </v-col>
@@ -84,9 +85,10 @@ function searchPatient(identifier: string) {
     text: 'Estamos buscando seu cadastro'
   })
 
+  console.log({ identifier })
   findByIdentifier(identifier)
-    .then((res: any) => {
-      data.value.patient = Object.assign(data.value.patient, res.data);
+    .then((res) => {
+      data.value.identifier = { ...res.data };
       emit("next", null);
     })
     .catch((err) => {
