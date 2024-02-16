@@ -196,6 +196,7 @@ function loadBaseTotemData() {
     isLoading.value = false;
   });
 }
+
 function checkLoadingDialog() {
   if (loadingFlowDialog.value.display) {
     loadingFlowDialog.value = {

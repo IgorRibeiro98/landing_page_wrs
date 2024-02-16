@@ -85,7 +85,6 @@ function searchPatient(identifier: string) {
     text: 'Estamos buscando seu cadastro'
   })
 
-  console.log({ identifier })
   findByIdentifier(identifier)
     .then((res) => {
       data.value.identifier = { ...res.data };
