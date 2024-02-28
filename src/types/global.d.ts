@@ -4,13 +4,23 @@ interface Screens {
     component: string
 }
 
+type SendType = 'password' | 'print' | 'sms' | 'qrcode'
+
+interface DataContent {
+  send_type: SendType
+  title: string
+  text: string
+  raw: any
+}
+
 interface Data {
     identifier: {
         id: string;
         generic_id: string;
         first_name: string
         birth_date: string;
-    }
+    },
+    content: DataContent
     password_send_type: string;
     patient?: Patient;
     queue?: Queue;
@@ -143,4 +153,14 @@ interface ButtonOption {
     icons?: string[]
     show: boolean;
     [key: string]: any;
+}
+
+interface Account {
+    id: number;
+    name: string;
+    logo: string;
+    theme: object;
+    domain: string;
+    updated_at: string;
+    created_at: string;
 }

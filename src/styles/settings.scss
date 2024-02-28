@@ -121,3 +121,11 @@ $font-size:clamp(1.3rem, 1.7vw, 2.7rem) !important;
         }
     }
 }
+
+.pointer {
+    cursor: pointer;
+}
+
+.text-regular {
+    text-transform: none;
+}

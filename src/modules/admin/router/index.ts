@@ -4,7 +4,9 @@ import { layouts } from '@/router'
 const routes: RouteRecordRaw[] = [
     {
         path: '/',
-        redirect: '/fluxo-paciente',
+        redirect: {
+          name: 'totem.view'
+        },
 
         // component: () => layouts.default(),
         // children: [

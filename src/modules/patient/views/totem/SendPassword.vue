@@ -26,18 +26,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from "vue";
-import OptionsButton from "@/modules/patient/components/OptionsButton.vue";
 import ConfirmPhoneDialog from "@/modules/patient/components/ConfirmPhoneDialog.vue";
+import OptionsButton from "@/modules/patient/components/OptionsButton.vue";
+import { computed, onMounted, ref } from "vue";
 
-import useAlertStore from '@/stores/alert'
-import useResponsive from "@patient/helpers/responsives";
+import useAlertStore from '@/stores/alert';
 import Msisid from "@/valueObjects/Msisid";
 
 const { openAlert } = useAlertStore()
-const { title, subtitle } = useResponsive()
 
-import { sendSMSQueue, printQueue } from '@patient/repositories/queue.repository'
+import { printQueue, sendSMSQueue } from '@patient/repositories/queue.repository';
 
 const emit = defineEmits(['update:modelValue', 'next', 'to', 'start'])
 
@@ -113,7 +111,7 @@ function print() {
 
   printQueue(data.value.queue)
     .then(res => {
-      data.value.password_send_type = 'print'
+      data.value.content.send_type = 'print'
       emit('next')
     })
     .catch((error: any) => {
@@ -128,7 +126,7 @@ function generateSMS(number: string) {
   isLoading.value = true
   sendSMSQueue(number, data.value?.queue)
     .then(res => {
-      data.value.password_send_type = 'sms'
+      data.value.content.send_type = 'sms'
       emit('next')
     })
     .catch((error: any) => {

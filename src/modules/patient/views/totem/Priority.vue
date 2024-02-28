@@ -14,11 +14,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
-import { pushQueue } from '@patient/repositories/queue.repository'
-import OptionsButton from '@patient/components/OptionsButton.vue'
 import useAlertStore from '@/stores/alert'
+import OptionsButton from '@patient/components/OptionsButton.vue'
 import useResponsive from '@patient/helpers/responsives'
+import { pushQueue } from '@patient/repositories/queue.repository'
+import { computed, ref } from 'vue'
 
 const { openAlert } = useAlertStore()
 const { title } = useResponsive()
@@ -128,11 +128,12 @@ function generatePass({ type, id }: ButtonOption) {
 
     pushQueue(body)
         .then((res) => {
-            data.value.password = res.data
+            data.value.content.title = res.data.ds_senha;
+            data.value.content.raw = res.data;
             emit('next')
         })
         .catch((error) => {
-            openAlert('Não foi possível gerar a senha', error.response.data.message)
+            openAlert('Não foi possível gerar a senha', '')
             emit('next')
         })
         .finally(() => {

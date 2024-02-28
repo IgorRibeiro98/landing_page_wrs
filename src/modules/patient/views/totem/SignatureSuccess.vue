@@ -14,7 +14,7 @@
                     Retire o Ticket impresso contendo as informações do atendimento.
                 </p> <br />
 
-                <p clas="mb-5">
+                <p class="mb-5">
                     <b>Atenção</b>, siga atentamente as instruções abaixo: <br />
                 </p>
 
@@ -28,9 +28,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue';
 
-import Timer from '@patient/components/Timer.vue'
+import Timer from '@patient/components/Timer.vue';
 import useResponsive from '@patient/helpers/responsives';
 
 const props = defineProps<{

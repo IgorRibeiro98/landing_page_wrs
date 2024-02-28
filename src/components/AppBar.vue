@@ -1,0 +1,68 @@
+<template>
+  <v-app-bar color="nav-color" class="position-fixed">
+    <template #prepend>
+      <v-img
+        aspect-ratio="16/9"
+        @click="$router.push({ path: '/' })"
+        class="pointer mx-4"
+        :src="logo"
+        width="50"
+      ></v-img>
+      <v-slide-group show-arrows>
+        <v-slide-group-item v-for="item in items">
+          <v-btn class="text-regular mx-1">
+            <v-icon class="mr-1">{{ item.icon }}</v-icon>
+            <span>{{ item.title }}</span>
+          </v-btn>
+        </v-slide-group-item>
+      </v-slide-group>
+    </template>
+    <template #append>
+      <v-btn @click="toggleTheme" variant="text" :icon="themeIcon"></v-btn>
+      <v-btn
+        :loading="loadingLogout"
+        title="Sair"
+        icon="mdi-exit-to-app"
+      ></v-btn>
+    </template>
+  </v-app-bar>
+</template>
+<script setup lang="ts">
+import logo from "@/assets/logo.png";
+import { computed, ref } from "vue";
+import { useTheme } from "vuetify";
+
+const theme = useTheme();
+const loadingLogout = ref(false);
+
+function toggleTheme() {
+  theme.global.name.value = theme.global.current.value.dark ? "light" : "dark";
+  localStorage.setItem("theme", JSON.stringify(theme.global.current.value));
+  localStorage.setItem("themeName", theme.global.name.value);
+}
+
+const themeIcon = computed<string>(() => {
+  if (theme.global.current.value.dark) {
+    return "mdi-white-balance-sunny";
+  }
+  return "mdi-weather-night";
+});
+
+const items = [
+  {
+    title: "Totens",
+    icon: "mdi-monitor-vertical",
+    route: {
+      name: "totem.view",
+    },
+  },
+  {
+    title: "Filas",
+    icon: "mdi-format-list-bulleted",
+    route: {
+      name: "user.all",
+    },
+  },
+];
+</script>
+<style scoped lang="scss"></style>
