@@ -12,14 +12,17 @@ import * as components from 'vuetify/components'
 
 // Composables
 import { createVuetify } from 'vuetify'
-
+import { pt } from 'vuetify/locale'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
+  locale: {
+    locale: 'pt',
+    messages: { pt }
+  },
   aliases: {
     KeyboardBtn: components.VBtn,
     HexagonalBtn: components.VBtn,
-
   },
   defaults: {
     KeyboardBtn: { variant: 'outlined', style: 'font-size: 1.2rem; text-transform: unset !important' },
@@ -32,6 +35,9 @@ export default createVuetify({
     },
     VSelect: {
       variant: 'outlined'
+    },
+    VRow: {
+      style: 'margin: 0'
     }
   },
   display: {
@@ -44,7 +50,8 @@ export default createVuetify({
         colors: {
           primary: '#f94c07',
           secondary: '#243859',
-          grey: '#abacac'
+          grey: '#abacac',
+          background: "#F3F3F3",
         }
       }
     }

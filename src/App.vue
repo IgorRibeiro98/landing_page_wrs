@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-layout class="pa-0 ma-0">
+    <v-layout fill-height class="pa-0 ma-0 h-screen overflow-hidden">
       <router-view />
     </v-layout>
     <Alert />
