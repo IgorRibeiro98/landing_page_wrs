@@ -48,6 +48,17 @@ interface Totem {
     site: Site
 }
 
+interface TotemItem {
+  id: number;
+  name: string;
+  description: string | null;
+  screens_count: number;
+  queues_count: number;
+  updated_at: string;
+}
+
+type TotemList = TotemItem[]
+
 interface Site {
     cd_estabelecimento;
     ds_estabelecimento;
@@ -163,4 +174,36 @@ interface Account {
     domain: string;
     updated_at: string;
     created_at: string;
+}
+
+interface FormItem {
+  title?: string
+  label: string
+  value: string
+  description?: string
+  required?: boolean
+  component: 'VAutocomplete' |  'VTextField' | 'VTextarea'
+  props?: any
+  on?: {
+      [key: string]: (data: any) => void
+  }
+  hide?: boolean
+  cols?: {
+      cols?: number | string
+      xs?: number | string
+      sm?: number | string
+      md?: number | string
+      lg?: number | string
+  }
+}
+
+interface FormDialog {
+  title: any
+  value?: any
+  form?: {
+      value: any,
+      inputs: FormItem[]
+  }
+  submit?: (data: any) => void
+  cancel?: () => void
 }

@@ -1,0 +1,101 @@
+<template>
+  <v-dialog v-bind="$attrs" v-model="dialog">
+      <v-form ref="formRef" @submit.prevent="handleSubmit" v-model="validate" lazy-validation>
+          <v-card :loading="loading">
+              <v-card-title class="d-flex align-center pa-4 pb-0">
+                  <slot name="title">
+                      <span>
+                          {{ form?.title || title }}
+                      </span>
+                      <v-spacer />
+                      <v-btn variant="plain" icon="mdi-close" @click="handleClose">
+                      </v-btn>
+                  </slot>
+              </v-card-title>
+              <v-divider></v-divider>
+              <v-card-text class="px-4">
+                  <slot></slot>
+                  <slot name="content">
+                      <FormBuilder v-if="form?.form" v-model="form.form.value" :form="form?.form.inputs ?? []">
+                          <template v-for="(formItem, index) in form.form.inputs" #[`item:${formItem.value}`]="data">
+                              <slot :name="`item:${formItem.value}`" v-bind="data"></slot>
+                          </template>
+                      </FormBuilder>
+                  </slot>
+              </v-card-text>
+              <v-card-actions class="px-4 pb-4" v-if="!hideActions">
+                  <slot name="actions">
+                      <v-spacer></v-spacer>
+                      <v-btn variant="text" @click="handleClose">Cancelar</v-btn>
+                      <v-btn color="primary" type="submit">Salvar</v-btn>
+                  </slot>
+              </v-card-actions>
+          </v-card>
+      </v-form>
+  </v-dialog>
+</template>
+<script lang="ts" setup>
+import { computed, defineExpose, ref } from 'vue';
+import FormBuilder from './FormBuilder.vue';
+interface Props {
+  modelValue: boolean
+  title?: string
+  form?: FormDialog,
+  loading?: boolean,
+  cancelReset?: boolean
+  hideActions?: boolean
+}
+
+interface Emit {
+  (event: 'update:modelValue', value: boolean): void
+  (event: 'update:form', value: any): void
+  (event: 'close'): void
+  (event: 'submit'): void
+  (event: 'invalid'): void
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  cancelReset: false,
+  hideActions: false
+});
+const emit = defineEmits<Emit>();
+const formRef = ref();
+const validate = ref<boolean>(true);
+
+const dialog = computed({
+  get: () => props.modelValue,
+  set: (value) => emit('update:modelValue', value)
+});
+
+const handleClose = () => {
+  if (props.form?.cancel) {
+      props.form.cancel();
+  }
+  if(!props.cancelReset) {
+      formRef.value.reset();
+  }
+  dialog.value = false;
+  emit('close');
+}
+
+const handleSubmit = () => {
+  if (!validate.value) {
+      emit('invalid');
+      return
+  };
+
+  if (props.form?.submit) {
+      return props.form.submit(props.form);
+  }
+
+  emit('submit');
+}
+
+const reset = () => {
+  formRef.value.reset();
+}
+
+defineExpose({
+  reset
+});
+</script>
