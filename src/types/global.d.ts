@@ -7,10 +7,10 @@ interface Screens {
 type SendType = 'password' | 'print' | 'sms' | 'qrcode'
 
 interface DataContent {
-  send_type: SendType
-  title: string
-  text: string
-  raw: any
+    send_type: SendType
+    title: string
+    text: string
+    raw: any
 }
 
 interface Data {
@@ -27,17 +27,17 @@ interface Data {
     password: Password;
 }
 
-interface Queue {
-    id: number;
-    name: string;
-    description: string;
-    icon: string;
-    color: string;
-    nr_seq_fila_comum: string;
-    nr_seq_fila_preferencial: string;
-    nr_seq_fila_preferencial_80: string;
-    [key: string]: any;
-}
+// interface Queue {
+//     id: number;
+//     name: string;
+//     description: string;
+//     icon: string;
+//     color: string;
+//     nr_seq_fila_comum: string;
+//     nr_seq_fila_preferencial: string;
+//     nr_seq_fila_preferencial_80: string;
+//     [key: string]: any;
+// }
 
 interface Totem {
     id: number;
@@ -49,15 +49,30 @@ interface Totem {
 }
 
 interface TotemItem {
-  id: number;
-  name: string;
-  description: string | null;
-  screens_count: number;
-  queues_count: number;
-  updated_at: string;
+    id: number;
+    name: string;
+    description: string | null;
+    screens_count: number;
+    queues_count: number;
+    updated_at: string;
 }
 
 type TotemList = TotemItem[]
+
+interface Queue {
+    id: number,
+    name: string
+    description: string | null,
+    icon_src: string,
+    status: string | null,
+    created_at: string,
+    updated_at: string
+}
+
+type QueueList = Queue[]
+
+interface NewQueue extends Omit<Queue, 'id' | 'created_at' | 'updated_at'> {
+}
 
 interface Site {
     cd_estabelecimento;
@@ -177,33 +192,33 @@ interface Account {
 }
 
 interface FormItem {
-  title?: string
-  label: string
-  value: string
-  description?: string
-  required?: boolean
-  component: 'VAutocomplete' |  'VTextField' | 'VTextarea'
-  props?: any
-  on?: {
-      [key: string]: (data: any) => void
-  }
-  hide?: boolean
-  cols?: {
-      cols?: number | string
-      xs?: number | string
-      sm?: number | string
-      md?: number | string
-      lg?: number | string
-  }
+    title?: string
+    label: string
+    value: string
+    description?: string
+    required?: boolean
+    component: 'VAutocomplete' | 'VTextField' | 'VTextarea' | 'VFileInput'
+    props?: any
+    on?: {
+        [key: string]: (data: any) => void
+    }
+    hide?: boolean
+    cols?: {
+        cols?: number | string
+        xs?: number | string
+        sm?: number | string
+        md?: number | string
+        lg?: number | string
+    }
 }
 
 interface FormDialog {
-  title: any
-  value?: any
-  form?: {
-      value: any,
-      inputs: FormItem[]
-  }
-  submit?: (data: any) => void
-  cancel?: () => void
+    title: any
+    value?: any
+    form?: {
+        value: any,
+        inputs: FormItem[]
+    }
+    submit?: (data: any) => void
+    cancel?: () => void
 }

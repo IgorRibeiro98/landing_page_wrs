@@ -1,16 +1,11 @@
 <template>
   <v-app-bar color="nav-color" class="position-fixed">
     <template #prepend>
-      <v-img
-        aspect-ratio="16/9"
-        @click="$router.push({ path: '/' })"
-        class="pointer mx-4"
-        :src="logo"
-        width="50"
-      ></v-img>
+      <v-img aspect-ratio="16/9" @click="$router.push({ path: '/' })" class="pointer mx-4" :src="logo" width="50"></v-img>
       <v-slide-group show-arrows>
-        <v-slide-group-item v-for="item in items">
-          <v-btn class="text-regular mx-1">
+        <v-slide-group-item v-for="item in items" :value="item.route.name">
+          <v-btn class="text-regular mx-1" @click="$router.push(item.route)"
+            :active="$router.currentRoute.value.name == item.route.name">
             <v-icon class="mr-1">{{ item.icon }}</v-icon>
             <span>{{ item.title }}</span>
           </v-btn>
@@ -19,11 +14,7 @@
     </template>
     <template #append>
       <v-btn @click="toggleTheme" variant="text" :icon="themeIcon"></v-btn>
-      <v-btn
-        :loading="loadingLogout"
-        title="Sair"
-        icon="mdi-exit-to-app"
-      ></v-btn>
+      <v-btn :loading="loadingLogout" title="Sair" icon="mdi-exit-to-app"></v-btn>
     </template>
   </v-app-bar>
 </template>
@@ -31,6 +22,7 @@
 import logo from "@/assets/logo.png";
 import { computed, ref } from "vue";
 import { useTheme } from "vuetify";
+import router from '@/router'
 
 const theme = useTheme();
 const loadingLogout = ref(false);
@@ -60,7 +52,7 @@ const items = [
     title: "Filas",
     icon: "mdi-format-list-bulleted",
     route: {
-      name: "user.all",
+      name: "queue.view",
     },
   },
 ];

@@ -39,11 +39,13 @@ import { computed } from 'vue';
 import { VAutocomplete } from 'vuetify/components/VAutocomplete';
 import { VTextField } from 'vuetify/components/VTextField';
 import { VTextarea } from 'vuetify/components/VTextarea';
+import { VFileInput } from 'vuetify/components/VFileInput';
 
 const components: any = {
     VAutocomplete,
     VTextField,
     VTextarea,
+    VFileInput
 }
 
 const validator = new Validator();
