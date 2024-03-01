@@ -14,6 +14,13 @@
               </v-card-title>
               <v-divider></v-divider>
               <v-card-text class="px-4">
+                  <v-row class="text-subtitle-1" v-if="$slots.description || form?.description">
+                      <v-col>
+                          <slot name="description">
+                              <p v-if="form?.description" v-html="form.description"></p>
+                          </slot>
+                      </v-col>
+                  </v-row>
                   <slot></slot>
                   <slot name="content">
                       <FormBuilder v-if="form?.form" v-model="form.form.value" :form="form?.form.inputs ?? []">
@@ -27,7 +34,7 @@
                   <slot name="actions">
                       <v-spacer></v-spacer>
                       <v-btn variant="text" @click="handleClose">Cancelar</v-btn>
-                      <v-btn color="primary" type="submit">Salvar</v-btn>
+                      <v-btn color="primary" type="submit"> {{ form?.submitText ?? 'Salvar' }}</v-btn>
                   </slot>
               </v-card-actions>
           </v-card>
