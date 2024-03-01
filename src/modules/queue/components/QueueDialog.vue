@@ -69,7 +69,6 @@ const formDialog = ref<FormDialog>({
         component: "VTextarea",
         value: "description",
         label: "Descrição",
-        required: true,
         on: {}
       },
     ],
@@ -118,8 +117,6 @@ function close() {
 
   iconWasEddited.value = false
   icon.value = []
-
-  dialog.value = false;
 }
 
 async function getIconFromURL() {
