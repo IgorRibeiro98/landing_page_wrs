@@ -29,20 +29,34 @@
             <v-icon icon="mdi-calendar"></v-icon>
             {{ new Date(item.updated_at).toLocaleString() }}
           </template>
+          <template #item.actions="{ item }">
+            <v-menu left>
+              <template #activator="{ props }">
+                <v-btn v-bind="props" icon="mdi-dots-horizontal" variant="text"> </v-btn>
+              </template>
+              <v-list >
+                <v-list-item link @click="option.action(item)" v-for="option in options">
+                  <v-list-item-title>
+                    {{option.title}}
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </template>
 
           <template #bottom> </template>
         </v-data-table>
       </v-col>
     </v-row>
-    <TotemDialog @save="loadTotens(false)" v-model="dialog"></TotemDialog>
+    <TotemDialog @close="clearTotem" @save="loadTotens(false);clearTotem()" v-model:totem="totem" v-model="dialog"></TotemDialog>
   </v-sheet>
 </template>
 
 <script lang="ts" setup>
 import TotemDialog from "@/modules/totem/components/TotemDialog.vue";
-import { getTotem } from "@/modules/totem/repositories/totem.repository";
+import { deleteTotem, getTotem } from "@/modules/totem/repositories/totem.repository";
 import useAlertStore from "@/stores/alert";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, type Ref } from "vue";
 import { RouterLink } from "vue-router";
 
 const headers: any = [
@@ -55,14 +69,25 @@ const headers: any = [
     title: "Última atualização",
     value: "updated_at",
     align: "start",
-    width: "15%",
+    width: "13%",
   },
+  { title: "", value: "actions", align: "center", width: "2%" },
 ];
+
+const totem = ref<TotemItem>({
+  name: "",
+  description: "",
+  id: 0,
+  queues_count: 0,
+  screens_count: 0,
+  updated_at: "",
+});
+
 const loading = ref<boolean>(true);
 const items = ref<TotemList>([]);
 const dialog = ref<boolean>(false);
 
-const { openAlert } = useAlertStore();
+const { openAlert, closeAlert } = useAlertStore();
 
 function loadTotens(mustLoading = true) {
   if (mustLoading) loading.value = true;
@@ -78,6 +103,50 @@ function loadTotens(mustLoading = true) {
     .finally(() => {
       loading.value = false;
     });
+}
+
+const options = ref<any>([
+  {
+    title: 'Editar',
+    action: (totemClicked: TotemItem) => {
+      totem.value = {...totemClicked}
+      dialog.value = true;
+    }
+  },
+  {
+    title: 'Excluir',
+    action: (totem: TotemItem) => {
+      openAlert('Excluir Totem', `Deseja realmente excluir o totem <span class="text-no-wrap bg-primary pa-1 rounded">${totem.name}</span>?`, {
+        confirm: true,
+        onConfirm(loading: Ref<boolean>) {
+          loading.value = true;
+          deleteTotem(totem.id)
+            .then(() => {
+              loadTotens(false);
+              clearTotem();
+              closeAlert();
+            })
+            .catch((error) => {
+              openAlert("Erro ao excluir totem", error);
+            })
+            .finally(() => {
+              loading.value = false;
+            });
+        }
+      })
+    }
+  }
+])
+
+function clearTotem() {
+  totem.value = {
+    name: "",
+    description: "",
+    id: 0,
+    queues_count: 0,
+    screens_count: 0,
+    updated_at: "",
+  };
 }
 
 onMounted(() => {
