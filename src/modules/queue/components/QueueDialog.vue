@@ -1,9 +1,13 @@
 <template>
-  <Dialog :loading="loading" v-model="dialog" width="400" v-model:form="formDialog">
+  <Dialog @close="close" :loading="loading" v-model="dialog" width="400" v-model:form="formDialog">
+    <template #[`item:icon_src`]>
+      <v-file-input v-model="icon" @change="iconWasEddited = true" required accept="image/*" :multiple="false" chips>
+      </v-file-input>
+    </template>
   </Dialog>
 </template>
-<script lang="ts" setup>
 
+<script lang="ts" setup>
 import Dialog from "@/components/Dialog.vue";
 import { createQueue, updateQueue } from "@/modules/queue/repositories/queue.repository";
 import useAlertStore from "@/stores/alert";
@@ -35,10 +39,10 @@ const loading = ref<boolean>(false);
 
 const queue = computed<any>({
   get: () => {
-    getIconFromURL(props.queue.icon_src)
+    getIconFromURL()
     return props.queue
   },
-  set: (value) => {
+  set: (value: any): any => {
     emit("update:queue", value)
   }
 })
@@ -57,17 +61,9 @@ const formDialog = ref<FormDialog>({
       },
       {
         component: "VFileInput",
-        value: "icon",
+        value: "icon_src",
         label: "Ícone",
         required: true,
-        on: {
-          change: () => iconWasEddited.value = true
-        },
-        props: {
-          accept: "image/*",
-          multiple: false,
-          chips: true,
-        }
       },
       {
         component: "VTextarea",
@@ -99,7 +95,7 @@ function save() {
 
   queuePromise
     .then(() => {
-      dialog.value = false;
+      close()
       emit("save");
     })
     .catch((err: AxiosError) => {
@@ -110,14 +106,34 @@ function save() {
     });
 }
 
-async function getIconFromURL(url: string) {
+function close() {
+  queue.value = {
+    name: '',
+    status: null,
+    description: '',
+    icon_src: '',
+    created_at: '',
+    updated_at: '',
+  }
+
+  iconWasEddited.value = false
+  icon.value = []
+
+  dialog.value = false;
+}
+
+async function getIconFromURL() {
+  const url = props.queue.icon_src
+
+  if (!url) return
+
   const response = await fetch(url, { method: 'GET', mode: "no-cors" })
 
   const data = await response.blob();
 
   const fileName = url.match(/[^/]*$/)?.[0]
 
-  props.queue.icon = [new File([data], fileName ?? 'Não identificado', { type: response.headers.get('Content-Type') as string })]
+  icon.value = [new File([data], fileName ?? 'Não identificado', { type: response.headers.get('Content-Type') as string })]
 }
 </script>
   

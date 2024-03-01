@@ -22,6 +22,16 @@
                 </template>
 
                 <template #bottom> </template>
+
+                <template #[`item.actions`]="{ item }: { item: Queue }">
+                    <div class="d-flex">
+                        <v-btn icon="mdi-pencil" variant="text" @click="openDialog(null, { item })">
+                        </v-btn>
+
+                        <v-btn icon="mdi-delete-circle-outline" variant="text" color="error" @click="removeQueue(item)">
+                        </v-btn>
+                    </div>
+                </template>
             </v-data-table>
         </template>
     </LayoutView>
@@ -32,8 +42,9 @@
 <script lang="ts" setup>
 import LayoutView from '@/components/LayoutView.vue'
 import QueueDialog from "@/modules/queue/components/QueueDialog.vue";
-import { getQueues } from "@/modules/queue/repositories/queue.repository";
+import { getQueues, deleteQueue } from "@/modules/queue/repositories/queue.repository";
 import useAlertStore from "@/stores/alert";
+import { Ref } from 'vue';
 import { onMounted, ref } from "vue";
 import { RouterLink } from "vue-router";
 
@@ -48,6 +59,12 @@ const headers: any = [
         align: "start",
         width: "25%",
     },
+    {
+        title: '',
+        value: 'actions',
+        align: 'start',
+        width: '10%'
+    }
 ];
 const loading = ref<boolean>(true);
 
@@ -65,7 +82,7 @@ const item = ref<Queue>({
 
 const dialog = ref<boolean>(false);
 
-const { openAlert } = useAlertStore();
+const { openAlert, closeAlert } = useAlertStore();
 
 function loadQueues(mustLoading = true) {
     if (mustLoading) loading.value = true;
@@ -83,9 +100,25 @@ function loadQueues(mustLoading = true) {
         });
 }
 
-function openDialog(event: MouseEvent, { item: queue }: { item: Queue }) {
+function openDialog(event: MouseEvent | null, { item: queue }: { item: Queue }) {
     item.value = { ...queue }
     dialog.value = true
+}
+
+function removeQueue(queue: Queue) {
+    openAlert('Remover fila', `Deseja realmente remover a fila <span class="text-no-wrap bg-primary pa-1 rounded"> ${queue.name}</span>?`, {
+        confirm: true,
+        onConfirm: (loading: Ref<boolean>) => {
+            loading.value = true
+
+            deleteQueue(queue.id)
+                .finally(() => {
+                    loading.value = false
+                    closeAlert()
+                    loadQueues(false)
+                })
+        },
+    });
 }
 
 onMounted(() => {

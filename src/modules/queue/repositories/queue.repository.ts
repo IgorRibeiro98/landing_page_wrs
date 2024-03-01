@@ -18,3 +18,7 @@ export function updateQueue(id: number, queue: FormData) {
     
     return axios.post(`/queue/${id}`, queue);
 }
+
+export function deleteQueue(id: number) {
+    return axios.delete(`/queue/${id}`);
+}
