@@ -4,7 +4,7 @@
 
   <v-main>
     <v-container fluid class="d-flex flex-column overflow-auto h-100">
-      <v-breadcrumbs class="px-0 pt-0" :items="['Foo', 'Bar', 'Fizz']"></v-breadcrumbs>
+      <Breadcrumb class="mb-4"></Breadcrumb>
 
       <div class="flex-grow-1">
         <RouterView />
@@ -14,7 +14,9 @@
 </template>
 <script setup lang="ts">
 import AppBar from "@/components/AppBar.vue";
+import Breadcrumb from "@/components/BreadCrumb.vue";
 import NavigationDrawer from "@/components/NavigationDrawer.vue";
 import { RouterView } from "vue-router";
+
 </script>
 <style scoped lang="scss"></style>

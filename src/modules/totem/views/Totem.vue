@@ -32,10 +32,15 @@
           <template #item.actions="{ item }">
             <v-menu left>
               <template #activator="{ props }">
-                <v-btn v-bind="props" icon="mdi-dots-horizontal" variant="text"> </v-btn>
+                <v-btn v-bind="props" icon="mdi-dots-horizontal" variant="text">
+                </v-btn>
               </template>
               <v-list>
-                <v-list-item link @click="option.action(item)" v-for="option in options">
+                <v-list-item
+                  link
+                  @click="option.action(item)"
+                  v-for="option in options"
+                >
                   <v-list-item-title>
                     {{ option.title }}
                   </v-list-item-title>
@@ -48,15 +53,26 @@
         </v-data-table>
       </v-col>
     </v-row>
-    <TotemDialog @close="clearTotem" @save="loadTotens(false); clearTotem()" v-model:totem="totem" v-model="dialog">
-    </TotemDialog>
+    <TotemDialog
+      @close="clearTotem"
+      @save="
+        loadTotens(false);
+        clearTotem();
+      "
+      v-model:totem="totem"
+      v-model="dialog"
+    ></TotemDialog>
   </v-sheet>
 </template>
 
 <script lang="ts" setup>
 import TotemDialog from "@/modules/totem/components/TotemDialog.vue";
-import { deleteTotem, getTotem } from "@/modules/totem/repositories/totem.repository";
+import {
+  deleteTotem,
+  getTotem,
+} from "@/modules/totem/repositories/totem.repository";
 import useAlertStore from "@/stores/alert";
+import useSystemStore from "@/stores/system";
 import { onMounted, ref, type Ref } from "vue";
 import { RouterLink } from "vue-router";
 
@@ -85,6 +101,7 @@ const totem = ref<TotemItem>({
   screens_count: 0,
   updated_at: "",
 });
+const { setBreadcrumbs } = useSystemStore();
 
 const loading = ref<boolean>(true);
 const items = ref<TotemList>([]);
@@ -109,14 +126,14 @@ function loadTotens(mustLoading = true) {
 
 const options = ref<any>([
   {
-    title: 'Editar',
+    title: "Editar",
     action: (totemClicked: TotemItem) => {
       totem.value = { ...totemClicked }
       dialog.value = true;
-    }
+    },
   },
   {
-    title: 'Excluir',
+    title: "Excluir",
     action: (totem: TotemItem) => {
       openConfirmAlert({
         title: 'Excluir Totem',
@@ -153,5 +170,11 @@ function clearTotem() {
 
 onMounted(() => {
   loadTotens();
+
+  setBreadcrumbs([
+    { title: "Totens", name: "true", to: "" },
+    { title: "wdwq", name: "dwqqwdq", to: "" },
+    { title: "Totens", name: "true", to: "" },
+  ]);
 });
 </script>

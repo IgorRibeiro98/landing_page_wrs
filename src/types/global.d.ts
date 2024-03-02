@@ -1,3 +1,5 @@
+import { type RouteLocationRaw} from 'vue-router';
+
 interface Screens {
   id: number;
   name: string;
@@ -225,4 +227,12 @@ interface FormDialog {
   submit?: (data: any) => void,
   submitText?: string,
   cancel?: () => void
+}
+
+interface Breadcrumb {
+  title: string
+  disabled?: boolean
+  active?: boolean
+  name: string,
+  to: RouteLocationRaw
 }
