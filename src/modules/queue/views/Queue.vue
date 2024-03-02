@@ -51,6 +51,7 @@ import LayoutView from '@/components/LayoutView.vue'
 import QueueDialog from "@/modules/queue/components/QueueDialog.vue";
 import { getQueues, deleteQueue } from "@/modules/queue/repositories/queue.repository";
 import useAlertStore from "@/stores/alert";
+import { useSystemStore } from "@/stores/system";
 import { Ref } from 'vue';
 import { onMounted, ref } from "vue";
 import { RouterLink } from "vue-router";
@@ -75,6 +76,12 @@ const headers: any = [
 ];
 
 const { openAlert, closeAlert, openConfirmAlert } = useAlertStore();
+
+const { setBreadcrumbs } = useSystemStore()
+
+setBreadcrumbs([
+    { title: "Filas", name: "true", to: "" },
+]);
 
 const dialog = ref<boolean>(false);
 
@@ -119,8 +126,6 @@ const options = ref<any>([
         }
     }
 ])
-
-
 
 function loadQueues(mustLoading = true) {
     if (mustLoading) loading.value = true;

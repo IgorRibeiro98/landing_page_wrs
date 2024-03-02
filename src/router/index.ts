@@ -1,11 +1,6 @@
-/**
- * router/index.ts
- *
- * Automatic routes for `./src/pages/*.vue`
- */
-
-// Composables
 import { RouteRecordRaw, createRouter, createWebHashHistory } from 'vue-router'
+
+import { useSystemStore } from '@/stores/system'
 
 export const layouts = {
   default: () => import('@/layouts/Default.vue'),
@@ -23,6 +18,12 @@ for (const path in routeModules) {
 const router = createRouter({
   history: createWebHashHistory(),
   routes
+})
+
+router.beforeEach(() => {
+  const { setBreadcrumbs } = useSystemStore()
+
+  setBreadcrumbs([])
 })
 
 export default router

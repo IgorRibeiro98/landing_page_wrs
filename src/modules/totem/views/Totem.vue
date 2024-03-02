@@ -36,11 +36,7 @@
                 </v-btn>
               </template>
               <v-list>
-                <v-list-item
-                  link
-                  @click="option.action(item)"
-                  v-for="option in options"
-                >
+                <v-list-item link @click="option.action(item)" v-for="option in options">
                   <v-list-item-title>
                     {{ option.title }}
                   </v-list-item-title>
@@ -53,15 +49,10 @@
         </v-data-table>
       </v-col>
     </v-row>
-    <TotemDialog
-      @close="clearTotem"
-      @save="
-        loadTotens(false);
-        clearTotem();
-      "
-      v-model:totem="totem"
-      v-model="dialog"
-    ></TotemDialog>
+    <TotemDialog @close="clearTotem" @save="
+      loadTotens(false);
+    clearTotem();
+    " v-model:totem="totem" v-model="dialog"></TotemDialog>
   </v-sheet>
 </template>
 
@@ -172,8 +163,6 @@ onMounted(() => {
   loadTotens();
 
   setBreadcrumbs([
-    { title: "Totens", name: "true", to: "" },
-    { title: "wdwq", name: "dwqqwdq", to: "" },
     { title: "Totens", name: "true", to: "" },
   ]);
 });
