@@ -1,11 +1,5 @@
 <template>
-  <Dialog
-    :loading="loading"
-    v-model="dialog"
-    width="400"
-    :form="formDialog"
-    @clock="emit('close')"
-  ></Dialog>
+  <Dialog :loading="loading" v-model="dialog" width="400" :form="formDialog" @clock="emit('close')"></Dialog>
 </template>
 <script lang="ts" setup>
 import Dialog from "@/components/Dialog.vue";
@@ -55,12 +49,14 @@ const formDialog = ref<FormDialog>({
         value: "name",
         label: "Nome",
         required: true,
+        on: {}
       },
       {
         component: "VTextarea",
         value: "description",
         label: "Descrição",
         required: true,
+        on: {}
       },
     ],
   },

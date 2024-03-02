@@ -47,8 +47,14 @@ const queue = computed<any>({
   }
 })
 
+const isUpdate = computed(() => props?.queue?.id ? true : false)
+
+const title = computed(() => {
+  return isUpdate.value ? "Editar Fila" : "Adicionar Fila";
+})
+
 const formDialog = ref<FormDialog>({
-  title: "Adicionar Fila",
+  title,
   form: {
     value: queue,
     inputs: [
@@ -90,7 +96,7 @@ function save() {
   if (iconWasEddited.value)
     formData.set('icon_src', icon.value[0])
 
-  const queuePromise = props?.queue?.id ? updateQueue(props.queue.id, formData) : createQueue(formData);
+  const queuePromise = isUpdate.value ? updateQueue(props.queue.id, formData) : createQueue(formData);
 
   queuePromise
     .then(() => {
@@ -106,6 +112,11 @@ function save() {
 }
 
 function close() {
+  dialog.value = false
+
+  iconWasEddited.value = false
+  icon.value = []
+
   queue.value = {
     name: '',
     status: null,
@@ -114,9 +125,6 @@ function close() {
     created_at: '',
     updated_at: '',
   }
-
-  iconWasEddited.value = false
-  icon.value = []
 }
 
 async function getIconFromURL() {

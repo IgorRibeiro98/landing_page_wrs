@@ -5,21 +5,27 @@ import { ref } from "vue";
 
 export const alertStore = defineStore('alert', () => {
 
-  interface Options {
-    confirm: boolean,
-    onConfirm: (loading: Ref<boolean>) => void  
+  interface Alert {
+    display: boolean,
+    title: string,
+    text: string,
+    options: {
+      type: 'confirm' | 'alert',
+      callback: (loading: Ref<boolean>) => void,
+    }
   }
-  const alert = ref({
+
+  const alert = ref<Alert>({
     display: false,
     title: '',
     text: '',
     options: {
-      confirm: false,
-      onConfirm: (loading: Ref<boolean>) => { }
+      type: 'confirm',
+      callback: (loading: Ref<boolean>) => { }
     }
   })
 
-  function openAlert(title: string, text: string | AxiosError, options: Options| null = null) {
+  function openAlert(title: string, text: string | AxiosError) {
     if (text instanceof AxiosError) {
       const data = text.response?.data as any;
 
@@ -30,9 +36,21 @@ export const alertStore = defineStore('alert', () => {
       display: true,
       title,
       text,
-      options: options ?? {
-        confirm: false,
-        onConfirm: () => { }
+    }
+  }
+
+  function openConfirmAlert({
+    title,
+    text
+  }, callback: CallableFunction) {
+
+    alert.value = {
+      display: true,
+      title,
+      text,
+      options: {
+        type: 'confirm',
+        callback
       }
     }
   }
@@ -45,7 +63,8 @@ export const alertStore = defineStore('alert', () => {
     alert,
 
     openAlert,
-    closeAlert
+    closeAlert,
+    openConfirmAlert
   }
 })
 

@@ -6,7 +6,7 @@
             </v-btn>
         </template>
         <template #content>
-            <v-data-table :headers="headers" :items="items" :loading="loading" @dblclick:row="openDialog">
+            <v-data-table :headers="headers" :items="items" :loading="loading">
                 <template #[`item.name`]="{ item }">
                     <RouterLink :to="{ name: 'totem.view' }">
                         {{ item.name }}
@@ -24,13 +24,20 @@
                 <template #bottom> </template>
 
                 <template #[`item.actions`]="{ item }: { item: Queue }">
-                    <div class="d-flex">
-                        <v-btn icon="mdi-pencil" variant="text" @click="openDialog(null, { item })">
-                        </v-btn>
+                    <v-menu>
+                        <template #activator="{ props }">
+                            <v-btn icon="mdi-dots-horizontal" variant="text" v-bind="props">
+                            </v-btn>
+                        </template>
 
-                        <v-btn icon="mdi-delete-circle-outline" variant="text" color="error" @click="removeQueue(item)">
-                        </v-btn>
-                    </div>
+                        <v-list>
+                            <v-list-item link @click="option.action(item)" v-for="option in options">
+                                <v-list-item-title>
+                                    {{ option.title }}
+                                </v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
                 </template>
             </v-data-table>
         </template>
@@ -66,6 +73,11 @@ const headers: any = [
         width: '10%'
     }
 ];
+
+const { openAlert, closeAlert, openConfirmAlert } = useAlertStore();
+
+const dialog = ref<boolean>(false);
+
 const loading = ref<boolean>(true);
 
 const items = ref<QueueList>([]);
@@ -80,9 +92,35 @@ const item = ref<Queue>({
     updated_at: '',
 })
 
-const dialog = ref<boolean>(false);
+const options = ref<any>([
+    {
+        title: 'Editar',
+        action: (queue: Queue) => {
+            item.value = { ...queue }
+            dialog.value = true;
+        }
+    },
+    {
+        title: 'Excluir',
+        action: (queue: Queue) => {
+            openConfirmAlert({
+                title: 'Remover fila',
+                text: `Deseja realmente remover a fila <span class="text-no-wrap bg-primary pa-1 rounded"> ${queue.name}</span>?`
+            }, (loading: Ref<boolean>) => {
+                loading.value = true
 
-const { openAlert, closeAlert } = useAlertStore();
+                deleteQueue(queue.id)
+                    .finally(() => {
+                        loading.value = false
+                        closeAlert()
+                        loadQueues(false)
+                    })
+            })
+        }
+    }
+])
+
+
 
 function loadQueues(mustLoading = true) {
     if (mustLoading) loading.value = true;
@@ -98,27 +136,6 @@ function loadQueues(mustLoading = true) {
         .finally(() => {
             loading.value = false;
         });
-}
-
-function openDialog(event: MouseEvent | null, { item: queue }: { item: Queue }) {
-    item.value = { ...queue }
-    dialog.value = true
-}
-
-function removeQueue(queue: Queue) {
-    openAlert('Remover fila', `Deseja realmente remover a fila <span class="text-no-wrap bg-primary pa-1 rounded"> ${queue.name}</span>?`, {
-        confirm: true,
-        onConfirm: (loading: Ref<boolean>) => {
-            loading.value = true
-
-            deleteQueue(queue.id)
-                .finally(() => {
-                    loading.value = false
-                    closeAlert()
-                    loadQueues(false)
-                })
-        },
-    });
 }
 
 onMounted(() => {

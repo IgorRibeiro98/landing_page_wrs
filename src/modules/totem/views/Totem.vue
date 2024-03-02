@@ -34,10 +34,10 @@
               <template #activator="{ props }">
                 <v-btn v-bind="props" icon="mdi-dots-horizontal" variant="text"> </v-btn>
               </template>
-              <v-list >
+              <v-list>
                 <v-list-item link @click="option.action(item)" v-for="option in options">
                   <v-list-item-title>
-                    {{option.title}}
+                    {{ option.title }}
                   </v-list-item-title>
                 </v-list-item>
               </v-list>
@@ -48,7 +48,8 @@
         </v-data-table>
       </v-col>
     </v-row>
-    <TotemDialog @close="clearTotem" @save="loadTotens(false);clearTotem()" v-model:totem="totem" v-model="dialog"></TotemDialog>
+    <TotemDialog @close="clearTotem" @save="loadTotens(false); clearTotem()" v-model:totem="totem" v-model="dialog">
+    </TotemDialog>
   </v-sheet>
 </template>
 
@@ -74,6 +75,8 @@ const headers: any = [
   { title: "", value: "actions", align: "center", width: "2%" },
 ];
 
+const { openAlert, closeAlert, openConfirmAlert } = useAlertStore();
+
 const totem = ref<TotemItem>({
   name: "",
   description: "",
@@ -87,7 +90,6 @@ const loading = ref<boolean>(true);
 const items = ref<TotemList>([]);
 const dialog = ref<boolean>(false);
 
-const { openAlert, closeAlert } = useAlertStore();
 
 function loadTotens(mustLoading = true) {
   if (mustLoading) loading.value = true;
@@ -109,30 +111,30 @@ const options = ref<any>([
   {
     title: 'Editar',
     action: (totemClicked: TotemItem) => {
-      totem.value = {...totemClicked}
+      totem.value = { ...totemClicked }
       dialog.value = true;
     }
   },
   {
     title: 'Excluir',
     action: (totem: TotemItem) => {
-      openAlert('Excluir Totem', `Deseja realmente excluir o totem <span class="text-no-wrap bg-primary pa-1 rounded">${totem.name}</span>?`, {
-        confirm: true,
-        onConfirm(loading: Ref<boolean>) {
-          loading.value = true;
-          deleteTotem(totem.id)
-            .then(() => {
-              loadTotens(false);
-              clearTotem();
-              closeAlert();
-            })
-            .catch((error) => {
-              openAlert("Erro ao excluir totem", error);
-            })
-            .finally(() => {
-              loading.value = false;
-            });
-        }
+      openConfirmAlert({
+        title: 'Excluir Totem',
+        text: `Deseja realmente excluir o totem <span class="text-no-wrap bg-primary pa-1 rounded">${totem.name}</span>?`
+      }, (loading: Ref<boolean>) => {
+        loading.value = true;
+        deleteTotem(totem.id)
+          .then(() => {
+            loadTotens(false);
+            clearTotem();
+            closeAlert();
+          })
+          .catch((error) => {
+            openAlert("Erro ao excluir totem", error);
+          })
+          .finally(() => {
+            loading.value = false;
+          });
       })
     }
   }

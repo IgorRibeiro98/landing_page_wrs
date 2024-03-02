@@ -16,7 +16,7 @@
             </v-card-text>
 
             <v-card-actions class="d-flex justify-center">
-                <div v-if="alert.options.confirm">
+                <div v-if="alert.options.type == 'confirm'">
                     <v-btn @click="close" variant="tonal" class="px-16" :disabled="loading">
                         Não
                     </v-btn>
@@ -49,6 +49,6 @@ function close() {
 }
 
 function confirm() {
-    alert.value.options.onConfirm(loading)
+    alert.value.options.callback(loading)
 }
 </script>
