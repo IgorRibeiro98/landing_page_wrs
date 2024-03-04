@@ -133,3 +133,24 @@ $font-size:clamp(1.3rem, 1.7vw, 2.7rem) !important;
 a {
     color: var(--v-primary-base) !important; 
 }
+
+.v-slide-group__prev {
+    flex: none !important;
+    min-width: 0 !important;
+    padding-right: 2%
+}
+
+.v-slide-group__next {
+    flex: none !important;
+    min-width: 0 !important;
+    padding-left: 2%
+}
+
+
+.v-slide-group__prev--disabled {
+    display: none !important;
+}
+
+.v-slide-group__next--disabled {
+    display: none !important;
+}
