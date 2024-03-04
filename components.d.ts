@@ -18,6 +18,7 @@ declare module 'vue' {
     PrintPassword: typeof import('./src/components/PrintPassword.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    View: typeof import('./src/components/View.vue')['default']
     VirtualKeyboard: typeof import('./src/components/VirtualKeyboard.vue')['default']
   }
 }

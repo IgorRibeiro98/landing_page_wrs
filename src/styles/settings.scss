@@ -6,11 +6,35 @@
 
 // https://vuetifyjs.com/features/sass-variables/`
 @use 'vuetify/settings' with (
-  $body-font-family: 'Poppins',
+    $body-font-family: 'Poppins',
 );
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
+.v-window__controls {
+    button {
+        background-color: rgb(var(--v-theme-primary));
+        color: white;
+    }
+}
+.v-table .v-table__wrapper > table > tbody > tr:not(:last-child) > td, .v-table .v-table__wrapper > table > tbody > tr:not(:last-child) > th {
+    border-bottom: none;
+}
+
+.v-slide-group__content > div:not(:first-child) {
+    margin-left: 15px;
+}
+.v-slide-group__content > div:not(:last-child) {
+    margin-right: 15px;
+}
+
+.v-slide-group__container {
+    padding: 15px 5px;
+}
+
+.v-table .v-table__wrapper > table > tbody > tr:hover {
+    background: rgb(var(--v-theme-background))
+}
 // html {
 //     font-size: 90%;
 //     @media only screen and (min-width: 600px) {
@@ -153,4 +177,8 @@ a {
 
 .v-slide-group__next--disabled {
     display: none !important;
+}
+
+.pointer-none {
+    pointer-events: none;
 }

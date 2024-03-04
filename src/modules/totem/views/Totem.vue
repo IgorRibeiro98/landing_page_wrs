@@ -1,5 +1,5 @@
 <template>
-  <v-sheet color="white" rounded>
+  <v-sheet color="on-surface" rounded>
     <v-row>
       <v-col class="d-flex align-center">
         <h1><v-icon icon="mdi-monitor-vertical"></v-icon> Totens</h1>
@@ -11,7 +11,7 @@
       <v-col cols="12">
         <v-data-table :headers="headers" :items="items" :loading="loading">
           <template #[`item.name`]="{ item }">
-            <RouterLink :to="{ name: 'totem.view' }">
+            <RouterLink :to="{ name: 'totem.detail', params: { id: item.id} }">
               {{ item.name }}
             </RouterLink>
           </template>

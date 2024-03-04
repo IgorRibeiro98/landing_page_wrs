@@ -3,7 +3,7 @@
     <v-row>
       <v-col>
         <h1>
-          <b>{{ data.identifier.first_name }}</b>, por favor revise suas informações pessoais
+          <b>{{ data?.identifier.first_name }}</b>, por favor revise suas informações pessoais
         </h1>
       </v-col>
       <v-col cols="12">
@@ -103,8 +103,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from "vue";
 import { required } from "@/rules";
+import { computed, onMounted, ref } from "vue";
 
 import useAlertStore from "@/stores/alert";
 

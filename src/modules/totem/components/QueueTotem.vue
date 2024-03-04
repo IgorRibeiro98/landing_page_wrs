@@ -1,7 +1,7 @@
 <template>
-    <v-card>
+    <v-card width="100%" height="100%">
         <v-card-title class="bg-secondary d-flex align-end justify-start pb-0 text-wrap overflow-visible"
-            style="min-height: 90px">
+            style="min-height: 60px">
             <v-sheet min-height="60" min-width="60"
                 class="bg-primary pa-2 rounded mb-n4 mr-4 d-flex align-center justify-center">
                 <v-img :src="queue.data.icon_src" />
@@ -17,7 +17,7 @@
             </div>
         </v-card-title>
 
-        <v-card-text class="pt-4">
+        <v-card-text class="py-0">
             <v-chip-group show-arrows>
                 <v-chip v-for="(type, index) of queue.attendance_types" :key="index">
                     {{ type.data.name }}
@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed } from 'vue';
 
 interface Queue {
     id: number;

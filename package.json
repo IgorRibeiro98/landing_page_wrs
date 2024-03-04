@@ -7,7 +7,8 @@
     "electron:build": "npm run build && cd electron && npm run build -- --dir",
     "preview": "vite preview",
     "lint": "eslint . --fix --ignore-path .gitignore",
-    "postinstall": "cd electron && npm install"
+    "postinstall": "cd electron && npm install",
+    "check": "vue-tsc --noEmit"
   },
   "dependencies": {
     "@mdi/font": "7.4.47",

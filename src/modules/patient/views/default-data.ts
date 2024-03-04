@@ -1,4 +1,4 @@
-const totem = {
+export const totem = {
     id: 0,
     name: '',
     site: {
@@ -10,7 +10,7 @@ const totem = {
     queues: []
 }
 
-const data = {
+export const data = {
     identifier: {
         id: '',
         generic_id: '',

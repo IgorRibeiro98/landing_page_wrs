@@ -4,6 +4,10 @@ export function getTotem() {
     return axios.get(`/totem`);
 }
 
+export function findTotem(id: number) {
+  return axios.get(`/totem/${id}`);
+}
+
 export function createTotem(totem: TotemItem) {
     return axios.post(`/totem`, totem);
 }
