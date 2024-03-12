@@ -11,6 +11,7 @@ declare module 'vue' {
     AppBar: typeof import('./src/components/AppBar.vue')['default']
     BreadCrumb: typeof import('./src/components/BreadCrumb.vue')['default']
     Dialog: typeof import('./src/components/Dialog.vue')['default']
+    Draggable: typeof import('./src/components/Draggable.vue')['default']
     FormBuilder: typeof import('./src/components/FormBuilder.vue')['default']
     IFrameVue: typeof import('./src/components/IFrameVue.vue')['default']
     LayoutView: typeof import('./src/components/LayoutView.vue')['default']

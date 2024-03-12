@@ -182,3 +182,19 @@ a {
 .pointer-none {
     pointer-events: none;
 }
+
+.text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.scale-up:hover {
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.1);
+}
+
+.clickable:active {
+    // background: red;
+    transform: scale(0.90);
+  }

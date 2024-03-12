@@ -1,9 +1,14 @@
 <template>
-  <View :title="totem.name" :description="totem.description">
+  <View
+    :title="totem.name"
+    enable-action
+    :actions="actions"
+    :description="totem.description"
+  >
     <v-row>
       <v-col cols="12">
         <div class="d-flex align-center">
-          <h2>Filas </h2>
+          <h2>Filas</h2>
           <v-spacer></v-spacer>
           total: {{ totem.queues.length }}
         </div>
@@ -16,7 +21,7 @@
       </v-col>
       <v-col cols="12">
         <div class="d-flex align-center">
-          <h2>Telas </h2>
+          <h2>Telas</h2>
           <v-spacer></v-spacer>
           total: {{ totem.screens.length }}
         </div>
@@ -32,7 +37,7 @@ import QueueTotem from "@/modules/totem/components/QueueTotem.vue";
 import TotemScreensTable from "@/modules/totem/components/TotemScreensTable.vue";
 import { findTotem } from "@/modules/totem/repositories/totem.repository";
 import useTotemStore from "@/stores/alert";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 
 const { openAlert } = useTotemStore();
@@ -48,6 +53,18 @@ const totem = ref<Totem>({
     ds_estabelecimento: "",
   },
 });
+
+const actions = reactive([
+  {
+    title: "Gerenciar telas",
+    to: {
+      name: "screen.totem.manager",
+      params: {
+        id: computed(() => totem.value.id),
+      },
+    },
+  },
+]);
 
 const route = useRoute();
 

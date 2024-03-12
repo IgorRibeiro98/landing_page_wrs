@@ -17,6 +17,11 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/modules/totem/views/TotemDetail.vue'),
       },
       {
+        path: ':id/screens',
+        name: 'screen.totem.manager',
+        component: () => import('@/modules/totem/views/ScreenTotemManager.vue'),
+      },
+      {
         path: ':id/screens/:screenId',
         name: 'screen.detail',
         component: () => import('@/modules/totem/views/TotemScreenDetail.vue')

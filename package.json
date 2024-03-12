@@ -16,6 +16,7 @@
     "core-js": "^3.34.0",
     "pinia": "^2.1.7",
     "roboto-fontface": "*",
+    "sortablejs": "^1.15.2",
     "vue": "^3.3.0",
     "vuetify": "^3.0.0"
   },
