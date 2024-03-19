@@ -1,11 +1,26 @@
 import { ComputedRef } from 'vue';
 import { type RouteLocationRaw } from 'vue-router';
 declare global {
+  type ScreenComponent = 'PersonalDataForm' | 'Identifier'
+
+  interface ScreenField {
+    id: number
+    slug: string
+    key: string
+    description: string
+    group_id: number,
+    label: string
+    updated_at: string
+    created_at: string
+  }
+
   interface Screens {
     id: number;
     name: string;
-    component: string
+    component?: ScreenComponent,
     description?: string
+    fields: ScreenField[]
+    traits: any[]
   }
 
 
@@ -45,12 +60,20 @@ declare global {
   // }
   interface ScreenTotem {
     data: Screens
-    fields: any[]
+    fields: ScreenTotemField[]
     traits: any[]
     id: number
     order: number
     screen_id: number
     totem_id: number
+  }
+  interface ScreenTotemField {
+    editable: number,
+    field_id: number,
+    order: number,
+    required: number,
+    screen_totem_id: number,
+    data: ScreenField
   }
   interface Totem {
     id: number;

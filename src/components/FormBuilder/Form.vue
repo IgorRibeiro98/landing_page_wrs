@@ -1,6 +1,6 @@
 <template>
     <v-row>
-        <v-col class="px-0" v-for="(formItem, index) in props.form" v-show="formItem.hide ?? true" :cols="formItem?.cols?.cols ?? 12"
+        <v-col v-for="(formItem, index) in props.form" v-show="formItem.hide ?? true" :cols="formItem?.cols?.cols ?? 12"
             v-bind="formItem.cols">
             <div v-if="formItem.title" class="mb-4">
                 <span class="text-subtitle-1 font-weight-bold ">{{ formItem.title }}</span>
@@ -34,21 +34,9 @@
 </template>
 
 <script lang="ts" setup>
+import components from '@/components/FormBuilder/components';
 import Validator from '@/helpers/validator';
-import { computed, type Component } from 'vue';
-import { VAutocomplete } from 'vuetify/components/VAutocomplete';
-import { VFileInput } from 'vuetify/components/VFileInput';
-import { VTextField } from 'vuetify/components/VTextField';
-import { VTextarea } from 'vuetify/components/VTextarea';
-import RichText from './RichText.vue';
-
-const components: Record<FormComponent, Component> = {
-    VAutocomplete,
-    VTextField,
-    VTextarea,
-    VFileInput,
-    RichText
-}
+import { computed } from 'vue';
 
 const validator = new Validator();
 

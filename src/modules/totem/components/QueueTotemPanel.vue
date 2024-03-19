@@ -35,7 +35,7 @@
 <script lang="ts" setup>
 import { computed } from "vue";
 
-import FormBuilder from "@/components/FormBuilder.vue";
+import FormBuilder from "@/components/FormBuilder/Form.vue";
 
 const props = defineProps<{
   modelValue: QueueTotem;

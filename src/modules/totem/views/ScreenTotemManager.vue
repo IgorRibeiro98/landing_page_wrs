@@ -14,13 +14,14 @@
           ]"
         >
         </FormBuilder>
-        <Draggable draggable=".card-title"  show-arrows>
+        <!-- <Draggable draggable=".card-title"  show-arrows> -->
 
         <v-slide-group show-arrows ref="slideGroup">
           <v-slide-group-item
             v-for="(filteredScreen, index) in filteredScreens"
           >
             <v-card
+              @click="insertScreenInTotem(filteredScreen)"
               variant="outlined"
               width="300"
               height="150"
@@ -34,7 +35,7 @@
                 <v-tooltip text="Preview" location="bottom">
                   <template #activator="{ props }">
                     <v-icon
-                      @click="openPreview('base', index)"
+                      @click.stop="openPreview('base', index)"
                       v-bind="props"
                       icon="mdi-monitor"
                       class="cursor-pointer clickable"
@@ -48,7 +49,7 @@
             </v-card>
           </v-slide-group-item>
         </v-slide-group>
-        </Draggable>
+        <!-- </Draggable> -->
         <p class="text-center" v-if="!filteredScreens.length">
           {{
             search.screen
@@ -59,49 +60,70 @@
       </v-col>
       <v-col cols="12">
         <h3>Telas atuais</h3>
-        <v-list>
-        <Draggable>
-
-          <v-list-item
-            @click="edit"
-            :active="
-              previewDialog.listType === 'totem' &&
-              previewDialog.activeIndex === i
-            "
-            :title="screen.data.name"
-            :subtitle="screen.data.description"
-            v-for="(screen, i) in totem.screens"
-          >
-            <template #prepend>
-              <h1 class="mr-5">{{ i + 1 }}</h1>
-            </template>
-            <template #append>
-              <v-card
-                variant="outlined"
-                v-ripple.stop
-                class="scale-up"
-                @click.stop="openPreview('totem', i)"
-              >
-                <component
+        <v-list class="position-relative overflow-hidden" v-click-outside="clearSelectedScreenTotem">
+          <!-- <Draggable> -->
+          <transition-group name="list">
+            <v-list-item
+              :active="lastScreenTotemSelected === i"
+              :key="screen"
+              :title="screen.data.name"
+              :subtitle="screen.data.description"
+              v-for="(screen, i) in totem.screens"
+              @click="edit(screen)"
+            >
+              <template #prepend>
+                <div>
+                  <v-btn
+                    block
+                    variant="text"
+                    icon="mdi-chevron-up"
+                    :disabled="i === 0"
+                    @click.stop="changeOrder(-1, i)"
+                  ></v-btn>
+                  <v-btn
+                    block
+                    variant="text"
+                    icon="mdi-chevron-down"
+                    :disabled="i + 1 == totemScreensLength"
+                    @click.stop="changeOrder(1, i)"
+                  ></v-btn>
+                </div>
+                <h1 class="mr-5">{{ i + 1 }}</h1>
+              </template>
+              <template #append>
+                <v-card
+                  variant="outlined"
+                  v-ripple.stop
+                  class="scale-up"
+                  @click.stop="openPreview('totem', i)"
                   style="
                     min-width: 800px;
                     min-height: 400px;
                     max-width: 800px;
                     max-height: 400px;
                     zoom: 18%;
-                    pointer-events: none;
                   "
-                  v-model="data"
-                  :is="components[screen.data.component]"
-                ></component>
-              </v-card>
-            </template>
-          </v-list-item>
-          </Draggable>
+                >
+                <keep-alive>
+                  <component
+                    style="pointer-events: none"
+                    v-model="data"
+                    :is="components[screen.data.component!]"
+                  ></component>
+                </keep-alive>
+                </v-card>
+              </template>
+            </v-list-item>
+          </transition-group>
+          <!-- </Draggable> -->
         </v-list>
         <p class="text-center" v-if="!totem.screens.length">
           Não há telas no totem {{ totem.name }}
         </p>
+      </v-col>
+      <v-col cols="12" class="d-flex justify-end">
+        <v-btn @click="cancel" class="mr-3" variant="total" color="gray">Cancelar</v-btn>
+        <v-btn @click="save" variant="tonal" color="primary">Salvar</v-btn>
       </v-col>
     </v-row>
     <ScreenPreviewDialog
@@ -109,11 +131,15 @@
       :screens="previewDialog.screens"
       v-model:actualScreenIndex="previewDialog.activeIndex"
     />
+    <ScreenTotemConfigDialog
+      v-model="configDialog"
+      :screen-totem="screen"
+      :screens="screens"
+    />
   </View>
 </template>
 <script lang="ts" setup>
-import Draggable from "@/components/Draggable.vue";
-import FormBuilder from "@/components/FormBuilder.vue";
+import FormBuilder from "@/components/FormBuilder/Form.vue";
 import View from "@/components/View.vue";
 import { components } from "@/modules/patient/helpers/totem-components";
 import { data } from "@/modules/patient/views/default-data";
@@ -122,13 +148,32 @@ import { getScreens } from "@/modules/totem/repositories/screen.repository";
 import { findTotem } from "@/modules/totem/repositories/totem.repository";
 import useTotemStore from "@/stores/alert";
 import { computed, onMounted, reactive, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { VSlideGroup } from "vuetify/components/VSlideGroup";
+import ScreenTotemConfigDialog from "../components/ScreenTotemConfigDialog.vue";
 
 const route = useRoute();
+const router = useRouter();
 const screens = ref<Screens[]>([]);
 const slideGroup = ref();
+const screen = ref<ScreenTotem>({
+  id: 0,
+  order: 0,
+  totem_id: 0,
+  screen_id: 0,
+  data: {
+    id: 0,
+    name: "",
+    description: "",
+    component: undefined,
+    traits: [],
+    fields: [],
+  },
+  traits: [],
+  fields: [],
+});
 
+const lastScreenTotemSelected = ref<number|null>(null)
 const previewDialog = ref<{
   visible: boolean;
   screens: Screens[];
@@ -141,14 +186,7 @@ const previewDialog = ref<{
   listType: "",
 });
 
-const arr = reactive([
-  {
-    id: 1,
-  },
-  {
-    id: 2,
-  },
-]);
+const configDialog = ref(false);
 
 const totem = ref<Totem>({
   id: 0,
@@ -188,6 +226,10 @@ const totemFormattedScreens = computed(() => {
   });
 });
 
+const totemScreensLength = computed(() => {
+  return totem.value.screens.length;
+});
+
 const { openAlert } = useTotemStore();
 
 function loadTotem() {
@@ -210,8 +252,45 @@ function loadScreens() {
     });
 }
 
-function edit() {
-  console.log("edit");
+function edit(screenTotem: ScreenTotem) {
+  screen.value = screenTotem;
+  configDialog.value = true;
+}
+
+function insertScreenInTotem(screen: Screens) {
+  totem.value.screens.push({
+    id: 0,
+    order: totem.value.screens.length + 1,
+    totem_id: totem.value.id,
+    screen_id: screen.id,
+    data: screen,
+    traits: [],
+    fields: [],
+  });
+  const actualScreenTotem = findScreenTotemByComponent(screen.component!);
+
+  if (actualScreenTotem === undefined) {
+    openAlert("Erro", "Tela não encontrada");
+    return;
+  }
+  edit(actualScreenTotem);
+}
+
+function changeOrder(direction: number, actualIndex: number) {
+  const newIndex = actualIndex + direction;
+  const item = totem.value.screens.splice(actualIndex, 1)[0];
+  totem.value.screens.splice(newIndex, 0, {...item});
+  lastScreenTotemSelected.value = newIndex;
+}
+
+function findScreenTotemByComponent(
+  component: string
+): ScreenTotem | undefined {
+  return totem.value.screens.find((s) => s.data.component === component);
+}
+
+function clearSelectedScreenTotem() {
+  lastScreenTotemSelected.value = null;
 }
 
 function openPreview(screenList: "totem" | "base", index: number) {
@@ -223,6 +302,14 @@ function openPreview(screenList: "totem" | "base", index: number) {
   previewDialog.value.screens = availableScreens[screenList];
   previewDialog.value.activeIndex = index;
   previewDialog.value.visible = true;
+}
+
+function cancel() {
+  router.push({ name: "totem.detail", params: { id: totem.value.id } });
+}
+
+function save() {
+  console.log('save');
 }
 onMounted(() => {
   loadTotem();
@@ -237,5 +324,24 @@ onMounted(() => {
     white-space: normal !important;
     overflow: unset !important;
   }
+}
+/* 1. declare transition */
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+/* 2. declare enter from and leave to state */
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: scaleY(0.01) translate(30px, 0);
+}
+
+/* 3. ensure leaving items are taken out of layout flow so that moving
+      animations can be calculated correctly. */
+.list-leave-active {
+  position: absolute;
 }
 </style>

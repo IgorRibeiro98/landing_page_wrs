@@ -106,11 +106,11 @@
           </v-expansion-panels>
 
           <div class="mt-4">
-            <v-badge color="warning" v-model="allQueueIsAdded">
+            <v-badge color="info" v-model="allQueueIsAdded">
               <template #badge>
                 <v-tooltip>
                   <template #activator="{ props }">
-                    <v-icon icon="mdi-alert" v-bind="props" />
+                    <v-icon icon="mdi-information-variant" v-bind="props" />
                   </template>
 
                   <p>Todas as filas já foram mapeadas para este totem</p>
@@ -164,8 +164,8 @@ import LayoutView from "@/components/LayoutView.vue";
 import { getQueues } from "@/modules/queue/repositories/queue.repository";
 import { getAttendanceTypes } from "@/modules/totem/repositories/attendance-type.repository";
 import {
-  findTotem,
-  updateQueueTotem,
+findTotem,
+updateQueueTotem,
 } from "@/modules/totem/repositories/totem.repository";
 import useAlertStore from "@/stores/alert";
 import useSystemStore from "@/stores/system";

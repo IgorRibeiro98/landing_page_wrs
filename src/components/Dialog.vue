@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-bind="$attrs" v-model="dialog">
-      <v-form ref="formRef" @submit.prevent="handleSubmit" v-model="validate" lazy-validation>
-          <v-card :loading="loading">
+      <v-form ref="formRef" @submit.prevent="handleSubmit" v-model="validate" lazy-validation class="fill-height">
+          <v-card :loading="loading" height="100%">
               <v-card-title class="d-flex align-center pa-4 pb-0">
                   <slot name="title">
                       <span>
@@ -23,11 +23,11 @@
                   </v-row>
                   <slot></slot>
                   <slot name="content">
-                      <FormBuilder v-if="form?.form" v-model="form.form.value" :form="form?.form.inputs ?? []">
+                      <Form v-if="form?.form" v-model="form.form.value" :form="form?.form.inputs ?? []">
                           <template v-for="(formItem, index) in form.form.inputs" #[`item:${formItem.value}`]="data">
                               <slot :name="`item:${formItem.value}`" v-bind="data"></slot>
                           </template>
-                      </FormBuilder>
+                      </Form>
                   </slot>
               </v-card-text>
               <v-card-actions class="px-4 pb-4" v-if="!hideActions">
@@ -42,8 +42,8 @@
   </v-dialog>
 </template>
 <script lang="ts" setup>
+import Form from '@/components/FormBuilder/Form.vue';
 import { computed, defineExpose, ref } from 'vue';
-import FormBuilder from './FormBuilder.vue';
 interface Props {
   modelValue: boolean
   title?: string
