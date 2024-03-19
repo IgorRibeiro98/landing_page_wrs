@@ -36,13 +36,17 @@ export const alertStore = defineStore('alert', () => {
       display: true,
       title,
       text,
+      options: {
+        type: 'alert',
+        callback: (loading: Ref<boolean>) => { }
+      }
     }
   }
 
   function openConfirmAlert({
     title,
     text
-  }, callback: CallableFunction) {
+  }: { title: string, text: string }, callback: (loading: Ref<boolean>) => void) {
 
     alert.value = {
       display: true,

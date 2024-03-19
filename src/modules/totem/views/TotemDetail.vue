@@ -40,6 +40,9 @@ import useTotemStore from "@/stores/alert";
 import { computed, onMounted, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 
+import useSystemStore from "@/stores/system";
+
+const { setBreadcrumbs } = useSystemStore();
 const { openAlert } = useTotemStore();
 
 const totem = ref<Totem>({
@@ -55,6 +58,12 @@ const totem = ref<Totem>({
 });
 
 const actions = reactive([
+  {
+    title: "Gerenciar Filas",
+    to: {
+      name: "queue.detail",
+    },
+  },
   {
     title: "Gerenciar telas",
     to: {
@@ -73,6 +82,20 @@ onMounted(() => {
 });
 
 function loadTotem() {
+  setBreadcrumbs([
+    {
+      title: "Totens",
+      to: {
+        name: "totem.view",
+      },
+    },
+    {
+      title: computed(() => totem.value.name ?? `${route.params.id}`),
+      to: {
+        name: "totem.detail",
+      },
+    },
+  ]);
   findTotem(Number(route.params.id))
     .then((response) => {
       totem.value = response.data;

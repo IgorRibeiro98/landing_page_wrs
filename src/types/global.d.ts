@@ -1,4 +1,5 @@
-import { type RouteLocationRaw} from 'vue-router';
+import { ComputedRef } from 'vue';
+import { type RouteLocationRaw } from 'vue-router';
 declare global {
   interface Screens {
     id: number;
@@ -42,21 +43,21 @@ declare global {
   //     nr_seq_fila_preferencial_80: string;
   //     [key: string]: any;
   // }
-interface ScreenTotem {
-  data: Screens
-  fields: any[]
-  traits: any[]
-  id: number
-  order: number
-  screen_id: number
-  totem_id: number
-}
+  interface ScreenTotem {
+    data: Screens
+    fields: any[]
+    traits: any[]
+    id: number
+    order: number
+    screen_id: number
+    totem_id: number
+  }
   interface Totem {
     id: number;
     name: string;
     description: string | null;
     screens: ScreenTotem[];
-    queues: Queue[];
+    queues: QueueTotem[];
     site: Site
   }
 
@@ -203,7 +204,7 @@ interface ScreenTotem {
     created_at: string;
   }
 
-  type FormComponent = 'VAutocomplete' | 'VTextField' | 'VTextarea' | 'VFileInput'
+  type FormComponent = 'VAutocomplete' | 'VTextField' | 'VTextarea' | 'VFileInput' | 'RichText'
 
   interface FormItem {
     title?: string
@@ -240,10 +241,40 @@ interface ScreenTotem {
   }
 
   interface Breadcrumb {
-    title: string
+    title: string | ComputedRef
     disabled?: boolean
     active?: boolean
-    name: string,
+    name?: string | ComputedRef,
     to: RouteLocationRaw
+  }
+
+  interface AttendanceTypeData {
+    id: number
+    name: string
+    description: string
+    created_at: string
+    updated_at: string
+  }
+
+  interface AttendanceType {
+    data: AttendanceTypeData | null
+    attendance_type_id: number
+    integration_id: string
+  }
+
+  interface AttendanceHour {
+    end_time: string
+    start_time: string
+    weekday_iso: number
+  }
+
+  interface QueueTotem {
+    attendance_types: AttendanceType[];
+    attendance_hours: AttendanceHour[];
+    off_hours_message: string;
+    data?: Queue;
+    form: {
+      value: boolean;
+    };
   }
 }

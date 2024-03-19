@@ -13,10 +13,18 @@
           <slot name="action">
             <v-menu v-if="enableAction">
               <template #activator="{ props }">
-                <v-btn :icon="actionIcon" v-bind="props" class="ml-auto"></v-btn>
+                <v-btn
+                  :icon="actionIcon"
+                  v-bind="props"
+                  class="ml-auto"
+                ></v-btn>
               </template>
               <v-list>
-                <v-list-item :to="action.to" v-for="action in actions" @click="action.click">
+                <v-list-item
+                  :to="action.to"
+                  v-for="action in actions"
+                  @click="action.click"
+                >
                   <v-list-item-title>{{ action.title }}</v-list-item-title>
                 </v-list-item>
               </v-list>
@@ -36,18 +44,17 @@
   </v-sheet>
 </template>
 <script lang="ts" setup>
-
 interface Action {
   title: string;
   click?: () => void;
-  to?: any,
+  to?: any;
 }
 
 interface Props {
   title: string;
-  description: string;
+  description?: string | null;
   enableAction: boolean;
-  actionIcon: string;
+  actionIcon?: string;
   actions: Action[];
 }
 
@@ -56,5 +63,4 @@ const props = withDefaults(defineProps<Props>(), {
   actions: () => [],
   actionIcon: "mdi-cog",
 });
-
 </script>
