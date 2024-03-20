@@ -16,36 +16,29 @@
                   show-select
                   :item-value="(item) => item"
                   v-model="attendanceTypesSelected"
-                  no-data-text="Adicione um novo horário"
+                  no-data-text=""
                 >
                   <template #top>
-                    <v-toolbar>
-                      <div
-                        class="d-flex justify-space-between mx-1 w-100 align-center"
-                      >
-                        <div>
-                          <v-expand-x-transition>
-                            <v-btn
-                              icon="mdi-delete"
-                              variant="text"
-                              color="primary"
-                              v-if="
-                                data.attendance_hours.length &&
-                                attendanceTypesSelected.length
-                              "
-                              @click="removeSelectedAttendanceHours"
-                            >
-                            </v-btn>
-                          </v-expand-x-transition>
-                        </div>
-
+                    <v-toolbar density="compact">
+                      <v-expand-x-transition class="position-absolute">
                         <v-btn
-                          variant="tonal"
+                          class="mx-1"
+                          icon="mdi-delete"
+                          variant="text"
                           color="primary"
-                          @click="attendanceHourDialog = true"
+                          v-if="
+                            data.attendance_hours.length &&
+                            attendanceTypesSelected.length
+                          "
+                          @click="removeSelectedAttendanceHours"
                         >
-                          Novo Horário
                         </v-btn>
+                      </v-expand-x-transition>
+
+                      <div
+                        class="w-100 text-center font-weight-medium text-subtitle-2"
+                      >
+                        Horários de Atendimento
                       </div>
                     </v-toolbar>
                   </template>
@@ -80,7 +73,16 @@
                     </v-menu>
                   </template>
 
-                  <template #bottom> </template>
+                  <template #bottom>
+                    <div class="d-flex justify-center mt-4">
+                      <v-btn
+                        color="secondary"
+                        @click="attendanceHourDialog = true"
+                      >
+                        Adicionar novo horário
+                      </v-btn>
+                    </div>
+                  </template>
                 </v-data-table>
               </template>
 
@@ -102,6 +104,16 @@
                   </template>
                 </v-autocomplete>
               </template>
+
+              <div class="d-flex justify-end mt-2">
+                <v-btn
+                  color="error"
+                  variant="tonal"
+                  @click="openDeleteDialog(data)"
+                >
+                  Remover
+                </v-btn>
+              </div>
             </queue-totem-panel>
           </v-expansion-panels>
 
@@ -130,10 +142,20 @@
 
         <v-col class="d-flex align-end justify-end">
           <v-btn
+            class="mr-4"
+            variant="tonal"
+            color="error"
+            @click="redirectToTotemDetail"
+            :disabled="isLoading"
+          >
+            Cancelar
+          </v-btn>
+
+          <v-btn
             variant="tonal"
             color="primary"
             @click="save"
-            :disabled="isLoading"
+            :disabled="disableSaveButton"
             :loading="isLoading"
           >
             Salvar
@@ -147,7 +169,7 @@
     :attendanceTypes="currentQueueTotem.attendance_types"
     v-model="attendanceTypeDialog"
     v-model:attendanceType="attendanceType"
-    @update="addAttendanceType($event)"
+    @update="addAttendanceType"
     @close="removeLastAttendanceType"
   />
 
@@ -164,8 +186,9 @@ import LayoutView from "@/components/LayoutView.vue";
 import { getQueues } from "@/modules/queue/repositories/queue.repository";
 import { getAttendanceTypes } from "@/modules/totem/repositories/attendance-type.repository";
 import {
-findTotem,
-updateQueueTotem,
+  deleteQueueTotem,
+  findTotem,
+  updateQueueTotem,
 } from "@/modules/totem/repositories/totem.repository";
 import useAlertStore from "@/stores/alert";
 import useSystemStore from "@/stores/system";
@@ -174,13 +197,17 @@ import QueueTotemPanel from "../components/QueueTotemPanel.vue";
 import TotemAttendanceHourDialog from "../components/TotemAttendanceHourDialog.vue";
 import TotemAttendanceTypeDialog from "../components/TotemAttendanceTypeDialog.vue";
 
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const { setBreadcrumbs } = useSystemStore();
 
 const route = useRoute();
 
+const router = useRouter();
+
 interface QueueTotem {
+  queue_id?: number;
+  id?: number;
   attendance_types: AttendanceType[];
   attendance_hours: AttendanceHour[];
   off_hours_message: string;
@@ -190,7 +217,7 @@ interface QueueTotem {
   };
 }
 
-const { openAlert } = useAlertStore();
+const { openAlert, openConfirmAlert, closeAlert } = useAlertStore();
 
 const options = [
   {
@@ -306,14 +333,16 @@ const formData = ref<FormItem[]>([
     required: true,
     on: {
       "update:modelValue": (value: any[]) => {
-        if (!value.length || expansion.value == null) return;
+        const length = value.length;
+
+        if (!length || expansion.value == null) return;
 
         const updatedAttendanceType =
           value.length < items.value[expansion.value]?.attendance_types?.length;
 
         if (updatedAttendanceType) return;
 
-        attendanceType.value = { ...value.at(-1) };
+        attendanceType.value = { ...value[length - 1] };
 
         attendanceTypeDialog.value = true;
         return value;
@@ -358,6 +387,10 @@ const currentQueueTotem = computed<QueueTotem>({
   },
 });
 
+const disableSaveButton = computed(
+  () => isLoading.value || !items.value.length
+);
+
 const totemId = computed<number>(() => {
   return parseInt(route.params.id as string);
 });
@@ -371,6 +404,11 @@ const allQueueIsAdded = computed(() => {
     );
   });
 });
+
+const deleteQueueMessage = computed(() => ({
+  title: "Exclusão vinculo fila x totem",
+  text: `Deseja realmente remover a fila <b> ${currentQueueTotem.value.data?.name} </b> do totem <b> ${totem.value.name} </b>`,
+}));
 
 function save() {
   const rawQueueTotemData = items.value.filter(
@@ -388,6 +426,9 @@ function save() {
   isLoading.value = true;
 
   updateQueueTotem(totemId.value, { queues: payload })
+    .then(() => {
+      redirectToTotemDetail();
+    })
     .catch((error) => {
       openAlert("Erro para atualizar Totem", error);
     })
@@ -402,15 +443,13 @@ function editAttendanceType(item: AttendanceType) {
 }
 
 function addAttendanceType(data: AttendanceType) {
-  const item: AttendanceType | undefined =
-    currentQueueTotem.value.attendance_types.find(
-      (type: any) =>
-        type.attendance_type_id == attendanceType.value.attendance_type_id
-    );
+  const index = currentQueueTotem.value.attendance_types.findIndex(
+    (type: AttendanceType) => type.attendance_type_id == data.attendance_type_id
+  );
 
-  if (!item) return;
+  if (index == null) return;
 
-  Object.assign(item, data);
+  currentQueueTotem.value.attendance_types[index] = data;
 }
 
 function addAttendanceHour(item: AttendanceHour) {
@@ -430,7 +469,7 @@ function removeSelectedAttendanceHours() {
       return !attendanceTypesSelected.value.includes(item);
     });
 
-  attendanceTypesSelected.value = [...currentQueueTotem.value.attendance_hours];
+  attendanceTypesSelected.value = [];
 }
 
 function nextItem() {
@@ -471,6 +510,13 @@ function removeLastAttendanceType() {
 
   if (!attendanceTypes[attendanceTypes.length - 1]?.integration_id)
     currentQueueTotem.value.attendance_types.pop();
+}
+
+function redirectToTotemDetail() {
+  router.push({
+    name: "totem.detail",
+    params: { id: totemId.value },
+  });
 }
 
 onMounted(() => {
@@ -522,6 +568,30 @@ function loadQueueTotem() {
     .catch((error) => {
       openAlert(`Erro para carregar Totem ${1}`, error);
     });
+}
+
+function openDeleteDialog(queue: QueueTotem) {
+  const index = expansion.value as number;
+
+  if (!queue.id || !queue.queue_id) {
+    expansion.value = null;
+    return items.value.splice(index, 1);
+  }
+
+  openConfirmAlert(deleteQueueMessage.value, (loading) => {
+    loading.value = true;
+
+    deleteQueueTotem(totemId.value, queue.queue_id!)
+      .then(() => {
+        expansion.value = null;
+        items.value.splice(index, 1);
+      })
+      .catch((error) => openAlert("Erro ao remover a fila", error))
+      .finally(() => {
+        loading.value = false;
+        closeAlert();
+      });
+  });
 }
 
 function loadAttendanceTypes() {

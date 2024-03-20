@@ -33,7 +33,7 @@ const attendanceType = computed({
     return props.attendanceType;
   },
   set(value: any) {
-    emit("update:attendanceType", value);
+    emit("update:attendanceType", { ...value });
   },
 });
 

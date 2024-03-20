@@ -23,3 +23,7 @@ export function deleteTotem(id: number) {
 export function updateQueueTotem(id: number, props: any) {
   return axios.post(`/totem/${id}/queue`, props);
 }
+
+export function deleteQueueTotem(id: number, queueId: string | number) {
+  return axios.delete(`/totem/${id}/queue/${queueId}`);
+}

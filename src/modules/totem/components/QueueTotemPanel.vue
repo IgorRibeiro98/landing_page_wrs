@@ -28,6 +28,8 @@
           </template>
         </FormBuilder>
       </v-form>
+
+      <slot></slot>
     </v-expansion-panel-text>
   </v-expansion-panel>
 </template>
