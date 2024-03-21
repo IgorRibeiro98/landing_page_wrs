@@ -15,6 +15,11 @@ export const alertStore = defineStore('alert', () => {
     }
   }
 
+  interface ConfirmAlertOptions {
+    title: string,
+    text: string,
+  }
+
   const alert = ref<Alert>({
     display: false,
     title: '',
@@ -46,7 +51,7 @@ export const alertStore = defineStore('alert', () => {
   function openConfirmAlert({
     title,
     text
-  }: { title: string, text: string }, callback: (loading: Ref<boolean>) => void) {
+  }: ConfirmAlertOptions, callback: (loading: Ref<boolean>) => void) {
 
     alert.value = {
       display: true,
@@ -59,6 +64,13 @@ export const alertStore = defineStore('alert', () => {
     }
   }
 
+  function openDeleteAlert(callback: (loading: Ref<boolean>) => void, options?: ConfirmAlertOptions) {
+    openConfirmAlert(Object.assign(options ?? {},{
+      title: 'Deletar',
+      text: 'Tem certeza que deseja excluir? está ação é irreversível.'
+    }), callback)
+  }
+
   function closeAlert() {
     alert.value.display = false
   }
@@ -68,7 +80,8 @@ export const alertStore = defineStore('alert', () => {
 
     openAlert,
     closeAlert,
-    openConfirmAlert
+    openConfirmAlert,
+    openDeleteAlert
   }
 })
 

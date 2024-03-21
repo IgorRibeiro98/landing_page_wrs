@@ -1,3 +1,4 @@
+import { VSwitch } from 'vuetify/components/VSwitch';
 /**
  * plugins/vuetify.ts
  *
@@ -38,6 +39,9 @@ export default createVuetify({
     },
     VRow: {
       style: 'margin: 0'
+    },
+    VSwitch: {
+      color: 'primary'
     }
   },
   display: {

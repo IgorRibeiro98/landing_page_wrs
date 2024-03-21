@@ -26,4 +26,15 @@ export function updateQueueTotem(id: number, props: any) {
 
 export function deleteQueueTotem(id: number, queueId: string | number) {
   return axios.delete(`/totem/${id}/queue/${queueId}`);
+};
+
+export function attachScreens(id: number, screens: ScreenTotem[]) {
+  return axios.post(`/totem/${id}/screen`, {
+    screens
+  });
 }
+
+export function deleteScreenTotem(screen: ScreenTotem) {
+  return axios.delete(`/totem/${screen.totem_id}/screen/${screen.screen_id}`);
+}
+

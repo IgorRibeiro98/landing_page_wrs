@@ -60,7 +60,10 @@
       </v-col>
       <v-col cols="12">
         <h3>Telas atuais</h3>
-        <v-list class="position-relative overflow-hidden" v-click-outside="clearSelectedScreenTotem">
+        <v-list
+          class="position-relative overflow-hidden"
+          v-click-outside="clearSelectedScreenTotem"
+        >
           <!-- <Draggable> -->
           <transition-group name="list">
             <v-list-item
@@ -88,7 +91,7 @@
                     @click.stop="changeOrder(1, i)"
                   ></v-btn>
                 </div>
-                <h1 class="mr-5">{{ i + 1 }}</h1>
+                <h1 class="mr-5">{{ screen.order }}</h1>
               </template>
               <template #append>
                 <v-card
@@ -104,13 +107,18 @@
                     zoom: 18%;
                   "
                 >
-                <keep-alive>
-                  <component
-                    style="pointer-events: none"
-                    v-model="data"
-                    :is="components[screen.data.component!]"
-                  ></component>
-                </keep-alive>
+                  <keep-alive>
+                    <component
+                      style="pointer-events: none"
+                      v-model="data"
+                      :religions="[]"
+                      :meritalStatuses="[]"
+                      :nationalities="[]"
+                      :genders="[]"
+                      :totem="{}"
+                      :is="components[screen.data.component!]"
+                    ></component>
+                  </keep-alive>
                 </v-card>
               </template>
             </v-list-item>
@@ -122,7 +130,9 @@
         </p>
       </v-col>
       <v-col cols="12" class="d-flex justify-end">
-        <v-btn @click="cancel" class="mr-3" variant="total" color="gray">Cancelar</v-btn>
+        <v-btn @click="cancel" class="mr-3" variant="tonal" color="gray"
+          >Cancelar</v-btn
+        >
         <v-btn @click="save" variant="tonal" color="primary">Salvar</v-btn>
       </v-col>
     </v-row>
@@ -133,30 +143,33 @@
     />
     <ScreenTotemConfigDialog
       v-model="configDialog"
-      :screen-totem="screen"
-      :screens="screens"
+      :screen-totem="screenTotem"
+      @save="saveScreenTotemConfig"
+      @screen:delete="removeScreen"
     />
   </View>
 </template>
 <script lang="ts" setup>
 import FormBuilder from "@/components/FormBuilder/Form.vue";
 import View from "@/components/View.vue";
+import { removePropertiesByPaths } from "@/helpers/object";
 import { components } from "@/modules/patient/helpers/totem-components";
 import { data } from "@/modules/patient/views/default-data";
 import ScreenPreviewDialog from "@/modules/totem/components/ScreenPreviewDialog.vue";
 import { getScreens } from "@/modules/totem/repositories/screen.repository";
-import { findTotem } from "@/modules/totem/repositories/totem.repository";
+import {
+attachScreens,
+findTotem,
+} from "@/modules/totem/repositories/totem.repository";
 import useTotemStore from "@/stores/alert";
 import { computed, onMounted, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { VSlideGroup } from "vuetify/components/VSlideGroup";
 import ScreenTotemConfigDialog from "../components/ScreenTotemConfigDialog.vue";
 
 const route = useRoute();
 const router = useRouter();
 const screens = ref<Screens[]>([]);
-const slideGroup = ref();
-const screen = ref<ScreenTotem>({
+const screenTotem = ref<ScreenTotem>({
   id: 0,
   order: 0,
   totem_id: 0,
@@ -172,8 +185,8 @@ const screen = ref<ScreenTotem>({
   traits: [],
   fields: [],
 });
-
-const lastScreenTotemSelected = ref<number|null>(null)
+const slideGroup = ref();
+const lastScreenTotemSelected = ref<number | null>(null);
 const previewDialog = ref<{
   visible: boolean;
   screens: Screens[];
@@ -235,15 +248,28 @@ const { openAlert } = useTotemStore();
 function loadTotem() {
   findTotem(Number(route.params.id))
     .then((resp) => {
+      // totem.value = resp.data;
       totem.value = resp.data;
+      mergeTotemScreensWithBaseScreen();
     })
     .catch((error) => {
       openAlert("Erro", error);
     });
 }
-
-function loadScreens() {
-  getScreens()
+function mergeTotemScreensWithBaseScreen() {
+  totem.value.screens = totem.value.screens.map((s: ScreenTotem) => {
+    return {
+      ...s,
+      data: Object.assign(
+        {},
+        s.data,
+        screens.value.find((screen) => screen.id === s.screen_id)
+      ),
+    };
+  });
+}
+async function loadScreens() {
+  return getScreens()
     .then((resp) => {
       screens.value = resp.data;
     })
@@ -252,8 +278,18 @@ function loadScreens() {
     });
 }
 
-function edit(screenTotem: ScreenTotem) {
-  screen.value = screenTotem;
+function saveScreenTotemConfig(screenTotem: ScreenTotem) {
+  const index = totem.value.screens.findIndex(
+    (s) => s.data.component === screenTotem.data.component
+  );
+  if (index === -1) return;
+
+  totem.value.screens[index] = screenTotem;
+  configDialog.value = false;
+}
+
+function edit(selectedScreenTotem: ScreenTotem) {
+  screenTotem.value = { ...selectedScreenTotem };
   configDialog.value = true;
 }
 
@@ -278,8 +314,11 @@ function insertScreenInTotem(screen: Screens) {
 
 function changeOrder(direction: number, actualIndex: number) {
   const newIndex = actualIndex + direction;
+  totem.value.screens[actualIndex].order = newIndex + 1;
+  totem.value.screens[newIndex].order = actualIndex + 1;
   const item = totem.value.screens.splice(actualIndex, 1)[0];
-  totem.value.screens.splice(newIndex, 0, {...item});
+  totem.value.screens.splice(newIndex, 0, { ...item });
+  reorderScreensByIndex();
   lastScreenTotemSelected.value = newIndex;
 }
 
@@ -291,6 +330,13 @@ function findScreenTotemByComponent(
 
 function clearSelectedScreenTotem() {
   lastScreenTotemSelected.value = null;
+}
+
+function removeScreen(screenTotem: ScreenTotem) {
+  const index = totem.value.screens.findIndex((s) => s.id === screenTotem.id);
+  if (index === -1) return;
+  totem.value.screens.splice(index, 1);
+  reorderScreensByIndex();
 }
 
 function openPreview(screenList: "totem" | "base", index: number) {
@@ -309,11 +355,32 @@ function cancel() {
 }
 
 function save() {
-  console.log('save');
+  //necessário remover todos os ids 0 para criar no backend em vez de atualizar uma coisa que não existe.
+  const screens = removePropertiesByPaths(
+    totem.value.screens,
+    ["id", "fields.screen_totem_id"],
+    (value) => {
+      if (value === 0) return true;
+      return false;
+    }
+  );
+  attachScreens(totem.value.id, screens)
+    .then(() => {
+      router.push({ name: "totem.detail", params: { id: totem.value.id } });
+    })
+    .catch((error: any) => {
+      openAlert("Erro", error);
+    });
 }
-onMounted(() => {
+function reorderScreensByIndex() {
+  totem.value.screens.forEach((s, index) => {
+    s.order = index + 1;
+  });
+}
+
+onMounted(async () => {
+  await loadScreens();
   loadTotem();
-  loadScreens();
 });
 </script>
 

@@ -27,7 +27,7 @@
                     variant: 'solo-filled',
                     flat: true,
                     rules: getRulesFromFormItem(formItem),
-                }" v-on="formItem.on"/>
+                }" v-on="formItem.on ?? {}"/>
             </slot>
         </v-col>
     </v-row>

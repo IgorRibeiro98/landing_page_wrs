@@ -1,3 +1,3 @@
 <template>
-  Tela do totem hehe
+  Tela em desenvolvimento...
 </template>

@@ -53,9 +53,9 @@ interface Action {
 interface Props {
   title: string;
   description?: string | null;
-  enableAction: boolean;
+  enableAction?: boolean;
   actionIcon?: string;
-  actions: Action[];
+  actions?: Action[];
 }
 
 const props = withDefaults(defineProps<Props>(), {

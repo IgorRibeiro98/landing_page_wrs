@@ -227,7 +227,7 @@ declare global {
     created_at: string;
   }
 
-  type FormComponent = 'VAutocomplete' | 'VTextField' | 'VTextarea' | 'VFileInput' | 'RichText'
+  type FormComponent = 'VAutocomplete' | 'VTextField' | 'VTextarea' | 'VFileInput' | 'RichText' | 'VSwitch'
 
   interface FormItem {
     title?: string
