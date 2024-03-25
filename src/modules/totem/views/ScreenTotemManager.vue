@@ -162,10 +162,13 @@ attachScreens,
 findTotem,
 } from "@/modules/totem/repositories/totem.repository";
 import useTotemStore from "@/stores/alert";
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, onBeforeMount, onMounted, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import ScreenTotemConfigDialog from "../components/ScreenTotemConfigDialog.vue";
 
+import useSystemStore from '@/stores/system';
+
+const { setBreadcrumbs } = useSystemStore()
 const route = useRoute();
 const router = useRouter();
 const screens = ref<Screens[]>([]);
@@ -377,6 +380,25 @@ function reorderScreensByIndex() {
     s.order = index + 1;
   });
 }
+
+onBeforeMount(() => {
+  setBreadcrumbs([
+  {
+      title: 'Totens',
+      to: {
+        name: 'totem.view',
+      },
+    },
+    {
+      title: computed<string>(() => totem.value.id ? totem.value.name : (route.params.id as string)),
+      to: {
+        name: 'totem.detail',
+        params: { id: route.params.id },
+      },
+    },
+    { title: 'Gerenciamento de Telas', to: '' },
+  ])
+})
 
 onMounted(async () => {
   await loadScreens();

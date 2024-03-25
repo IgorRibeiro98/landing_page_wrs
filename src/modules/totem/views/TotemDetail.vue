@@ -90,7 +90,7 @@ function loadTotem() {
       },
     },
     {
-      title: computed(() => totem.value.name ?? `${route.params.id}`),
+      title: computed(() => totem.value.id ? totem.value.name : route.params.id),
       to: {
         name: "totem.detail",
       },
