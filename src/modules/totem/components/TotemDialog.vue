@@ -52,6 +52,13 @@ const formDialog = ref<FormDialog>({
         on: {}
       },
       {
+        component: "VTextField",
+        value: "department_id",
+        label: "Departamento (Integração)",
+        required: true,
+        on: {}
+      },
+      {
         component: "VTextarea",
         value: "description",
         label: "Descrição",
