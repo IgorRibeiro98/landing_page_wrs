@@ -1,3 +1,4 @@
+import { RouteNamedMap } from './../../typed-router.d';
 import { ComputedRef } from 'vue';
 import { type RouteLocationRaw } from 'vue-router';
 declare global {
@@ -61,7 +62,7 @@ declare global {
   interface ScreenTotem {
     data: Screens
     fields: ScreenTotemField[]
-    traits: any[]
+    traits: ScreenTotemTrait[]
     id: number
     order: number
     screen_id: number
@@ -75,6 +76,24 @@ declare global {
     screen_totem_id: number,
     data: ScreenField
   }
+
+  interface ScreenTotemTrait {
+    enabled: number
+    screen_totem_id: number
+    trait_id: number
+    data: Trait
+  }
+
+  interface ScreenTrait {
+    component: string
+    created_at: string
+    updated_at: string
+    description: string
+    id: number
+    slug: string
+    question_id?: number
+  }
+
   interface Totem {
     id: number;
     name: string;

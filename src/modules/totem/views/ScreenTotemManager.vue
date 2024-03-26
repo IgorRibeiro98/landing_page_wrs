@@ -251,7 +251,6 @@ const { openAlert } = useTotemStore();
 function loadTotem() {
   findTotem(Number(route.params.id))
     .then((resp) => {
-      // totem.value = resp.data;
       totem.value = resp.data;
       mergeTotemScreensWithBaseScreen();
     })

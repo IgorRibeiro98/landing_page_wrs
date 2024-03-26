@@ -21,12 +21,24 @@
       :screen-totem-fields="screenTotemEdit.fields"
     ></ScreenTotemFieldConfig>
     <v-divider class="my-4" />
+    <h2 class="mb-2">
+      Funcionalidades
+    </h2>
+    <div class="text-center" v-if="screenTotemEdit.data!.traits.length === 0">
+      Não há funcionalidades para configuração nessa tela.
+    </div>
+    <ScreenTotemTraitConfig
+      v-show="screenTotemEdit.data!.traits.length > 0"
+      :screen-totem="screenTotemEdit"
+      :screen-traits="screenTotemEdit.data!.traits"
+      :screen-totem-traits="screenTotemEdit.traits"/>
   </Dialog>
 </template>
 <script lang="ts" setup>
 import Dialog from "@/components/Dialog.vue";
 import { ReactiveProps } from "@/helpers/vue";
 import ScreenTotemFieldConfig from "@/modules/totem/components/ScreenTotemFieldConfig.vue";
+import ScreenTotemTraitConfig from "@/modules/totem/components/ScreenTotemTraitConfig.vue";
 import useAlertStore from "@/stores/alert";
 import { ref, watch } from "vue";
 import { deleteScreenTotem } from "../repositories/totem.repository";
