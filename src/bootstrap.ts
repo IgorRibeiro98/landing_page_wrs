@@ -1,7 +1,6 @@
-import { App } from "vue";
-import useAccountStore from "@/modules/account/store";
+import useTenantStore from "@/modules/tenant/store";
 
-export default function (app: App) {
-  const accountStore = useAccountStore()
-  accountStore.loadAccount()
+export default function () {
+  const tenantStore = useTenantStore()
+  tenantStore.loadTenant()
 }

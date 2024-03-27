@@ -12,11 +12,9 @@ import App from './App.vue'
 
 // Composables
 import { createApp } from 'vue'
-import bootstrap from '@/bootstrap';
 
 const app = createApp(App)
 
 registerPlugins(app)
-bootstrap(app)
 
 app.mount('#app')

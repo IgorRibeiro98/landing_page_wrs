@@ -236,7 +236,7 @@ declare global {
     [key: string]: any;
   }
 
-  interface Account {
+  interface Tenant {
     id: number;
     name: string;
     logo: string;

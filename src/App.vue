@@ -8,9 +8,12 @@
 </template>
 
 <script lang="ts" setup>
-import VirtualKeyboard from '@/components/VirtualKeyboard.vue'
+import bootstrap from "@/bootstrap";
 
-// import Alert from '@/components/Alert.vue'
+import { onMounted } from "vue";
+
+onMounted(() =>  bootstrap());
+
 </script>
 
 <style scoped>
@@ -21,7 +24,6 @@ import VirtualKeyboard from '@/components/VirtualKeyboard.vue'
   flex-direction: column;
 }
 
-
 .top {
   flex-grow: 1;
   flex-shrink: 1;
@@ -31,6 +33,6 @@ import VirtualKeyboard from '@/components/VirtualKeyboard.vue'
 .bottom {
   flex-grow: 0;
   flex-shrink: 0;
-  overflow: auto
+  overflow: auto;
 }
 </style>
