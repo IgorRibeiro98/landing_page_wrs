@@ -146,6 +146,7 @@
       :screen-totem="screenTotem"
       @save="saveScreenTotemConfig"
       @screen:delete="removeScreen"
+      @field:remove="removeField"
     />
   </View>
 </template>
@@ -311,6 +312,8 @@ function insertScreenInTotem(screen: Screens) {
     openAlert("Erro", "Tela não encontrada");
     return;
   }
+  if (actualScreenTotem.data.fields.length === 0 && actualScreenTotem.data.traits.length === 0) return
+
   edit(actualScreenTotem);
 }
 
@@ -341,6 +344,14 @@ function removeScreen(screenTotem: ScreenTotem) {
   reorderScreensByIndex();
 }
 
+function removeField(field: ScreenTotemField) {
+  const index = screenTotem.value.fields.findIndex(
+    (f) => f.field_id === field.field_id
+  );
+  if (index === -1) return;
+  screenTotem.value.fields.splice(index, 1);
+}
+
 function openPreview(screenList: "totem" | "base", index: number) {
   const availableScreens = {
     totem: totemFormattedScreens.value,
@@ -360,7 +371,7 @@ function save() {
   //necessário remover todos os ids 0 para criar no backend em vez de atualizar uma coisa que não existe.
   const screens = removePropertiesByPaths(
     totem.value.screens,
-    ["id", "fields.screen_totem_id"],
+    ["id", "fields.screen_totem_id", "traits.screen_totem_id"],
     (value) => {
       if (value === 0) return true;
       return false;

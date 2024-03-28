@@ -1,7 +1,12 @@
 <template>
-  <div style="height:30%;">
+  <div style="height: 30%">
     <v-row class="fill-height">
-      <v-col cols="12" md="6" style="max-height: 100%;" class="d-flex flex-column">
+      <v-col
+        cols="12"
+        md="6"
+        style="max-height: 100%"
+        class="d-flex flex-column"
+      >
         <h3>Campos disponíveis</h3>
         <v-list class="position-relative overflow-scroll">
           <v-list-item
@@ -15,10 +20,18 @@
           Não há mais campos disponíveis nessa tela
         </div>
       </v-col>
-      <v-col cols="12" md="6" style="max-height: 100%;" class="d-flex flex-column">
+      <v-col
+        cols="12"
+        md="6"
+        style="max-height: 100%"
+        class="d-flex flex-column"
+      >
         <h3>Campos selecionados</h3>
-        <v-list class="position-relative overflow-scroll" style="overflow-x: hidden;">
-            <transition-group name="list">
+        <v-list
+          class="position-relative overflow-scroll"
+          style="overflow-x: hidden"
+        >
+          <transition-group name="list">
             <v-list-item
               :key="screenTotemField"
               v-for="(screenTotemField, i) in screenTotem.fields"
@@ -57,7 +70,8 @@
           </transition-group>
         </v-list>
         <div class="text-center" v-if="screenTotem.fields.length === 0">
-          Não há campos selecionados, clique na listagem da esquerda para adicionar novos campos
+          Não há campos selecionados, clique na listagem da esquerda para
+          adicionar novos campos
         </div>
       </v-col>
     </v-row>
@@ -70,18 +84,26 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { deleteScreenFieldTotem } from "@/modules/totem/repositories/totem.repository";
+import useAlertStore from "@/stores/alert";
 import { computed, ref } from "vue";
 import ScreenTotemFieldConfigDialog from "./ScreenTotemFieldConfigDialog.vue";
 interface Props {
   screenTotem: ScreenTotem;
 }
+interface Emits {
+  (e: "deleteField", value: ScreenTotemField): void;
+}
 const props = defineProps<Props>();
+const emit = defineEmits<Emits>();
 const dialog = ref(false);
 const availableFields = computed(() => {
   return props.screenTotem.data.fields.filter(
     (field) => !props.screenTotem.fields.find((f) => f.field_id === field.id)
   );
 });
+
+const { openDeleteAlert, closeAlert } = useAlertStore();
 
 const selectedFieldScreen = ref<ScreenTotemField>({
   editable: 1,
@@ -120,7 +142,7 @@ function createScreenTotemFieldWithDefaults(
     editable: 1,
     required: 1,
     field_id: field.id,
-    screen_totem_id: props.screenTotem.id,
+    screen_totem_id: 0,
     data: field,
     order: props.screenTotem.fields.length + 1,
   };
@@ -135,6 +157,24 @@ function deleteField(field: ScreenTotemField) {
   const index = props.screenTotem.fields.findIndex(
     (f) => f.field_id === field.field_id
   );
+  const removedField = props.screenTotem.fields[index];
+
+  if (removedField.screen_totem_id === 0) {
+    removeField(index);
+    return;
+  }
+
+  openDeleteAlert((loading) => {
+    return deleteScreenFieldTotem(props.screenTotem, removedField).then(() => {
+      removeField(index)
+      emit('deleteField', removedField);
+      loading.value = false;
+      closeAlert();
+    })
+  });
+}
+
+function removeField(index: number) {
   props.screenTotem.fields.splice(index, 1);
   props.screenTotem.fields.forEach((f, index) => {
     f.order = index + 1;
@@ -159,7 +199,7 @@ function changeOrder(direction: number, actualIndex: number) {
   props.screenTotem.fields[actualIndex].order = newIndex + 1;
   props.screenTotem.fields[newIndex].order = actualIndex + 1;
   const item = props.screenTotem.fields.splice(actualIndex, 1)[0];
-  props.screenTotem.fields.splice(newIndex, 0, {...item});
+  props.screenTotem.fields.splice(newIndex, 0, { ...item });
   // lastScreenTotemSelected.value = newIndex;
 }
 </script>

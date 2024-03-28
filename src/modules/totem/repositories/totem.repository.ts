@@ -38,3 +38,6 @@ export function deleteScreenTotem(screen: ScreenTotem) {
   return axios.delete(`/totem/${screen.totem_id}/screen/${screen.screen_id}`);
 }
 
+export function deleteScreenFieldTotem(screen: ScreenTotem, field: ScreenTotemField) {
+  return axios.delete(`/totem/${screen.totem_id}/screen/${screen.screen_id}/field/${field.field_id}`);
+}

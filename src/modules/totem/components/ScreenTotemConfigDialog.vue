@@ -19,6 +19,7 @@
       :screen-totem="screenTotemEdit"
       :screen-fields="screenTotemEdit.data!.fields"
       :screen-totem-fields="screenTotemEdit.fields"
+      @deleteField="emit('field:remove', $event)"
     ></ScreenTotemFieldConfig>
     <v-divider class="my-4" />
     <h2 class="mb-2">
@@ -49,10 +50,10 @@ interface Props {
 }
 interface Emits {
   (e: "update:modelValue", value: boolean): void;
-  (e: "screen:delete", ScreenTotemEdit: ScreenTotem): void;
-  (e: "save", screenTotem: ScreenTotem): void;
+  (e: "screen:delete", value: ScreenTotem): void;
+  (e: "field:remove", value: ScreenTotemField): void;
+  (e: "save", value: ScreenTotem): void;
 }
-
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
