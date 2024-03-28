@@ -9,7 +9,7 @@
       </v-col>
 
       <v-col cols="12">
-        <v-data-table :headers="headers" :items="items" :loading="loading">
+        <v-data-table :headers="headers" :items="items" :loading="loading" :items-per-page="-1">
           <template #[`item.name`]="{ item }">
             <RouterLink :to="{ name: 'totem.detail', params: { id: item.id} }">
               {{ item.name }}

@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :items="screens" :headers="headers" @click:item="">
+  <v-data-table :items="screens" :headers="headers" @click:item="" :items-per-page="-1">
     <template #item.data.name="{ item }">
       <RouterLink :to="{ name: 'screen.detail', params: {id: totemId, screenId: item.id}}">
         {{ item.data.name }}
@@ -10,6 +10,15 @@
         <v-icon> mdi-eye-outline </v-icon>
       </v-btn>
     </template>
+
+    <template #item.traits="{item}">
+      {{item.traits.length ? item.traits.length : '-'}}
+    </template>
+
+    <template #item.fields="{item}">
+      {{ item.fields.length ? item.fields.length : '-' }}
+    </template>
+
     <template #bottom> </template>
   </v-data-table>
   <v-dialog v-model="dialog">
@@ -35,16 +44,21 @@ import { RouterLink, useRoute } from 'vue-router';
 interface Props {
   screens: ScreenTotem[];
 }
+
 const props = defineProps<Props>();
-const route = useRoute();
-const totemId = route.params.id
+const route: any = useRoute();
+
+const totemId = computed<string>(() => route.params.id as string);
+
 const dialog = ref<boolean>(false);
 const activePreviewIndex = ref<number>(0);
 const headers = [
-  { title: "ID", value: "id" },
-  { title: "Nome", value: "data.name"},
-  { title: "Descrição", value: "data.description" },
-  { title: "", value: "actions", sortable: false },
+  { title: "ID", align: "start" ,value: "id", width: '5%'},
+  { title: "Nome", align: "start" , value: "data.name", width: '20%'},
+  { title: "Descrição", align: "start", value: "data.description", width: '20%'},
+  { title: "Funcionalidades", align: "start", value: "traits", sortable: true, width: '5%'},
+  { title: "Campos", align: "start" , value: "fields", sortable: true, width: '5%'},
+  { title: "", align: "start" ,value: "actions", sortable: false, width: '5%'},
 ];
 const actualScreen = computed(() => {
   return props.screens[activePreviewIndex.value];
@@ -53,4 +67,5 @@ function openPreview(index: number) {
   dialog.value = true;
   activePreviewIndex.value = index;
 }
+
 </script>

@@ -18,7 +18,7 @@ declare global {
   interface Screens {
     id: number;
     name: string;
-    component?: ScreenComponent,
+    component: ScreenComponent,
     description?: string
     fields: ScreenField[]
     traits: any[]

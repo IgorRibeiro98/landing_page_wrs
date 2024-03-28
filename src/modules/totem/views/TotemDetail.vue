@@ -75,7 +75,7 @@ const actions = reactive([
   },
 ]);
 
-const route = useRoute();
+const route: any = useRoute();
 
 onMounted(() => {
   loadTotem();
