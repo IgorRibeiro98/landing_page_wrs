@@ -105,6 +105,8 @@ $font-size-h2:clamp(1.5rem, 2vw, 3rem) !important;
 $font-size:clamp(1.3rem, 1.7vw, 2.7rem) !important;
 
 .totem {
+    font-size: 20px;
+
     h1 {
         font-size: $font-size-h1;
         font-weight: normal;
@@ -118,9 +120,11 @@ $font-size:clamp(1.3rem, 1.7vw, 2.7rem) !important;
     }
 
     .v-btn {
-        font-size: $font-size-h1;
+        font-size: 1.2em;
         height: auto;
         font-weight: 700 !important;
+        letter-spacing: unset !important;
+        text-transform: none !important;
     }
 
     .v-text-field {

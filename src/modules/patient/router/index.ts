@@ -9,7 +9,7 @@ const routes: RouteRecordRaw[] = [
             {
                 path: '',
                 name: 'Home',
-                component: () => import('@patient/views/Flow.vue')
+                component: () => import('@patient/views/NewFlow.vue')
             },
         ],
     }

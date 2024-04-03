@@ -8,7 +8,7 @@ export function findTotemById(id: string) {
         cd_estabelecimento: 1,
         nm_estabelecimento: 'Hospital Teste',
       },
-      screens1: [
+      screens: [
         {
           id: 1,
           name: 'Identificação Paciente',
@@ -40,7 +40,7 @@ export function findTotemById(id: string) {
           component: 'PasswordSuccess',
         },
       ],
-      screens: [
+      screens1: [
         {
           id: 1,
           name: 'Início',
