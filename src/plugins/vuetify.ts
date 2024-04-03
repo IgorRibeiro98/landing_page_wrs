@@ -1,4 +1,3 @@
-import { VSwitch } from 'vuetify/components/VSwitch';
 /**
  * plugins/vuetify.ts
  *
@@ -6,14 +5,14 @@ import { VSwitch } from 'vuetify/components/VSwitch';
  */
 
 // Styles
-import '@mdi/font/css/materialdesignicons.css'
-import 'vuetify/styles'
+import '@mdi/font/css/materialdesignicons.css';
+import 'vuetify/styles';
 
-import * as components from 'vuetify/components'
+import * as components from 'vuetify/components';
 
 // Composables
-import { createVuetify } from 'vuetify'
-import { pt } from 'vuetify/locale'
+import { createVuetify } from 'vuetify';
+import { pt } from 'vuetify/locale';
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
@@ -56,9 +55,9 @@ export default createVuetify({
           secondary: '#243859',
           grey: '#abacac',
           background: "#F3F3F3",
+          keyboard: '#666666'
         }
       }
     }
   },
-
 })

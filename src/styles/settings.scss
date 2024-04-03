@@ -125,6 +125,8 @@ $font-size:clamp(1.3rem, 1.7vw, 2.7rem) !important;
         font-weight: 700 !important;
         letter-spacing: unset !important;
         text-transform: none !important;
+        padding-top: 0.2em;
+        padding-bottom: 0.2em;
     }
 
     .v-text-field {

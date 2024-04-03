@@ -1,556 +1,551 @@
 <template>
-    <div @pointerdown.prevent v-show="visible">
-        <v-row v-if="type == 'email'">
-            <v-col cols="12" class="d-flex justify-center">
-                <v-chip-group column>
-                    <v-chip v-for="(domain, index) in emailDomains" @click="input(domain)" :key="index" size="x-large"
-                        color="secondary" class="text-h4">
-                        {{ domain }}</v-chip>
-                </v-chip-group>
-            </v-col>
-        </v-row>
+  <table
+    style="border-spacing: 1.2em; border-collapse: separate; font-size: 20px"
+    @pointerdown.prevent
+    v-show="visible"
+  >
+    <tr v-for="(line, i) in keyboard" :key="i">
+      <td
+        :colspan="item.col"
+        :style="settings.button.style"
+        v-for="(item, j) in line"
+        :key="j"
+      >
+        <keyboard-btn
+          class="keyboard-key text-center"
+          width="100%"
+          height="100%"
+          v-bind="settings.button.props"
+          :key="j"
+          :disabled="item.disabled"
+          @click.native="
+            item.action ? item.action() : input(letter(item.value!))
+          "
+        >
+          <v-icon v-if="item.icon" :icon="item.icon" size="50" />
 
-        <v-row dense class="ma-0" v-for="(line, i) in keyboard" :key="i" justify="center">
-            <v-col v-for="(item, j) in line" :key="j" :cols="item.col ?? 1">
-                <keyboard-btn class="text-body-2" :rounded="settings.button.rounded" :variant="settings.button.variant"
-                    :size="settings.button.size ?? 'small'" :key="j" :disabled="item.disabled" @click.native="
-                        item.action ? item.action() : input(letter(item.value))
-                        " v-ripple :color="item.color ?? settings.button.color" width="100%"
-                    :height="settings.button.height ?? 80">
-                    <v-icon v-if="item.icon" color="white" :icon="item.icon" size="50">
-                    </v-icon>
-
-                    <span v-else class="text-h4">
-                        {{ item.action ? item.value : letter(item.value) }}
-                    </span>
-                </keyboard-btn>
-            </v-col>
-        </v-row>
-    </div>
+          <span v-else class="text-h4">
+            {{ item.action ? item.value : letter(item.value!) }}
+          </span>
+        </keyboard-btn>
+      </td>
+    </tr>
+  </table>
 </template>
 
-<style lang="scss"></style>
-
 <script setup lang="ts">
-interface Keyboard extends Array<Array<LineKeyboard>> { }
+interface Keyboard extends Array<Array<LineKeyboard>> {}
 
 interface LineKeyboard {
-    value?: string | number;
-    color?: string;
-    icon?: string;
-    action?: () => any;
-    disabled?: boolean;
-    col?: number;
+  value?: string | number;
+  icon?: string;
+  action?: () => any;
+  disabled?: boolean;
+  color?: string;
+  col?: number
 }
 
 interface SpecialLineKeyboard {
-    [key: string]: LineKeyboard;
+  [key: string]: LineKeyboard;
 }
 
-import { ref, onUpdated, watch, computed, Ref } from 'vue';
-import { useDisplay } from 'vuetify';
+import { onUpdated, ref, watch } from "vue";
 
 const upperCase = ref(true);
 const visible = ref(false);
 
-const { name } = useDisplay();
-
-interface ButtonResponsiveSettings {
-    [key: string]: {
-        size?: string;
-        height?: number;
-    };
-}
-
 interface Settings {
-    button: {
-        color: string;
-        rounded: boolean;
-        variant: 'outlined';
-        size?: string;
-        height?: number;
+  button: {
+    props: {
+      color: string;
+      rounded: boolean | string;
+      variant: "outlined" | "tonal" | "elevated" | "flat" | "plain" | "text";
+      size?: string;
     };
+    style: string
+  };
 }
 
 const props = defineProps<{
-    target?: string;
+  modelValue?: boolean
 }>();
 
-const emit = defineEmits(['open']);
+const emit = defineEmits<{
+  (event: "update:modelValue", value: boolean): void;
+}>();
 
-const buttonResponsiveSettings: Ref<ButtonResponsiveSettings> = ref({
-    xl: {},
-    lg: {},
-    md: {},
-    sm: {
-        height: 55,
-    },
-    xs: {
-        height: 40,
-    },
-    xxl: {},
-});
+watch(visible, (value: boolean) => {
+  emit('update:modelValue', value)
+})
 
-const buttonSettings = computed(() => {
-    return buttonResponsiveSettings.value[name.value];
-});
-
-const settings: Ref<Settings> = ref({
-    button: {
-        color: 'secondary',
-        rounded: false,
-        variant: 'flat',
-        ...buttonSettings.value,
+const settings = ref<Settings>({
+  button: {
+    props: {
+      color: "secondary",
+      rounded: "lg",
+      variant: "outlined",
+      size: "small",
     },
+    style: 'width: 72px; height:72px'
+  },
 });
 
 const toLetter = ref(false);
 
-const emailDomains = [
-    '@bol.com.br',
-    '@globo.com',
-    '@gmail.com',
-    '@hotmail.com',
-    '@icloud.com',
-    '@ig.com.br',
-    '@outlook.com',
-    '@terra.com.br',
-    '@uol.com.br',
-    '@yahoo.com',
-];
-
 const actions: SpecialLineKeyboard = {
-    clear: {
-        icon: 'mdi-eraser',
-        color: 'error',
-        action: clear,
+  clear: {
+    color: "error",
+    value: "Limpar",
+    action: clear,
+  },
+  backspace: {
+    icon: "mdi-backspace-outline",
+    color: "primary",
+    action: backspace,
+  },
+  moveLeft: {
+    icon: "mdi-chevron-left",
+    color: "primary",
+    action() {
+      moveCursor(-1);
     },
-    backspace: {
-        icon: 'mdi-backspace-outline',
-        color: 'primary',
-        action: backspace,
+  },
+  moveRight: {
+    icon: "mdi-chevron-right",
+    color: "primary",
+    action() {
+      moveCursor(1);
     },
-    moveLeft: {
-        icon: 'mdi-chevron-left',
-        color: 'primary',
-        action() {
-            moveCursor(-1);
-        },
+  },
+  shift: {
+    icon: "mdi-apple-keyboard-shift",
+    action() {
+      upperCase.value = !upperCase.value;
     },
-    moveRight: {
-        icon: 'mdi-chevron-right',
-        color: 'primary',
-        action() {
-            moveCursor(1);
-        },
+  },
+  toNumeric: {
+    icon: "mdi-numeric",
+    color: "primary",
+    action() {
+      keyboard.value = numericKeyboard;
+      toLetter.value = true;
     },
-    shift: {
-        icon: 'mdi-apple-keyboard-shift',
-        action() {
-            upperCase.value = !upperCase.value;
-        },
+  },
+  toAccent: {
+    value: "ÁÁÁ",
+    color: "primary",
+    action() {
+      setKeyboard(accentKeyboard);
     },
-    toNumeric: {
-        icon: 'mdi-numeric',
-        color: 'primary',
-        action() {
-            keyboard.value = numericKeyboard;
-            toLetter.value = true;
-        },
+  },
+  toSpecial: {
+    value: "@_-",
+    color: "primary",
+    action() {
+      setKeyboard(specialCharacters);
     },
-    toAccent: {
-        value: 'ÁÁÁ',
-        color: 'primary',
-        action() {
-            setKeyboard(accentKeyboard);
-        },
+  },
+  space: {
+    icon: "mdi-keyboard-space",
+    color: "primary",
+    action: space,
+  },
+  continue: {
+    value: "Continuar",
+    color: "success",
+    action: enter,
+  },
+  toLetter: {
+    icon: "mdi-alphabetical-variant",
+    color: "primary",
+    action() {
+      keyboard.value = letterKeyboard;
     },
-    toSpecial: {
-        value: '@_-',
-        color: 'primary',
-        action() {
-            setKeyboard(specialCharacters);
-        },
-    },
-    space: {
-        icon: 'mdi-keyboard-space',
-        color: 'primary',
-        col: 6,
-        action: space,
-    },
-    continue: {
-        value: 'Continuar',
-        color: 'success',
-        col: 2,
-        action: enter,
-    },
-    toLetter: {
-        icon: 'mdi-alphabetical-variant',
-        color: 'primary',
-        action() {
-            keyboard.value = letterKeyboard;
-        },
-    },
+  },
 };
 
 const letterKeyboard: Keyboard = [
-    [
-        { value: 'q' },
-        { value: 'w' },
-        { value: 'e' },
-        { value: 'r' },
-        { value: 't' },
-        { value: 'y' },
-        { value: 'u' },
-        { value: 'i' },
-        { value: 'o' },
-        { value: 'p' },
-        { ...actions.clear },
-    ],
-    [
-        { value: 'a' },
-        { value: 's' },
-        { value: 'd' },
-        { value: 'f' },
-        { value: 'g' },
-        { value: 'h' },
-        { value: 'j' },
-        { value: 'k' },
-        { value: 'l' },
-        { value: 'ç' },
-        { ...actions.backspace },
-    ],
-    [
-        { ...actions.shift },
-        { value: 'z' },
-        { value: 'x' },
-        { value: 'c' },
-        { value: 'v' },
-        { value: 'b' },
-        { value: 'n' },
-        { value: 'm' },
-        { ...actions.moveLeft },
-        { ...actions.moveRight },
-    ],
-    [
-        { ...actions.toNumeric },
-        { ...actions.toAccent },
-        { ...actions.toSpecial },
-        { ...actions.space },
-        { ...actions.continue },
-    ],
+  [
+    { value: "q" },
+    { value: "w" },
+    { value: "e" },
+    { value: "r" },
+    { value: "t" },
+    { value: "y" },
+    { value: "u" },
+    { value: "i" },
+    { value: "o" },
+    { value: "p" },
+    { ...actions.clear },
+  ],
+  [
+    { value: "a" },
+    { value: "s" },
+    { value: "d" },
+    { value: "f" },
+    { value: "g" },
+    { value: "h" },
+    { value: "j" },
+    { value: "k" },
+    { value: "l" },
+    { value: "ç" },
+    { ...actions.backspace },
+  ],
+  [
+    { ...actions.shift },
+    { value: "z" },
+    { value: "x" },
+    { value: "c" },
+    { value: "v" },
+    { value: "b" },
+    { value: "n" },
+    { value: "m" },
+    { ...actions.moveLeft },
+    { ...actions.moveRight },
+  ],
+  [
+    { ...actions.toNumeric },
+    { ...actions.toAccent },
+    { ...actions.toSpecial },
+    { ...actions.space },
+    { ...actions.continue },
+  ],
 ];
 
 const numericKeyboard: Keyboard = [
-    [
-        { value: 1, col: 2 },
-        { value: 2, col: 2 },
-        { value: 3, col: 2 },
-    ],
-    [
-        { value: 4, col: 2 },
-        { value: 5, col: 2 },
-        { value: 6, col: 2 },
-    ],
-    [
-        { value: 7, col: 2 },
-        { value: 8, col: 2 },
-        { value: 9, col: 2 },
-    ],
-    [
-        { ...actions.backspace, col: 2 },
-        { value: 0, col: 2 },
-        { ...actions.continue, col: 2 },
-    ],
-    [
-        {
-            ...actions.toLetter,
-            col: 2,
-        },
-    ],
+  [
+    {
+      value: 1,
+      col: 1,
+    },
+    {
+      value: 2,
+      col: 1,
+    },
+    {
+      value: 3,
+      col: 1,
+    },
+  ],
+  [
+    {
+      value: 4,
+      col: 1,
+    },
+    {
+      value: 5,
+      col: 1,
+    },
+    {
+      value: 6,
+      col: 1,
+    },
+  ],
+  [
+    {
+      value: 7,
+      col: 1,
+    },
+    {
+      value: 8,
+      col: 1,
+    },
+    {
+      value: 9,
+      col: 1,
+    },
+  ],
+  [
+    {
+      value: 0,
+      col: 1,
+    },
+    {
+      ...actions.clear,
+      col: 2,
+    },
+  ],
 ];
 
 const accentKeyboard: Keyboard = [
-    [
-        { value: 'à' },
-        { value: 'á' },
-        { value: 'â' },
-        { value: 'ã' },
-        { value: 'ä' },
-        { value: 'è' },
-        { value: 'é' },
-        { value: 'ê' },
-        { value: 'ë' },
-    ],
-    [
-        { value: 'ì' },
-        { value: 'í' },
-        { value: 'î' },
-        { value: 'ï' },
-        { value: 'ò' },
-        { value: 'ó' },
-        { value: 'ô' },
-    ],
-    [
-        { ...actions.shift },
-        { value: 'ù' },
-        { value: 'ú' },
-        { value: 'û' },
-        { value: 'ü' },
-        { value: 'õ' },
-        { value: 'ö' },
-        { ...actions.backspace },
-    ],
-    [
-        { ...actions.toNumeric },
-        { ...actions.toLetter },
-        { ...actions.toSpecial },
-        { ...actions.space },
-        { ...actions.continue },
-    ],
+  [
+    { value: "à" },
+    { value: "á" },
+    { value: "â" },
+    { value: "ã" },
+    { value: "ä" },
+    { value: "è" },
+    { value: "é" },
+    { value: "ê" },
+    { value: "ë" },
+  ],
+  [
+    { value: "ì" },
+    { value: "í" },
+    { value: "î" },
+    { value: "ï" },
+    { value: "ò" },
+    { value: "ó" },
+    { value: "ô" },
+  ],
+  [
+    { ...actions.shift },
+    { value: "ù" },
+    { value: "ú" },
+    { value: "û" },
+    { value: "ü" },
+    { value: "õ" },
+    { value: "ö" },
+    { ...actions.backspace },
+  ],
+  [
+    { ...actions.toNumeric },
+    { ...actions.toLetter },
+    { ...actions.toSpecial },
+    { ...actions.space },
+    { ...actions.continue },
+  ],
 ];
 
 const specialCharacters: Keyboard = [
-    [
-        { value: '!' },
-        { value: '@' },
-        { value: '#' },
-        { value: '$' },
-        { value: '%' },
-        { value: '&' },
-        { value: '*' },
-        { value: '(' },
-        { value: ')' },
-        { value: '-' },
-        { ...actions.clear },
-    ],
-    [
-        { value: '_' },
-        { value: '=' },
-        { value: '/' },
-        { value: '\\' },
-        { value: '<' },
-        { value: '>' },
-        { value: ':' },
-        { value: '.' },
-        { value: '+' },
-        { value: '?' },
-        { ...actions.backspace },
-    ],
-    [
-        { value: '.com' },
-        { value: '{' },
-        { value: '}' },
-        { value: '[' },
-        { value: ']' },
-        { value: '|' },
-        { value: '"' },
-        { value: "'" },
-        { ...actions.moveLeft },
-        { ...actions.moveRight },
-    ],
-    [
-        { ...actions.toNumeric },
-        { ...actions.toAccent },
-        { ...actions.toLetter },
-        { ...actions.space },
-        { ...actions.continue },
-    ],
+  [
+    { value: "!" },
+    { value: "@" },
+    { value: "#" },
+    { value: "$" },
+    { value: "%" },
+    { value: "&" },
+    { value: "*" },
+    { value: "(" },
+    { value: ")" },
+    { value: "-" },
+    { ...actions.clear },
+  ],
+  [
+    { value: "_" },
+    { value: "=" },
+    { value: "/" },
+    { value: "\\" },
+    { value: "<" },
+    { value: ">" },
+    { value: ":" },
+    { value: "." },
+    { value: "+" },
+    { value: "?" },
+    { ...actions.backspace },
+  ],
+  [
+    { value: ".com" },
+    { value: "{" },
+    { value: "}" },
+    { value: "[" },
+    { value: "]" },
+    { value: "|" },
+    { value: '"' },
+    { value: "'" },
+    { ...actions.moveLeft },
+    { ...actions.moveRight },
+  ],
+  [
+    { ...actions.toNumeric },
+    { ...actions.toAccent },
+    { ...actions.toLetter },
+    { ...actions.space },
+    { ...actions.continue },
+  ],
 ];
 
-const keyboard: Ref<any> = ref(letterKeyboard);
+const keyboard = ref<Keyboard>(numericKeyboard);
 
-const type = ref<string | null>('text');
-
-watch(name, () => {
-    settings.value.button = {
-        ...settings.value.button,
-        ...buttonResponsiveSettings.value[name.value],
-    };
+document.addEventListener("focusin", (event: FocusEvent) => {
+  setDefaultKeyboard(event.target);
 });
 
-document.addEventListener('focusin', (event: FocusEvent) => {
-    setDefaultKeyboard(event.target, event);
-});
+document.addEventListener("focusout", ({ target, relatedTarget }) => {
+  if (!(target instanceof HTMLInputElement)) return;
 
-document.addEventListener('focusout', ({ target, preventDefault }) => {
-    if (!(target instanceof HTMLInputElement)) return
+  if (relatedTarget instanceof HTMLButtonElement) {
+    setTimeout(() => {
+      visible.value = false;
+    }, 100);
+    return;
+  }
 
-    if (event.relatedTarget instanceof HTMLButtonElement) {
-        setTimeout(() => {
-            visible.value = false;
-        }, 100);
-        return;
+  target.scrollIntoView(false);
 
-        return;
-    }
-
-    target.scrollIntoView(false);
-
-    return (visible.value = false);
+  return (visible.value = false);
 });
 
 onUpdated(() => {
-    if (visible.value) return;
-    setDefaultKeyboard(getActiveInputElement());
+  if (visible.value) return;
+  setDefaultKeyboard(getActiveInputElement());
 });
 
-function setDefaultKeyboard(element: EventTarget | null, event?: Event) {
-    if (!(element instanceof HTMLInputElement)) return;
-    const keyboardId = element.getAttribute('keyboard');
-    if (
-        element.localName != 'input' ||
-        keyboardId == 'false'
-    ) return
+function setDefaultKeyboard(element: EventTarget | null) {
+  if (!(element instanceof HTMLInputElement) || element?.localName != "input")
+    return;
 
-    if (keyboardId && keyboardId !== props.target) return;
+  if (element.type == "number") setKeyboard(numericKeyboard);
+  else setKeyboard(letterKeyboard);
 
-    type.value = element.getAttribute('dtype');
+  setTimeout(() => {
+    element.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, 100);
 
-    if (element.type == 'number' || element.getAttribute('number') != null)
-        setKeyboard(numericKeyboard);
-    else setKeyboard(letterKeyboard);
-
-    emit('open', true);
-
-    setTimeout(() => {
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 100);
-
-    visible.value = true;
+  visible.value = true;
 }
 
 function enter() {
-    const element: HTMLInputElement | null = getActiveInputElement();
+  const element: HTMLInputElement | null = getActiveInputElement();
 
-    if (!element) return;
+  if (!element) return;
 
-    window.dispatchEvent(new CustomEvent('enter'));
+  window.dispatchEvent(new CustomEvent("enter"));
 
-    element.blur();
+  element.blur();
 }
 
 function input(letter: any): void {
-    const element: any = getActiveInputElement();
+  const element: any = getActiveInputElement();
 
-    if (!element) return;
+  if (!element) return;
 
-    element.type == 'number'
-        ? inputNumber(letter, element)
-        : inputLetter(letter, element);
+  element.type == "number"
+    ? inputNumber(letter, element)
+    : inputLetter(letter, element);
 }
 
 function inputLetter(letter: string, element: HTMLInputElement): void {
-    const { selectionStart, value }: any = element;
+  const { selectionStart, value }: any = element;
 
-    let letterLength: number = 1;
+  let letterLength: number = 1;
 
-    element.value =
-        value.slice(0, selectionStart) + letter + value.slice(selectionStart);
-    element.dispatchEvent(new InputEvent('input'));
+  element.value =
+    value.slice(0, selectionStart) + letter + value.slice(selectionStart);
+  element.dispatchEvent(new InputEvent("input"));
 
-    if (typeof letter == 'string') letterLength = letter.length;
+  if (typeof letter == "string") letterLength = letter.length;
 
-    element.selectionStart = selectionStart + letterLength;
-    element.selectionEnd = selectionStart + letterLength;
+  element.selectionStart = selectionStart + letterLength;
+  element.selectionEnd = selectionStart + letterLength;
 
-    if (letter == ' ') return;
+  if (letter == " ") return;
 
-    upperCase.value = false;
+  upperCase.value = false;
 }
 
 function inputNumber(number: number, element: HTMLInputElement): void {
-    element.value += number;
-    element.dispatchEvent(new InputEvent('input'));
+  element.value += number;
+  element.dispatchEvent(new InputEvent("input"));
 }
 
 function moveCursor(unit: number): void {
-    const element = getActiveInputElement();
+  const element = getActiveInputElement();
 
-    if (!element) return;
+  if (!element) return;
 
-    const { selectionStart, selectionEnd }: any = element;
-    const isSelected = selectionStart != selectionEnd;
+  const { selectionStart, selectionEnd }: any = element;
+  const isSelected = selectionStart != selectionEnd;
 
-    if (isSelected) {
-        const isNegative: boolean = Math.sign(unit) == -1;
+  if (isSelected) {
+    const isNegative: boolean = Math.sign(unit) == -1;
 
-        element.selectionStart = isNegative ? selectionStart : selectionEnd;
-        element.selectionEnd = isNegative ? selectionStart : selectionEnd;
-        return;
-    }
+    element.selectionStart = isNegative ? selectionStart : selectionEnd;
+    element.selectionEnd = isNegative ? selectionStart : selectionEnd;
+    return;
+  }
 
-    element.selectionStart = selectionStart + unit;
-    element.selectionEnd = selectionStart + unit;
+  element.selectionStart = selectionStart + unit;
+  element.selectionEnd = selectionStart + unit;
 }
 
 function setKeyboard(currentKeyboard: Keyboard) {
-    keyboard.value = currentKeyboard;
+  keyboard.value = currentKeyboard;
 }
 
 function letter(letter: string | number): string | number {
-    return typeof letter == 'string' && upperCase.value
-        ? letter.toUpperCase()
-        : letter;
+  return typeof letter == "string" && upperCase.value
+    ? letter.toUpperCase()
+    : letter;
 }
 
 function getActiveInputElement(): HTMLInputElement | null {
-    const element: any = document.activeElement;
+  const element: any = document.activeElement;
 
-    if (element?.localName != 'input') return null;
+  if (element?.localName != "input") return null;
 
-    return element;
+  return element;
 }
 
 function clear(): void {
-    const element = getActiveInputElement();
+  const element = getActiveInputElement();
 
-    if (!element) return;
+  if (!element) return;
 
-    element.value = '';
-    element.dispatchEvent(new InputEvent('input'));
+  element.value = "";
+  element.dispatchEvent(new InputEvent("input"));
 }
 
 function space(): void {
-    upperCase.value = true;
-    input(' ');
+  upperCase.value = true;
+  input(" ");
 }
 
 function backspace(): void {
-    const element = getActiveInputElement();
+  const element = getActiveInputElement();
 
-    if (!element) return;
+  if (!element) return;
 
-    if (element.type == 'number') backspaceNumber(element);
+  if (element.type == "number") backspaceNumber(element);
 
-    const { selectionStart, selectionEnd, value }: any = element;
+  const { selectionStart, selectionEnd, value }: any = element;
 
-    if (!selectionStart && !selectionEnd) return;
+  if (!selectionStart && !selectionEnd) return;
 
-    if (selectionStart != selectionEnd) return backspaceSelection(element);
+  if (selectionStart != selectionEnd) return backspaceSelection(element);
 
-    element.value =
-        value.slice(0, selectionStart - 1) + value.slice(selectionStart);
+  element.value =
+    value.slice(0, selectionStart - 1) + value.slice(selectionStart);
 
-    element.selectionStart = selectionStart - 1;
-    element.selectionEnd = selectionStart - 1;
+  element.selectionStart = selectionStart - 1;
+  element.selectionEnd = selectionStart - 1;
 
-    element.dispatchEvent(new InputEvent('input'));
+  element.dispatchEvent(new InputEvent("input"));
 }
 
 function backspaceNumber(element: HTMLInputElement) {
-    element.value = element.value.slice(0, element.value.length - 1);
-    element.dispatchEvent(new InputEvent('input'));
+  element.value = element.value.slice(0, element.value.length - 1);
+  element.dispatchEvent(new InputEvent("input"));
 }
 
 function backspaceSelection(element: HTMLInputElement): void {
-    const { selectionStart, selectionEnd, value }: any = element;
+  const { selectionStart, selectionEnd, value }: any = element;
 
-    element.value = value.slice(0, selectionStart) + value.slice(selectionEnd);
+  element.value = value.slice(0, selectionStart) + value.slice(selectionEnd);
 
-    element.selectionStart = selectionStart;
-    element.selectionEnd = selectionStart;
+  element.selectionStart = selectionStart;
+  element.selectionEnd = selectionStart;
 
-    element.dispatchEvent(new InputEvent('input'));
+  element.dispatchEvent(new InputEvent("input"));
 }
 </script>
+
+<style lang="scss">
+.keyboard-key {
+  transition: border 1s, color 1s;
+  border: rgb(var(--v-theme-keyboard)) 2px solid !important;
+  color: rgb(var(--v-theme-keyboard)) !important;
+  .text-h4 {
+    transition: filter 2s;
+    transition-delay: 2s; 
+    filter: contrast(200%);
+  }
+}
+
+.keyboard-key:active {
+  border: rgb(var(--v-theme-primary)) 2px solid !important;
+  color: rgb(var(--v-theme-primary)) !important;
+  transition: none;
+  filter: none;
+}
+</style>

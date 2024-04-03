@@ -1,6 +1,8 @@
 <template>
   <Layout>
+    <v-text-field type="number">
 
+    </v-text-field>
   </Layout>
 </template>
 

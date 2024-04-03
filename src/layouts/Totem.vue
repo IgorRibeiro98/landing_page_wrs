@@ -3,15 +3,10 @@
         <div class="top-container">
             <router-view />
         </div>
-
-        <div class="bottom-container">
-            <VirtualKeyboard />
-        </div>
     </v-main>
 </template>
 
 <script lang="ts" setup>
-import VirtualKeyboard from '@/components/VirtualKeyboard.vue'
 </script>
 
 <style scoped>
