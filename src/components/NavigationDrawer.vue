@@ -62,6 +62,13 @@ const drawerItems = ref<DrawerItem[]>([
           name: 'user.all',
       }
   },
+  {
+      icon: 'mdi-sitemap-outline',
+      title: 'Tipo de Atendimento',
+      route: {
+          name: 'attendance-type.view',
+      }
+  },
   // {
   //     icon: 'mdi-bulletin-board',
   //     title: 'Kanban',

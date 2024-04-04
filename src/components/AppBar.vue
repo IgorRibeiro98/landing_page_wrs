@@ -22,7 +22,6 @@
 import logo from "@/assets/logo.png";
 import { computed, ref } from "vue";
 import { useTheme } from "vuetify";
-import router from '@/router'
 
 const theme = useTheme();
 const loadingLogout = ref(false);
@@ -54,6 +53,13 @@ const items = [
     route: {
       name: "queue.view",
     },
+  },
+  {
+      icon: 'mdi-sitemap-outline',
+      title: 'Tipos de Atendimento',
+      route: {
+          name: 'attendance-type.view',
+      }
   },
 ];
 </script>

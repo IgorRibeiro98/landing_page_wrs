@@ -92,6 +92,11 @@
                   v-on="on"
                   v-model="data.attendance_types"
                 >
+                  <template #append-inner>
+                    <v-btn icon='mdi-plus' color="primary" variant="text" @click.prevent="openNewAttendanceTypeDialog">
+                    </v-btn>
+                  </template>
+
                   <template #chip="{ props, item: { raw } }">
                     <v-chip
                       v-bind="props"
@@ -179,6 +184,8 @@
     v-model:attendanceHour="attendanceHour"
     @update="addAttendanceHour"
   />
+  
+  <AttendanceTypeDialog v-model="newAttendanceTypeDialog" @submit="loadAttendanceTypes" v-model:item="newAttendanceType"/>
 </template>
 
 <script lang="ts" setup>
@@ -186,9 +193,9 @@ import LayoutView from "@/components/LayoutView.vue";
 import { getQueues } from "@/modules/queue/repositories/queue.repository";
 import { getAttendanceTypes } from "@/modules/totem/repositories/attendance-type.repository";
 import {
-  deleteQueueTotem,
-  findTotem,
-  updateQueueTotem,
+deleteQueueTotem,
+findTotem,
+updateQueueTotem,
 } from "@/modules/totem/repositories/totem.repository";
 import useAlertStore from "@/stores/alert";
 import useSystemStore from "@/stores/system";
@@ -197,6 +204,9 @@ import QueueTotemPanel from "../components/QueueTotemPanel.vue";
 import TotemAttendanceHourDialog from "../components/TotemAttendanceHourDialog.vue";
 import TotemAttendanceTypeDialog from "../components/TotemAttendanceTypeDialog.vue";
 
+import AttendanceTypeDialog from '@/modules/totem/components/dialog/AttendanceTypeDialog.vue';
+
+import defaultData from '@/modules/totem/default-values';
 import { useRoute, useRouter } from "vue-router";
 
 const { setBreadcrumbs } = useSystemStore();
@@ -610,5 +620,11 @@ function loadAttendanceTypes() {
     .catch((error) => {
       openAlert("Erro para carregar tipo de atendimentos", error);
     });
+}
+
+const newAttendanceTypeDialog = ref(false)
+const newAttendanceType = ref(structuredClone(defaultData.attendanceType))
+function openNewAttendanceTypeDialog() {
+  newAttendanceTypeDialog.value = true;
 }
 </script>

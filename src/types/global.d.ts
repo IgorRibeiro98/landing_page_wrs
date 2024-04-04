@@ -283,11 +283,12 @@ declare global {
   }
 
   interface AttendanceTypeData {
-    id: number
+    id?: number
     name: string
-    description: string
-    created_at: string
-    updated_at: string
+    icon: string
+    description: string | null
+    created_at?: string
+    updated_at?: string
   }
 
   interface AttendanceType {

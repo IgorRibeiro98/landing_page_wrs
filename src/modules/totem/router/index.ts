@@ -1,7 +1,18 @@
-import { type RouteRecordRaw } from 'vue-router'
-import { layouts } from '@/router'
+import { layouts } from '@/router';
+import { type RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
+  {
+    path: '/tipo-atendimento',
+    component: () => layouts.default(),
+    children: [
+      {
+        path: '',
+        name: 'attendance-type.view',
+        component: () => import('@/modules/totem/views/AttendanceType.vue')
+      },
+    ],
+  },
   {
     path: '/totem',
     component: () => layouts.default(),
@@ -30,7 +41,7 @@ const routes: RouteRecordRaw[] = [
         path: ':id/queues',
         name: 'queue.detail',
         component: () => import('@/modules/totem/views/QueueTotem.vue')
-      }
+      },
     ]
   }
 ]
