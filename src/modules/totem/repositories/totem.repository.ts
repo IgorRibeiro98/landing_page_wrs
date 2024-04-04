@@ -4,7 +4,7 @@ export function getTotem() {
   return axios.get(`/totem`);
 }
 
-export function findTotem(id: number) {
+export function findTotem(id: number | string) {
   return axios.get(`/totem/${id}`);
 }
 

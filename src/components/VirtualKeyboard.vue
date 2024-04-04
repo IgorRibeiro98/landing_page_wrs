@@ -1,6 +1,6 @@
 <template>
   <table
-    style="border-spacing: 1.2em; border-collapse: separate; font-size: 20px"
+    style="border-spacing: 1.2em; margin: -1.2em;border-collapse: separate; font-size: 20px"
     @pointerdown.prevent
     v-show="visible"
   >
@@ -12,6 +12,7 @@
         :key="j"
       >
         <keyboard-btn
+          v-if="item.show ?? true"
           class="keyboard-key text-center"
           width="100%"
           height="100%"
@@ -22,7 +23,7 @@
             item.action ? item.action() : input(letter(item.value!))
           "
         >
-          <v-icon v-if="item.icon" :icon="item.icon" size="50" />
+          <v-icon v-if="item.icon" :icon="item.icon" size="30" />
 
           <span v-else class="text-h4">
             {{ item.action ? item.value : letter(item.value!) }}
@@ -43,6 +44,7 @@ interface LineKeyboard {
   disabled?: boolean;
   color?: string;
   col?: number
+  show?: boolean
 }
 
 interface SpecialLineKeyboard {
@@ -99,7 +101,7 @@ const actions: SpecialLineKeyboard = {
     action: clear,
   },
   backspace: {
-    icon: "mdi-backspace-outline",
+    icon: "mdi-keyboard-backspace",
     color: "primary",
     action: backspace,
   },
@@ -214,6 +216,16 @@ const letterKeyboard: Keyboard = [
 
 const numericKeyboard: Keyboard = [
   [
+  {
+      ...actions.clear,
+      col: 2,
+    },
+    {
+      ...actions.backspace,
+      col: 1,
+    },
+  ],
+  [
     {
       value: 1,
       col: 1,
@@ -257,14 +269,23 @@ const numericKeyboard: Keyboard = [
   ],
   [
     {
+      show: false
+    },
+    {
       value: 0,
       col: 1,
     },
-    {
-      ...actions.clear,
-      col: 2,
-    },
   ],
+  // [
+  //   {
+  //     value: 0,
+  //     col: 1,
+  //   },
+  //   {
+  //     ...actions.clear,
+  //     col: 2,
+  //   },
+  // ],
 ];
 
 const accentKeyboard: Keyboard = [
@@ -385,7 +406,7 @@ function setDefaultKeyboard(element: EventTarget | null) {
   if (!(element instanceof HTMLInputElement) || element?.localName != "input")
     return;
 
-  if (element.type == "number") setKeyboard(numericKeyboard);
+  if (element.type == "number" || element.getAttribute('number') != null) setKeyboard(numericKeyboard);
   else setKeyboard(letterKeyboard);
 
   setTimeout(() => {

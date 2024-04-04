@@ -1,4 +1,4 @@
-import { App, Directive } from 'vue'
+import { App, Directive } from 'vue';
 
 const mask: Directive = {
     updated(el, binding): void {

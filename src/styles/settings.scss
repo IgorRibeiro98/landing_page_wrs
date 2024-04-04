@@ -100,8 +100,8 @@ animation-timing-function: ease-in-out;
   opacity: 0;
 }
 
-$font-size-h1:clamp(2rem, 2.5vw, 4rem) !important;
-$font-size-h2:clamp(1.5rem, 2vw, 3rem) !important;
+$font-size-h1:clamp(1.2em, 2.5vw, 1.6em) !important;
+$font-size-h2:clamp(1.1em, 2.5vw, 1.4em) !important;
 $font-size:clamp(1.3rem, 1.7vw, 2.7rem) !important;
 
 .totem {
@@ -109,11 +109,11 @@ $font-size:clamp(1.3rem, 1.7vw, 2.7rem) !important;
 
     h1 {
         font-size: $font-size-h1;
-        font-weight: normal;
+        font-weight: 700 !important;
     }
     h2 {
         font-size: $font-size-h2;
-        font-weight: normal;
+        font-weight: normal
     }
     p {
         font-size: $font-size;

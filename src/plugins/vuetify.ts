@@ -31,7 +31,8 @@ export default createVuetify({
       style: 'clip-path: polygon(25% -30%, 80% -30%, 91% 50%, 79% 140%, 23% 120%, 12% 50%);'
     },
     VTextField: {
-      variant: 'outlined'
+      variant: 'outlined',
+      validateOn: 'blur'
     },
     VSelect: {
       variant: 'outlined'

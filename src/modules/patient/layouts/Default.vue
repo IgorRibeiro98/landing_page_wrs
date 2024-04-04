@@ -5,11 +5,12 @@
         <v-img :src="logo" max-width="194"></v-img>
       </div>
       <div class="d-flex justify-space-between mt-8">
-        <v-btn variant="text" color="primary" @click="emit('back')">
+        <v-btn variant="text" color="primary" @click="emit('back')" :disabled="hideBack">
           <v-icon class="mr-2" size="30">mdi-chevron-left</v-icon>
           <span class="font-weight-bold">Voltar</span></v-btn
         >
         <v-btn variant="text" color="primary" @click="emit('cancel')"
+        :disabled="hideCancel"
           ><span class="font-weight-bold">Cancelar</span></v-btn
         >
       </div>
@@ -18,18 +19,10 @@
       style="width: 80%; height: 100%"
       class="flex-grow-1 ma-auto d-flex flex-column"
     >
-      <v-row class="ma-auto" style="height: 100%; width: 100%">
+      <v-row class="ma-auto" no-gutters style="height: 100%; width: 100%">
         <v-col>
             <slot></slot>
         </v-col>
-
-        <v-slide-x-reverse-transition class="v-col v-col-4" mode="out-in">
-        <v-col cols="4" v-show="keyboard" >
-          <div class="d-flex justify-center align-center h-100">
-            <VirtualKeyboard v-model="keyboard"/>
-          </div>
-        </v-col>
-      </v-slide-x-reverse-transition>
       </v-row>
       <div class="text-center">
         <v-divider class="my-4"></v-divider>
@@ -40,15 +33,24 @@
 </template>
 <script lang="ts" setup>
 import appLogo from "@/assets/logo.png";
-import VirtualKeyboard from '@/components/VirtualKeyboard.vue';
 import { capitalizeFirstLetter } from "@/helpers/string";
 import useTenantStore from "@/modules/tenant/store";
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, withDefaults } from "vue";
 
 interface Emits {
   (event: "cancel"): void;
   (event: "back"): void;
 }
+
+interface Props {
+  hideBack?: boolean
+  hideCancel?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  hideBack: false,
+  hideCancel: false
+})
 const emit = defineEmits<Emits>()
 const tenantStore = useTenantStore();
 

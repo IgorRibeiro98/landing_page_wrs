@@ -118,13 +118,7 @@ export function findByIdentifier(identifier: any): Promise<{ data: PatientIdenti
         setTimeout(() => {
             const cpfs = ['46518973800', '46518973803']
 
-            if (!cpfs.includes(identifier)) return rej({
-                response: {
-                    data: {
-                        message: `Paciente ${identifier} não foi encontrado`
-                    }
-                }
-            })
+            if (!cpfs.includes(identifier)) return rej(new Error(`Paciente ${identifier} não foi encontrado`))
 
             const patient: any = patients[identifier]
 

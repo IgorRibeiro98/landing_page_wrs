@@ -1,6 +1,6 @@
-import { RouteNamedMap } from './../../typed-router.d';
 import { ComputedRef } from 'vue';
 import { type RouteLocationRaw } from 'vue-router';
+
 declare global {
   type ScreenComponent = 'PersonalDataForm' | 'Identifier'
 

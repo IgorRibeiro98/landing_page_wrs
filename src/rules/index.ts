@@ -9,3 +9,8 @@ export function email(value: string): boolean | string {
     const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
     return emailRegex.test(value) || 'Endereço de email deve ser válido';
 }
+
+export function cpf(value: string): boolean | string {
+    const cpfRegex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
+    return cpfRegex.test(value) || 'CPF deve ser válido';
+}
