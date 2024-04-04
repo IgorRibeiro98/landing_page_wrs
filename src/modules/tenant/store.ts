@@ -26,12 +26,8 @@ const useTenantStore = defineStore('tenant', () => {
                         ...resp.data,
                         theme: JSON.parse(resp.data.theme),
                     }
-
-                    const light = Object.assign({}, theme.themes.value.saludti, tenant.value.theme)
-                    
+                    const light = Object.assign({}, tenant.value.theme, theme.themes.value.light)
                     Object.assign(theme.themes.value, { light })
-
-                    theme.global.name.value = 'light'
                 })
                 .catch((error) => {
                     console.error({ error })

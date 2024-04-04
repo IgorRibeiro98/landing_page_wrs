@@ -1,113 +1,103 @@
 <template>
-  <div class="fill-height d-flex align-center justify-center">
-    <v-row justify="center">
-      <v-col cols="12" v-if="!chosenIdentificationMethod">
-        <h1 class="text-center">Escolha como deseja se identificar</h1>
-      </v-col>
+  <v-row justify="center" no-gutters>
+    <v-col cols="12" md="11">
+      <v-row>
+        <v-col cols="12">
+          <h1>Digite os 4 primeiros dígitos do seu CPF</h1>
+        </v-col>
 
-      <v-col cols="12" md="4">
-        <v-btn class="pa-1" @click="setIdentification('cpf')" block rounded="0" variant="tonal"
-          :color="identificationMethod == 'cpf' ? 'primary' : 'secondary'">
-          CPF
-        </v-btn>
-      </v-col>
+        <v-col cols="12" md="7">
+          <v-form v-model="form">
+            <v-text-field
+              :disabled="isLoading"
+              v-model="identifier"
+              :rules="[required, cpf]"
+              v-mask="'###.###.###-##'"
+              placeholder="000.000.000-00"
+              number
+            >
+            </v-text-field>
+          </v-form>
 
-      <v-col cols="12" md="4">
-        <v-btn class="pa-1" @click="setIdentification('passport')" block rounded="0" variant="tonal"
-          :color="identificationMethod == 'passport' ? 'primary' : 'secondary'">
-          Passaporte / RNE
-        </v-btn>
-      </v-col>
+          <v-row no-gutters>
+            <v-col cols="12" md="6">
+              <v-btn
+                color="primary"
+                block
+                rounded
+                @click="send"
+                :loading="isLoading"
+                :disabled="isLoading"
+              >
+                Continuar
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-col>
 
-      <v-col cols="12" class="mt-10" v-if="chosenIdentificationMethod">
-        <Transition name="fade" mode="out-in">
-          <component :is="identifierComponent" v-model="data.identifier.generic_id" :loading="isLoading"
-            @search="searchPatient">
-          </component>
-        </Transition>
-      </v-col>
-    </v-row>
-  </div>
+        <v-col cols="12" md="5" class="d-flex justify-center">
+          <VirtualKeyboard />
+        </v-col>
+      </v-row>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from "vue";
+import VirtualKeyboard from "@/components/VirtualKeyboard.vue";
+import { ref } from "vue";
 
-import CPFIdentifier from "@patient/components/CPFIdentifier.vue";
-import PassportIdentifier from "@patient/components/PassportIdentifier.vue";
-
-import useAlertStore from "@/stores/alert";
-
+import { cpf, required } from "@/rules";
 import { findByIdentifier } from "@patient/repositories/patient.repository";
 
-interface Props {
-  modelValue: Data;
+const identifier = ref("46518973800");
+const form = ref(false);
+
+import { AlertProps } from "@patient/types";
+
+interface Emit {
+  (event: "alert", options: AlertProps): void;
+  (event: "next"): void;
 }
 
 const isLoading = ref(false);
+const emit = defineEmits<Emit>();
 
-const { openAlert } = useAlertStore();
-
-const props = defineProps<Props>();
-const emit = defineEmits(["update:modelValue", 'update:loading', "next", "to", "start"]);
-
-const chosenIdentificationMethod = ref(false);
-const identificationMethod = ref<string | null>(null);
-
-const identifierComponent = computed(() => {
-  if (identificationMethod.value == "cpf") {
-    return CPFIdentifier;
-  } else if (identificationMethod.value == "passport") {
-    return PassportIdentifier;
-  }
-});
-
-const data: any = computed({
-  get() {
-    return props.modelValue;
-  },
-  set() {
-    emit("update:modelValue", data);
-  },
-});
-
-function setIdentification(value: string) {
-  identificationMethod.value = value;
-  chosenIdentificationMethod.value = true;
+function getUnformattedIdentifier() {
+  return identifier.value.replace(/\D/g, "");
 }
 
-function searchPatient(identifier: string) {
+async function send() {
+  if (!form.value) return;
+
   isLoading.value = true;
 
-  emit('update:loading', {
-    display: true,
-    title: 'Aguarde um momento',
-    text: 'Estamos buscando seu cadastro'
-  })
-
-  findByIdentifier(identifier)
+  findByIdentifier(getUnformattedIdentifier())
     .then((res) => {
-      data.value.identifier = { ...res.data };
-      emit("next", null);
+      emit('next')
     })
-    .catch((err) => {
-      openAlert("Cadastro não localizado", err.response.data.message);
-      emit("to", "Menu");
+    .catch((error) => {
+      openAlert(error)
     })
-    .finally(() => {
-      isLoading.value = false;
-    });
+    .finally(() => (isLoading.value = false));
+}
+
+function openAlert(text: string | Error) {
+  emit("alert", {
+        title: "Não foi possível continuar o atendimento",
+        text,
+        action: {
+          type: "choise",
+          acceptLabel: "Vou tentar novamente",
+          rejectLabel: "Prefiro emitir uma senha",
+          callback(accept: boolean) {
+            if (accept) {
+              identifier.value = "";
+              console.log('continuar')
+            }
+            else console.log('emitir senha')
+          }
+        },
+  });
 }
 </script>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>

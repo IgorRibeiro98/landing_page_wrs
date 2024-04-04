@@ -1,5 +1,5 @@
 <template>
-  agendamento
+  queue
   <v-btn @click="emit('next')">proxima</v-btn>
 </template>
 <script lang="ts" setup>

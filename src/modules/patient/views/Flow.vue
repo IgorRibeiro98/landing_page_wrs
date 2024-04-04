@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 import { findTotemById } from "@/repositories/totem.repository";
 
@@ -34,10 +34,10 @@ import FlowLoading from "@patient/components/FlowLoading.vue";
 import defaultData from "@patient/views/default-data";
 
 import {
-  getNationality,
-  getReligion,
-  getMaritalStatus,
-  getGender,
+getGender,
+getMaritalStatus,
+getNationality,
+getReligion,
 } from "@patient/repositories/personal-data.repository";
 
 interface ComponentInfo {
@@ -53,9 +53,7 @@ interface ComponentInfo {
   __file: string;
 }
 
-interface Component {
-  [key: string]: ComponentInfo;
-}
+type Component = Record<ScreenComponent, ComponentInfo>
 
 interface Collection {
   data: any[];
@@ -70,6 +68,7 @@ interface Binding {
 const { openAlert } = useAlertStore();
 
 const components: Component = {};
+
 const isLoading = ref(false);
 
 const loadingFlowDialog = ref({
@@ -90,7 +89,7 @@ const componentIndex = ref(0);
 const component: any = computed(() => {
   if (!totem.value.screens.length) return null;
 
-  const view = totem.value.screens[componentIndex.value].component;
+  const view = totem.value.screens[componentIndex.value].data.component;
 
   if (!view) return null;
 
@@ -162,10 +161,12 @@ function redirect(to: string): void {
 
 function importModules() {
   for (const path in modules) {
-    const componentRegexName = path.match(/([A-Z])\w+/g);
+    const componentRegexName: any = path.match(/([A-Z])\w+/g);
 
-    if (componentRegexName)
-      components[`${componentRegexName[0]}`] = modules[path].default;
+    if (componentRegexName) {
+      const key = componentRegexName[0] as ScreenComponent;
+      components[key] = modules[path].default;
+    }
   }
 }
 

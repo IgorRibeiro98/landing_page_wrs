@@ -48,15 +48,26 @@ export default createVuetify({
     mobileBreakpoint: 'md'
   },
   theme: {
-    defaultTheme: 'saludti',
+    defaultTheme: 'light',
     themes: {
-      saludti: {
+      light: {
+        dark: false,
         colors: {
           primary: '#f94c07',
           secondary: '#243859',
           grey: '#abacac',
           background: "#F3F3F3",
-          keyboard: '#666666'
+          keyboard: '#f94c07'
+        }
+      },
+      dark: {
+        dark: true,
+        colors: {
+          primary: '#f94c07',
+          secondary: '#243859',
+          grey: '#abacac',
+          background: "#F3F3F3",
+          keyboard: '#f94c07'
         }
       }
     }

@@ -2,7 +2,7 @@ import { ComputedRef } from 'vue';
 import { type RouteLocationRaw } from 'vue-router';
 
 declare global {
-  type ScreenComponent = 'PersonalDataForm' | 'Identifier'
+  type ScreenComponent = 'Identifier' | 'Schedule' | 'Signature' | 'Queues' | 'Loading'
 
   interface ScreenField {
     id: number
@@ -27,13 +27,6 @@ declare global {
 
   type SendType = 'password' | 'print' | 'sms' | 'qrcode'
 
-  interface DataContent {
-    send_type: SendType
-    title: string
-    text: string
-    raw: any
-  }
-
   interface Data {
     identifier: {
       id: string;
@@ -41,7 +34,6 @@ declare global {
       first_name: string
       birth_date: string;
     },
-    content: DataContent
     password_send_type: string;
     patient?: Patient;
     queue?: Queue;

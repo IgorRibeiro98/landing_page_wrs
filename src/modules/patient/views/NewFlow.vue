@@ -3,6 +3,7 @@
     <component
       :is="component"
       @alert="openAlert"
+      @next="next"
     >
     </component>
   </Layout>
@@ -48,9 +49,9 @@ const id = computed(() => route.params.id as string);
 
 const totem = ref(structuredClone(defaultValues.totem));
 
-type Component = Record<string, VueComponent>;
+type Component = Record<ScreenComponent, VueComponent>;
 
-const components = shallowRef<Component>({});
+const components = shallowRef<Component>({} as Component);
 
 const layout = ref({
   hideBack: true,
@@ -71,7 +72,7 @@ watch(screenIndex, (value: number) => {
   if (value == 0) layout.value.hideBack = true;
 });
 const modules: Record<string, any> = import.meta.glob(
-  "@patient/views/totem/*.vue",
+  "@patient/views/totem/**/*.vue",
   { eager: true }
 );
 
@@ -90,6 +91,13 @@ function cancel() {
 function back() {
   screenIndex.value--;
 }
+function next() {
+  if (screenIndex.value == totem.value.screens.length - 1) {
+    screenIndex.value = 0;
+    return;
+  }
+  screenIndex.value++;
+}
 
 function openAlert(props: AlertProps) {
   alertProps.value = props;
@@ -98,10 +106,28 @@ function openAlert(props: AlertProps) {
 
 function importModules() {
   for (const path in modules) {
-    const componentRegexName = path.match(/([A-Z])\w+/g);
+    if(hasSubfolder(path) && !isComponentNameEqualToPreviousFolder(path)) continue;
 
-    if (componentRegexName)
-      components.value[`${componentRegexName[0]}`] = modules[path].default;
+    const componentName = getComponentNameByPath(path);
+    if (componentName) {
+      const key = componentName as ScreenComponent;
+      components.value[key] = modules[path].default;
+    }
   }
+}
+
+function getComponentNameByPath(path: string) {
+  const match = path.match(/\/([^\/]+)\.vue$/);
+  return match ? match[1] : null;
+}
+
+function isComponentNameEqualToPreviousFolder(path: string) {
+  const match = path.match(/\/([^\/]+)\/([^\/]+)\.vue$/);
+  return match ? match[1] === match[2] : false;
+}
+
+function hasSubfolder(path: string) {
+  const match = path.match(/\/totem\/([^\/]+)\/([^\/]+)/);
+  return match !== null;
 }
 </script>
