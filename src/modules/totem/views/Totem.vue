@@ -36,7 +36,7 @@
                 </v-btn>
               </template>
               <v-list>
-                <v-list-item link @click="option.action(item)" v-for="option in options">
+                <v-list-item link @click="option.action(item)" v-for="(option, index) in options" :key="index">
                   <v-list-item-title>
                     {{ option.title }}
                   </v-list-item-title>
@@ -59,8 +59,8 @@
 <script lang="ts" setup>
 import TotemDialog from "@/modules/totem/components/TotemDialog.vue";
 import {
-  deleteTotem,
-  getTotem,
+deleteTotem,
+getTotem,
 } from "@/modules/totem/repositories/totem.repository";
 import useAlertStore from "@/stores/alert";
 import useSystemStore from "@/stores/system";
