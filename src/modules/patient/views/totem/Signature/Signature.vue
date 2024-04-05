@@ -1,15 +1,26 @@
 <template>
-  assinatura
-  <v-btn @click="emit('next')">proxima</v-btn>
+  <SubScreen v-model="screen" :subScreens="subScreens">
+    assinatura
+    <v-btn block @click="screen = 'ATESTE'">proxima subtela</v-btn>
+    <v-btn block @click="emit('next')">proxima</v-btn>
+  </SubScreen>
 </template>
 <script lang="ts" setup>
+import SubScreen from "@/modules/patient/components/SubScreen.vue";
 import { AlertProps } from "@patient/types";
-
+import { onMounted, ref } from "vue";
 interface Emit {
   (event: "alert", options: AlertProps): void;
   (event: "next"): void;
 }
+interface Props {
+  subScreens: Record<string, any>;
+}
 
+const props = defineProps<Props>();
 const emit = defineEmits<Emit>();
+const screen = ref("")
 
+onMounted(() => {
+})
 </script>

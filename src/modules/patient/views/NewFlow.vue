@@ -1,7 +1,8 @@
 <template>
   <Layout @back="back" @cancel="cancel" v-bind="layout">
     <component
-      :is="component"
+      :is="componentData.component"
+      :subScreens="componentData.subScreens"
       @alert="openAlert"
       @next="next"
     >
@@ -25,12 +26,9 @@ type Component as VueComponent,
 } from "vue";
 
 import defaultValues from "@/modules/totem/default-values";
-
 import { findTotem } from "@/modules/totem/repositories/totem.repository";
-
-import { useRoute, type RouteLocationNormalizedLoaded } from "vue-router";
-
 import { AlertProps } from "@patient/types";
+import { useRoute, type RouteLocationNormalizedLoaded } from "vue-router";
 
 const alertProps = ref<AlertProps>({
   title: "CPF Inválido",
@@ -49,20 +47,27 @@ const id = computed(() => route.params.id as string);
 
 const totem = ref(structuredClone(defaultValues.totem));
 
-type Component = Record<ScreenComponent, VueComponent>;
+type SubScreen = Record<string, VueComponent>;
+
+type Component = Record<
+  ScreenComponent,
+  {
+    component: VueComponent;
+    subScreens: SubScreen;
+  }
+>;
 
 const components = shallowRef<Component>({} as Component);
-
 const layout = ref({
   hideBack: true,
   hideCancel: false,
 });
 
-const screenIndex = ref(0);
+const screenIndex = ref(2);
 
 const currentScreen = computed(() => totem.value.screens[screenIndex.value]);
 
-const component = computed(() => {
+const componentData = computed(() => {
   if (!currentScreen.value) return components.value["Loading"];
 
   return components.value[currentScreen.value.data.component];
@@ -71,6 +76,7 @@ const component = computed(() => {
 watch(screenIndex, (value: number) => {
   if (value == 0) layout.value.hideBack = true;
 });
+
 const modules: Record<string, any> = import.meta.glob(
   "@patient/views/totem/**/*.vue",
   { eager: true }
@@ -106,12 +112,28 @@ function openAlert(props: AlertProps) {
 
 function importModules() {
   for (const path in modules) {
-    if(hasSubfolder(path) && !isComponentNameEqualToPreviousFolder(path)) continue;
+    const basePath = path.replace("/src/modules/patient/views/totem/", "");
+    const componentName = getComponentNameByPath(path) as ScreenComponent;
 
-    const componentName = getComponentNameByPath(path);
-    if (componentName) {
-      const key = componentName as ScreenComponent;
-      components.value[key] = modules[path].default;
+    if (componentName === null) continue;
+
+    const isSubScreen = basePath.includes("/");
+    const rootComponent = (
+      isSubScreen ? basePath.split("/")[0] : componentName
+    ) as ScreenComponent;
+
+    if (components.value[rootComponent] === undefined) {
+      components.value[rootComponent] = {
+        component: {},
+        subScreens: {},
+      };
+    }
+
+    if (!isSubScreen || isComponentNameEqualToPreviousFolder(path)) {
+      components.value[rootComponent].component = modules[path].default;
+    } else {
+      components.value[rootComponent].subScreens[componentName] =
+        modules[path].default;
     }
   }
 }
@@ -124,10 +146,5 @@ function getComponentNameByPath(path: string) {
 function isComponentNameEqualToPreviousFolder(path: string) {
   const match = path.match(/\/([^\/]+)\/([^\/]+)\.vue$/);
   return match ? match[1] === match[2] : false;
-}
-
-function hasSubfolder(path: string) {
-  const match = path.match(/\/totem\/([^\/]+)\/([^\/]+)/);
-  return match !== null;
 }
 </script>
