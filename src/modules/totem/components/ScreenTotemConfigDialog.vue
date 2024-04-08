@@ -1,5 +1,5 @@
 <template>
-  <Dialog cancel-reset @submit="save" height="100%" v-model="dialog"  fullscreen>
+  <Dialog cancel-reset @submit="save" height="100%" v-model="dialog" fullscreen>
     <template #title>
       <div class="d-flex align-center">
         <div class="d-flex align-center mb-2">

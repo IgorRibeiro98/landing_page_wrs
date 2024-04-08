@@ -1,8 +1,8 @@
 <template>
   <SubScreen v-model="screen" :subScreens="subScreens">
     assinatura
-    <v-btn block @click="screen = 'ATESTE'">proxima subtela</v-btn>
-    <v-btn block @click="emit('next')">proxima</v-btn>
+    <v-btn block @click="screen = 'FaceRecognition'">Biometria facial</v-btn>
+    <v-btn block @click="screen = 'SendToken'">Token via SMS ou App</v-btn>
   </SubScreen>
 </template>
 <script lang="ts" setup>

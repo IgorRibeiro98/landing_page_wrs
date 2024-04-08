@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-bind="$attrs" v-model="dialog">
+  <v-dialog :width="$attrs.fullscreen !== undefined ? undefined:400" v-bind="$attrs" v-model="dialog">
     <v-form
       ref="formRef"
       @submit.prevent="handleSubmit"

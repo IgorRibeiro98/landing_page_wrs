@@ -58,6 +58,7 @@ import { AlertProps } from "@patient/types";
 interface Emit {
   (event: "alert", options: AlertProps): void;
   (event: "next"): void;
+  (event: "to", value: ScreenComponent | number): void;
 }
 
 const isLoading = ref(false);

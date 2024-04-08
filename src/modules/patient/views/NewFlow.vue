@@ -5,6 +5,10 @@
       :subScreens="componentData.subScreens"
       @alert="openAlert"
       @next="next"
+      @to="toScreen($event)"
+      :totem="totem"
+      :screen="currentScreen"
+      :vueComponents="componentData"
     >
     </component>
   </Layout>
@@ -28,6 +32,7 @@ type Component as VueComponent,
 import defaultValues from "@/modules/totem/default-values";
 import { findTotem } from "@/modules/totem/repositories/totem.repository";
 import { AlertProps } from "@patient/types";
+import { onBeforeUnmount, onMounted } from "vue";
 import { useRoute, type RouteLocationNormalizedLoaded } from "vue-router";
 
 const alertProps = ref<AlertProps>({
@@ -63,8 +68,9 @@ const layout = ref({
   hideCancel: false,
 });
 
-const screenIndex = ref(2);
-
+const screenIndex = ref(0);
+const idleTimeout = ref<number | null >(null);
+const idleScreenTimeoutValue = ref<number>(8000);
 const currentScreen = computed(() => totem.value.screens[screenIndex.value]);
 
 const componentData = computed(() => {
@@ -90,6 +96,18 @@ onBeforeMount(() => {
   });
 });
 
+onMounted(() => {
+  window.addEventListener("click", resetOnIdle);
+  window.addEventListener("keydown", resetOnIdle);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("click", resetOnIdle);
+  window.removeEventListener("keydown", resetOnIdle);
+  if(idleTimeout.value !== null)
+    clearTimeout(idleTimeout.value);
+});
+
 function cancel() {
   screenIndex.value = 0;
 }
@@ -105,9 +123,35 @@ function next() {
   screenIndex.value++;
 }
 
+function toScreen(screenComponent: ScreenComponent | number) {
+  if (typeof screenComponent === "number") {
+    screenIndex.value = screenComponent;
+    return;
+  }
+
+  screenIndex.value = totem.value.screens.findIndex(
+    (screen) => screen.data.component === screenComponent
+  );
+}
+
 function openAlert(props: AlertProps) {
   alertProps.value = props;
   alert.value = true;
+}
+
+const resetOnIdle = () => {
+  console.log("resetOnIdle");
+  if (idleTimeout.value !== null) {
+    clearTimeout(idleTimeout.value);
+  }
+
+  idleTimeout.value = window.setTimeout(() => {
+    if(screenIndex.value !== 0)
+      clear();
+  }, idleScreenTimeoutValue.value);
+}
+function clear() {
+  screenIndex.value = 0;
 }
 
 function importModules() {
@@ -125,6 +169,7 @@ function importModules() {
     if (components.value[rootComponent] === undefined) {
       components.value[rootComponent] = {
         component: {},
+        actualSubScreen: "",
         subScreens: {},
       };
     }
