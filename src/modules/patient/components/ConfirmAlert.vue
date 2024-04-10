@@ -1,15 +1,15 @@
 <template>
   <v-dialog v-model="dialog" persistent fullscreen class="totem">
       <div class="bg-white">
-        <v-img :src="logo" max-width="194"></v-img>
+        <v-img class="ml-15 mt-8" :src="logo" max-width="194"></v-img>
       </div>
 
       <div class="d-flex bg-white align-center justify-center fill-height w-100">
           <div>
-            <p class="font-weight-bold text-center mb-6" style="font-size: 1.4em">
-                {{ title }}
+            <p class="text-center mb-6" style="font-size: 1.4em">
+                <span class="font-weight-bold"> {{ title }} </span>
 
-                <div  v-html="textToShow"></div>
+                <div v-html="textToShow"></div>
             </p>
 
             <div  v-if="action.type == 'choise'">
@@ -21,8 +21,8 @@
               </v-btn>
             </div>
             
-            <div v-else>
-              <v-btn variant="text" color="primary" @click="dialog = false">
+            <div v-else class="d-flex justify-center">
+              <v-btn ariant="flat"  rounded width="350" color="primary" @click="dialog = false; action?.callback ? action.callback(): null">
                 {{ action.label }}
               </v-btn>
             </div>

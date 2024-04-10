@@ -116,7 +116,7 @@ $font-size:clamp(1.3rem, 1.7vw, 2.7rem) !important;
         font-weight: normal
     }
     p {
-        font-size: $font-size;
+        font-size: 1em !important;
     }
 
     .v-btn {

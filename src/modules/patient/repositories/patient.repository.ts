@@ -118,7 +118,7 @@ const patients: any = {
     }
 }
 
-export function findByIdentifier(identifier: any): Promise<{ data: PatientIdentifier }> {
+export function findByIdentifier(identifier: any): Promise<{ data: any }> {
     return new Promise((res, rej) => {
         setTimeout(() => {
             const cpfs = Object.keys(patients)

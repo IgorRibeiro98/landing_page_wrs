@@ -56,7 +56,7 @@ const identifier = ref("");
 const form = ref(false);
 const formElement = ref<HTMLFormElement>()!
 
-import { AlertProps } from "@patient/types";
+import { AlertProps, Data } from "@patient/types";
 
 interface Emit {
   (event: "alert", options: AlertProps): void;
@@ -69,12 +69,12 @@ const isLoading = ref(false);
 const emit = defineEmits<Emit>();
 
 const props = defineProps<{
-  data: any
+  data: Data
 }>()
 
 const data = computed({
   get: () => props.data,
-  set: (value: any) => emit('update:data', value)
+  set: (value: Data) => emit('update:data', value)
 })
 
 function getUnformattedIdentifier() {
@@ -88,7 +88,6 @@ async function send() {
 
   findByIdentifier(getUnformattedIdentifier())
     .then((res) => {
-      console.log({res})
       data.value.patient = res.data
       emit('next')
     })
