@@ -3,7 +3,7 @@
     <v-col cols="12" md="11">
       <v-row>
         <v-col cols="12">
-          <h1>Digite os 4 primeiros dígitos do seu CPF</h1>
+          <h1>Digite seu CPF no campo abaixo</h1>
         </v-col>
 
         <v-col cols="12" md="7">
