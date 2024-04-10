@@ -2,7 +2,7 @@
   <table
     style="border-spacing: 1.2em; margin: -1.2em;border-collapse: separate; font-size: 20px"
     @pointerdown.prevent
-    v-show="visible"
+    v-show="visible || alwaysVisible"
   >
     <tr v-for="(line, i) in keyboard" :key="i">
       <td
@@ -69,7 +69,8 @@ interface Settings {
 }
 
 const props = defineProps<{
-  modelValue?: boolean
+  modelValue?: boolean;
+  alwaysVisible?: boolean
 }>();
 
 const emit = defineEmits<{
@@ -83,7 +84,7 @@ watch(visible, (value: boolean) => {
 const settings = ref<Settings>({
   button: {
     props: {
-      color: "secondary",
+      color: "none",
       rounded: "lg",
       variant: "outlined",
       size: "small",
@@ -216,16 +217,6 @@ const letterKeyboard: Keyboard = [
 
 const numericKeyboard: Keyboard = [
   [
-  {
-      ...actions.clear,
-      col: 2,
-    },
-    {
-      ...actions.backspace,
-      col: 1,
-    },
-  ],
-  [
     {
       value: 1,
       col: 1,
@@ -269,23 +260,14 @@ const numericKeyboard: Keyboard = [
   ],
   [
     {
-      show: false
-    },
-    {
       value: 0,
       col: 1,
     },
+    {
+      ...actions.clear,
+      col: 2,
+    },
   ],
-  // [
-  //   {
-  //     value: 0,
-  //     col: 1,
-  //   },
-  //   {
-  //     ...actions.clear,
-  //     col: 2,
-  //   },
-  // ],
 ];
 
 const accentKeyboard: Keyboard = [
@@ -553,9 +535,6 @@ function backspaceSelection(element: HTMLInputElement): void {
 
 <style lang="scss">
 .keyboard-key {
-  transition: border 1s, color 1s;
-  border: rgb(var(--v-theme-keyboard)) 2px solid !important;
-  color: rgb(var(--v-theme-keyboard)) !important;
   .text-h4 {
     transition: filter 2s;
     transition-delay: 2s; 
@@ -564,9 +543,10 @@ function backspaceSelection(element: HTMLInputElement): void {
 }
 
 .keyboard-key:active {
-  border: rgb(var(--v-theme-primary)) 2px solid !important;
-  color: rgb(var(--v-theme-primary)) !important;
+  border: rgb(var(--v-theme-keyboard)) 2px solid !important;
+  color: white !important;
   transition: none;
   filter: none;
+  background: rgb(var(--v-theme-keyboard)) !important;
 }
 </style>

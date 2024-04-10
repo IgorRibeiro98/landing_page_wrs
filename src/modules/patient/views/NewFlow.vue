@@ -6,6 +6,7 @@
       @alert="openAlert"
       @next="next"
       @to="toScreen($event)"
+      v-model:data="data"
       :totem="totem"
       :screen="currentScreen"
       :vueComponents="componentData"
@@ -43,6 +44,8 @@ const alertProps = ref<AlertProps>({
     label: "Ok",
   },
 });
+
+const data = ref({})
 
 const alert = ref(false);
 
@@ -152,6 +155,7 @@ const resetOnIdle = () => {
 }
 function clear() {
   screenIndex.value = 0;
+  data.value = {}
 }
 
 function importModules() {
@@ -169,7 +173,6 @@ function importModules() {
     if (components.value[rootComponent] === undefined) {
       components.value[rootComponent] = {
         component: {},
-        actualSubScreen: "",
         subScreens: {},
       };
     }

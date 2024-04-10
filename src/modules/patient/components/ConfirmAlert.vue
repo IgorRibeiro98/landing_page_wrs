@@ -1,40 +1,48 @@
 <template>
-  <v-dialog v-model="dialog" persistent width="900" class="totem">
-    <v-card class="pa-5" width="900">
-      <v-card-title class="px-0">
-        <h1>
-          {{ title }}
-        </h1>
-      </v-card-title>
-      <v-divider></v-divider>
+  <v-dialog v-model="dialog" persistent fullscreen class="totem">
+      <div class="bg-white">
+        <v-img :src="logo" max-width="194"></v-img>
+      </div>
 
-      <v-card-text class="px-0">
-        <h2 v-html="textToShow">
-        </h2>
-      </v-card-text>
+      <div class="d-flex bg-white align-center justify-center fill-height w-100">
+          <div>
+            <p class="font-weight-bold text-center mb-6" style="font-size: 1.4em">
+                {{ title }}
 
-      <v-card-actions class="d-flex justify-center pa-0" v-if="action.type == 'choise'">
-        <v-btn variant="outlined" rounded @click="action.callback(false); dialog = false">
-            {{action.rejectLabel}}
-        </v-btn>
-        <v-btn variant="tonal" rounded color="primary" @click="action.callback(true); dialog = false">
-            {{action.acceptLabel}}
-        </v-btn>
-      </v-card-actions>
+                <div  v-html="textToShow"></div>
+            </p>
 
-      <v-card-actions v-else class="pa-0 d-flex justify-center">
-        <v-btn variant="text" color="primary" @click="dialog = false">
-          {{ action.label }}
-        </v-btn>
-      </v-card-actions>
-    </v-card>
+            <div  v-if="action.type == 'choise'">
+                <v-btn variant="outlined" color="primary" class="mr-4 py-2" width="350" rounded @click="action.callback(false); dialog = false">
+                  {{action.rejectLabel}}
+              </v-btn>
+              <v-btn variant="flat"  rounded width="350" color="primary" @click="action.callback(true); dialog = false">
+                  {{action.acceptLabel}}
+              </v-btn>
+            </div>
+            
+            <div v-else>
+              <v-btn variant="text" color="primary" @click="dialog = false">
+                {{ action.label }}
+              </v-btn>
+            </div>
+          </div>
+      </div>
   </v-dialog>
 </template>
 
 <script lang="ts" setup>
+import appLogo from "@/assets/logo.png";
 import { computed } from "vue";
 
 import { AlertProps } from "@patient/types";
+
+import useTenantStore from "@/modules/tenant/store";
+const tenantStore = useTenantStore();
+
+const logo = computed(() => {
+  return tenantStore.tenant.logo || appLogo;
+});
 
 interface Props extends AlertProps {
   modelValue: boolean

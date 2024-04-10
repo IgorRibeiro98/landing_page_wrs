@@ -4,126 +4,131 @@ const scheduleDate = new Date()
 scheduleDate.setHours(scheduleDate.getHours() + 1)
 
 const patients: any = {
-    '46518973800': {
-        identifier: {
-            id: '1235',
-            first_name: 'Luiz'
-        },
-        cd_pessoa_fisica: '1235',
-        prim_nm_pessoa_fisica: 'Luiz',
-        dt_nascimento: '02/03/1997',
-        nm_pessoa_fisica: 'Luiz Silva',
-        nm_social: null,
-        nm_social_int: null,
-        ie_sexo: "M",
-        nr_seq_genero: null,
-        nr_identidade: "2903040400",
-        nr_cpf: "46518973800",
-        cd_nacionalidade: 199,
-        nr_passaporte: null,
-        nr_reg_geral_estrang: null,
-        ie_estado_civil: 490,
-        nr_ddi_telefone: null,
-        nr_ddd_telefone: "0",
-        nr_telefone: null,
-        nr_ddd_celular: "11",
-        nr_ddi_celular: "55",
-        nr_telefone_celular: "947010101",
-        ds_email: "luiz@gmail.com",
-        cd_religiao: 4,
-        ie_tipo_complemento: 1,
-        tipo_endereco: "Residencial",
-        ds_endereco: "Avenida Paulista",
-        nr_endereco: 1174,
-        ds_complemento: "Apto. 55",
-        cd_cep: "09631111",
-        ds_municipio: "São Paulo",
-        cd_estado: 214,
-        agendamentos: [
+    '11111111111': {
+        id: '1234',
+        first_name: 'Jessica',
+        schedules: [
             {
-                nr_sequencia: 56434467,
-                cd_usuario_convenio: "88888459653390018",
-                cd_pessoa_fisica: "1697706",
-                ds_endereco: "Rua São Joaquim, 94 - Liberdade / São Paulo-SP | Bloco D - 3º Andar",
-                cd_convenio: 136,
-                ds_convenio: "Sul América ",
-                cd_categoria: 20,
-                ds_categoria: "Especial Coletivo (Acesso,Exato,Exato500,Compac,GM Enf, Mega ,Básico,DN,SeletoI)",
-                cd_plano: 28,
-                ds_plano: "Exato",
-                cd_produto: 204,
-                ds_produto: "515",
-                nr_dig_carteirinha: 17,
-                ds_especialidade: "Gastroenterologia",
-                registro_caso: "CR - Telefone",
-                cd_medico: "1170729",
-                medico: "Carlos Augusto Canteras Da Camara",
-                crm: "149119",
-                uf_conselho: "CRM-SP",
-                ie_status_agenda: "N",
-                cd_agenda: 5390,
-                agendado_para: scheduleDate,
-                duracao: 15,
-                cd_tipo_agenda: 3,
-                tp_agenda: "Consultas",
-                procedimento: "Consulta Com Gastroenterologista",
-                cd_setor_agenda: 87593,
-                nm_estabelecimento: "Hospital Vergueiro",
-                nm_pessoa_fisica: "Snouvn Kubpr Qnqn",
-                nr_cpf: "13563956944",
-                nr_seq_proc_interno: "204200",
+                date: new Date().toLocaleString(),
+                specialty: {
+                    id: '12345',
+                    name: 'Ortopedia'
+                },
+                doctor: {
+                    id: '123456',
+                    name: 'Carla Souza'
+                }
             }
+        ],
+    },
+    '22222222222': {
+        id: '1234',
+        first_name: 'Jose',
+        schedules: [
+            {
+                date: new Date().toLocaleString(),
+                specialty: {
+                    id: '12345',
+                    name: 'Ortopedia'
+                },
+                doctor: {
+                    id: '123456',
+                    name: 'Carla Souza'
+                }
+            },
+            {
+                date: new Date().toLocaleString(),
+                specialty: {
+                    id: '12345',
+                    name: 'Dermatologia'
+                },
+                doctor: {
+                    id: '123456',
+                    name: 'Sônia Melo'
+                }
+            }
+        ],
+    },
+    '33333333333': {
+        id: '1234',
+        first_name: 'Jessica',
+        schedules: [
+            {
+                date: new Date().toLocaleString(),
+                specialty: {
+                    id: '12345',
+                    name: 'Ortopedia'
+                },
+                doctor: {
+                    id: '123456',
+                    name: 'Carla Souza'
+                }
+            },
+            {
+                date: new Date().toLocaleString(),
+                specialty: {
+                    id: '12345',
+                    name: 'Ginecologia'
+                },
+                doctor: {
+                    id: '123456',
+                    name: 'João Paulo'
+                }
+            },
+            {
+                date: new Date().toLocaleString(),
+                specialty: {
+                    id: '12345',
+                    name: 'Dermatologia'
+                },
+                doctor: {
+                    id: '123456',
+                    name: 'Sônia Melo'
+                }
+            }
+        ],
+    },
+    '00000000000': {
+        id: '00000',
+        first_name: 'Mariana',
+        schedules: [
+            {
+                date: new Date((new Date()).setDate((new Date().getDate() +2))).toLocaleString(),
+                specialty: {
+                    id: '12345',
+                    name: 'Ortopedia'
+                },
+                doctor: {
+                    id: '123456',
+                    name: 'Carla Souza'
+                }
+            },
+            {
+                date: new Date((new Date()).setDate((new Date().getDate() +3))).toLocaleString(),
+                specialty: {
+                    id: '12345',
+                    name: 'Ginecologia'
+                },
+                doctor: {
+                    id: '123456',
+                    name: 'João Paulo'
+                }
+            },
         ]
-    },
-    '46518973803': {
-        identifier: {
-            id: '1234',
-            first_name: 'João'
-        },
-        cd_pessoa_fisica: '1234',
-        prim_nm_pessoa_fisica: 'João',
-        dt_nascimento: '02/03/1997',
-        nm_pessoa_fisica: 'João Apostulo Neto',
-        nm_social: null,
-        nm_social_int: null,
-        ie_sexo: "M",
-        nr_seq_genero: null,
-        nr_identidade: "2903040400",
-        nr_cpf: "46518973800",
-        cd_nacionalidade: 199,
-        nr_passaporte: null,
-        nr_reg_geral_estrang: null,
-        ie_estado_civil: 490,
-        nr_ddi_telefone: null,
-        nr_ddd_telefone: "0",
-        nr_telefone: null,
-        nr_ddd_celular: "11",
-        nr_ddi_celular: "55",
-        nr_telefone_celular: "947010101",
-        ds_email: "joao@gmail.com",
-        cd_religiao: 4,
-        ie_tipo_complemento: 1,
-        tipo_endereco: "Residencial",
-        ds_endereco: "Avenida dos Estados",
-        nr_endereco: 1000,
-        ds_complemento: "",
-        cd_cep: "09631111",
-        ds_municipio: "São Paulo",
-        cd_estado: 214,
-    },
+    }
 }
 
 export function findByIdentifier(identifier: any): Promise<{ data: PatientIdentifier }> {
     return new Promise((res, rej) => {
         setTimeout(() => {
-            const cpfs = ['46518973800', '46518973803']
+            const cpfs = Object.keys(patients)
 
             if (!cpfs.includes(identifier)) return rej(new Error(`Paciente ${identifier} não foi encontrado`))
 
             const patient: any = patients[identifier]
 
             return res({
-                data: patient.identifier
+                data: patient
             })
         }, 2000)
     })
