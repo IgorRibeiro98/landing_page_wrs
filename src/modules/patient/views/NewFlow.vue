@@ -1,15 +1,13 @@
 <template>
   <Layout @back="back" @cancel="cancel" v-bind="layout">
     <component
-      :is="componentData.component"
-      :subScreens="componentData.subScreens"
+      :is="currentFlowScreenComponent"
       @alert="openAlert"
       @next="next"
       @to="toScreen($event)"
       v-model:data="data"
       :totem="totem"
-      :screen="currentScreen"
-      :vueComponents="componentData"
+      :screen="currentFlowScreen"
     >
     </component>
   </Layout>
@@ -37,15 +35,15 @@ import { onBeforeUnmount, onMounted } from "vue";
 import { useRoute, type RouteLocationNormalizedLoaded } from "vue-router";
 
 const alertProps = ref<AlertProps>({
-  title: "CPF Inválido",
-  text: "O CPF informado não é válido. Por favor, verifique e tente novamente.",
+  title: "",
+  text: "",
   action: {
     type: "confirm",
     label: "Ok",
   },
 });
 
-const data = ref({})
+const data = ref({});
 
 const alert = ref(false);
 
@@ -55,15 +53,7 @@ const id = computed(() => route.params.id as string);
 
 const totem = ref(structuredClone(defaultValues.totem));
 
-type SubScreen = Record<string, VueComponent>;
-
-type Component = Record<
-  ScreenComponent,
-  {
-    component: VueComponent;
-    subScreens: SubScreen;
-  }
->;
+type Component = Record<string, VueComponent>;
 
 const components = shallowRef<Component>({} as Component);
 const layout = ref({
@@ -72,14 +62,35 @@ const layout = ref({
 });
 
 const screenIndex = ref(0);
-const idleTimeout = ref<number | null >(null);
-const idleScreenTimeoutValue = ref<number>(8000);
-const currentScreen = computed(() => totem.value.screens[screenIndex.value]);
+const subScreenComponent = ref("");
 
-const componentData = computed(() => {
-  if (!currentScreen.value) return components.value["Loading"];
+const idleTimeout = ref<number | null>(null);
+const idleScreenTimeoutSeconds = ref<number>(60 * 5);
 
-  return components.value[currentScreen.value.data.component];
+const currentScreen = computed(() => {
+  return totem.value.screens[screenIndex.value]?.data;
+});
+
+const currentSubScreen = computed(() => {
+  if (subScreenComponent.value === "") return undefined;
+
+  return findSubscreenByComponentName(
+    currentScreen.value,
+    subScreenComponent.value
+  );
+});
+
+const currentFlowScreen = computed(() => {
+  if (subScreenComponent.value === "") return currentScreen.value;
+
+  return currentSubScreen.value;
+});
+
+const currentFlowScreenComponent = computed(() => {
+  if (!currentFlowScreen.value) return components.value["Loading"];
+  const importComponent = components.value[currentFlowScreen.value.component];
+  if(!importComponent) openFlowError('component-not-found');
+  return components.value[currentFlowScreen.value.component];
 });
 
 watch(screenIndex, (value: number) => {
@@ -107,18 +118,34 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener("click", resetOnIdle);
   window.removeEventListener("keydown", resetOnIdle);
-  if(idleTimeout.value !== null)
-    clearTimeout(idleTimeout.value);
+  if (idleTimeout.value !== null) clearTimeout(idleTimeout.value);
 });
 
 function cancel() {
   screenIndex.value = 0;
+  subScreenComponent.value = "";
 }
 
 function back() {
   screenIndex.value--;
 }
 function next() {
+  const nextSubScreen = findNextSubscreen(
+    currentScreen.value,
+    currentSubScreen.value
+  );
+
+  if (!nextSubScreen) {
+    nextScreen();
+    return;
+  }
+
+  subScreenComponent.value = nextSubScreen.component;
+}
+
+function nextScreen() {
+  subScreenComponent.value = "";
+
   if (screenIndex.value == totem.value.screens.length - 1) {
     screenIndex.value = 0;
     return;
@@ -126,20 +153,41 @@ function next() {
   screenIndex.value++;
 }
 
-function toScreen(screenComponent: ScreenComponent | number) {
-  if (typeof screenComponent === "number") {
-    screenIndex.value = screenComponent;
+function toScreen(screenComponentName: string) {
+  const findSubScreen = findSubscreenByComponentName(
+    currentScreen.value,
+    screenComponentName
+  );
+  // debugger
+  if (findSubScreen) {
+    subScreenComponent.value = findSubScreen.component;
     return;
   }
 
-  screenIndex.value = totem.value.screens.findIndex(
-    (screen) => screen.data.component === screenComponent
-  );
+  setMainScreenByComponentName(screenComponentName);
+}
+
+function setMainScreenByComponentName(componentName: string) {
+  const findScreen = findScreenByComponentName(componentName);
+
+  if (!findScreen) return openFlowError('flow-not-found');;
+  subScreenComponent.value = "";
+  screenIndex.value = totem.value.screens.indexOf(findScreen);
 }
 
 function openAlert(props: AlertProps) {
   alertProps.value = props;
   alert.value = true;
+}
+function openFlowError(errorCode: string) {
+  openAlert({
+    title: "Erro de sistema",
+    text: `Favor entrar em contato com a equipe de TI. (erro: ${errorCode})`,
+    action: {
+      type: "confirm",
+      label: "Ok",
+    },
+  });
 }
 
 const resetOnIdle = () => {
@@ -149,50 +197,63 @@ const resetOnIdle = () => {
   }
 
   idleTimeout.value = window.setTimeout(() => {
-    if(screenIndex.value !== 0)
-      clear();
-  }, idleScreenTimeoutValue.value);
+    if (screenIndex.value !== 0) clear();
+  }, idleScreenTimeoutSeconds.value * 1000);
+};
+
+function findSubscreenByComponentName(screen: Screens, componentName: string) {
+  return screen.subscreens.find(
+    (subscreen) => subscreen.component === componentName
+  );
 }
+
+function findScreenByComponentName(componentName: string) {
+  return totem.value.screens.find(
+    (screen) => screen.data.component === componentName
+  );
+}
+
+function findNextSubscreen(
+  currentScreen: Screens,
+  currentSubScreenFind: SubScreen | undefined
+): Screens | undefined {
+  if (currentScreen.subscreens.length === 0) return undefined;
+
+  if (!currentSubScreenFind) return currentScreen.subscreens[0];
+
+  const currentIndex = currentScreen.subscreens.findIndex(
+    (subscreen) =>
+      subscreen.component === (currentSubScreenFind.component as any)
+  );
+
+  const nextSubScreen = currentScreen.subscreens[currentIndex + 1];
+
+  if (nextSubScreen === undefined) return undefined;
+
+  if (nextSubScreen.order === currentSubScreenFind.order) {
+    return findNextSubscreen(currentScreen, nextSubScreen);
+  }
+
+  return currentScreen.subscreens[currentIndex + 1];
+}
+
 function clear() {
   screenIndex.value = 0;
-  data.value = {}
+  subScreenComponent.value = "";
+  data.value = {};
 }
 
 function importModules() {
   for (const path in modules) {
-    const basePath = path.replace("/src/modules/patient/views/totem/", "");
     const componentName = getComponentNameByPath(path) as ScreenComponent;
 
     if (componentName === null) continue;
-
-    const isSubScreen = basePath.includes("/");
-    const rootComponent = (
-      isSubScreen ? basePath.split("/")[0] : componentName
-    ) as ScreenComponent;
-
-    if (components.value[rootComponent] === undefined) {
-      components.value[rootComponent] = {
-        component: {},
-        subScreens: {},
-      };
-    }
-
-    if (!isSubScreen || isComponentNameEqualToPreviousFolder(path)) {
-      components.value[rootComponent].component = modules[path].default;
-    } else {
-      components.value[rootComponent].subScreens[componentName] =
-        modules[path].default;
-    }
+    components.value[componentName] = modules[path].default;
   }
 }
 
 function getComponentNameByPath(path: string) {
   const match = path.match(/\/([^\/]+)\.vue$/);
   return match ? match[1] : null;
-}
-
-function isComponentNameEqualToPreviousFolder(path: string) {
-  const match = path.match(/\/([^\/]+)\/([^\/]+)\.vue$/);
-  return match ? match[1] === match[2] : false;
 }
 </script>

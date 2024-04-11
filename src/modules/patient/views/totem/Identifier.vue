@@ -47,7 +47,7 @@
 
 <script lang="ts" setup>
 import VirtualKeyboard from "@/components/VirtualKeyboard.vue";
-import { ref, computed } from "vue";
+import { computed, ref } from "vue";
 
 import { cpf, required } from "@/rules";
 import { findByIdentifier } from "@patient/repositories/patient.repository";
@@ -61,7 +61,7 @@ import { AlertProps, Data } from "@patient/types";
 interface Emit {
   (event: "alert", options: AlertProps): void;
   (event: "next"): void;
-  (event: "to", value: ScreenComponent | number): void;
+  (event: "to", value: string): void;
   (event: "update:data", value: any): void;
 }
 
@@ -103,17 +103,16 @@ function openAlert(text: string | Error) {
         text: "Não se preocupe! Vamos te encaminhar para a recepção",
         action: {
           type: "choise",
+          rejectLabel: "Tentar novamente",
           acceptLabel: "Ok, entendi",
-          rejectLabel: "Finalizar",
           callback(accept: boolean) {
-            if (accept) {
+            if (!accept) {
               identifier.value = "";
-              console.log('continuar')
               setTimeout(() => formElement.value!.focus(), 500)
             }
-            else console.log('emitir senha')
+            else emit("to", 'Queues');
           }
-        },
+        }
   });
 }
 </script>

@@ -34,6 +34,10 @@ const patients: any = {
                 doctor: {
                     id: '123456',
                     name: 'Carla Souza'
+                },
+                conventant: {
+                  id: '123456',
+                  name: 'Unimed'
                 }
             },
             {
@@ -45,6 +49,10 @@ const patients: any = {
                 doctor: {
                     id: '123456',
                     name: 'Sônia Melo'
+                },
+                conventant: {
+                  id: '123456',
+                  name: 'Unimed'
                 }
             }
         ],
@@ -62,6 +70,10 @@ const patients: any = {
                 doctor: {
                     id: '123456',
                     name: 'Carla Souza'
+                },
+                conventant: {
+                  id: '123456',
+                  name: 'Unimed'
                 }
             },
             {
@@ -73,6 +85,10 @@ const patients: any = {
                 doctor: {
                     id: '123456',
                     name: 'João Paulo'
+                },
+                conventant: {
+                  id: '123456',
+                  name: 'Leve Saúde'
                 }
             },
             {
@@ -84,6 +100,10 @@ const patients: any = {
                 doctor: {
                     id: '123456',
                     name: 'Sônia Melo'
+                },
+                conventant: {
+                  id: '123456',
+                  name: 'Unimed'
                 }
             }
         ],
@@ -101,6 +121,10 @@ const patients: any = {
                 doctor: {
                     id: '123456',
                     name: 'Carla Souza'
+                },
+                conventant: {
+                  id: '123456',
+                  name: 'Unimed'
                 }
             },
             {
@@ -112,6 +136,10 @@ const patients: any = {
                 doctor: {
                     id: '123456',
                     name: 'João Paulo'
+                },
+                conventant: {
+                  id: '123456',
+                  name: 'Leve'
                 }
             },
         ]

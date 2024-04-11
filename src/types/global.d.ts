@@ -22,8 +22,12 @@ declare global {
     description?: string
     fields: ScreenField[]
     traits: any[]
+    subscreens: SubScreen[]
   }
 
+  interface SubScreen extends Screens {
+    order: number
+  }
 
   type SendType = 'password' | 'print' | 'sms' | 'qrcode'
 

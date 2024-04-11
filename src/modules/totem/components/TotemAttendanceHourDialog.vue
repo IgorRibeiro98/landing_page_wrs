@@ -113,6 +113,7 @@ const formDialog = ref<FormDialog>({
           items: weekDaysIso,
           itemTitle: "name",
           itemValue: "weekday_iso",
+          autoSelectFirst: true,
         },
       },
       {

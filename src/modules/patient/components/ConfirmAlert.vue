@@ -13,16 +13,16 @@
             </p>
 
             <div  v-if="action.type == 'choise'">
-                <v-btn variant="outlined" color="primary" class="mr-4 py-2" width="350" rounded @click="action.callback(false); dialog = false">
+                <v-btn variant="outlined" color="primary" class="mr-4 py-2" width="350" rounded @click="executeCallBack(false)">
                   {{action.rejectLabel}}
               </v-btn>
-              <v-btn variant="flat"  rounded width="350" color="primary" @click="action.callback(true); dialog = false">
+              <v-btn variant="flat"  rounded width="350" color="primary" @click="executeCallBack()">
                   {{action.acceptLabel}}
               </v-btn>
             </div>
-            
+
             <div v-else class="d-flex justify-center">
-              <v-btn ariant="flat"  rounded width="350" color="primary" @click="dialog = false; action?.callback ? action.callback(): null">
+              <v-btn ariant="flat"  rounded width="350" color="primary" @click="executeCallBack()">
                 {{ action.label }}
               </v-btn>
             </div>
@@ -46,7 +46,7 @@ const logo = computed(() => {
 
 interface Props extends AlertProps {
   modelValue: boolean
-} 
+}
 
 const props = defineProps<Props>();
 
@@ -63,6 +63,18 @@ const dialog = computed({
   },
 });
 
+function executeCallBack(accept: boolean = true) {
+  dialog.value = false;
+
+  if (props.action.type === 'choise') {
+    props.action.callback(accept);
+    return;
+  }
+
+  if (props.action?.callback) {
+    props.action.callback();
+  }
+}
 const textToShow = computed(() => {
   return props.text instanceof Error ? props.text.message : props.text;
 });
