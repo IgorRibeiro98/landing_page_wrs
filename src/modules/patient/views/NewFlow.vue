@@ -1,5 +1,12 @@
 <template>
-  <Layout @back="back" @cancel="cancel" v-bind="layout">
+  <div v-if="isDev" style="position:absolute">
+    <div>
+      Histórico:
+      <span v-for="component in history">{{ component }} /</span>
+    </div>
+    <p class="text-primary">{{ currentFlowScreen?.component }}</p>
+  </div>
+  <Layout @back="backHistory" @cancel="cancel" v-bind="layout">
     <component
       :is="currentFlowScreenComponent"
       @alert="openAlert"
@@ -17,8 +24,6 @@
 
 <script lang="ts" setup>
 import ConfirmAlert from "@/modules/patient/components/ConfirmAlert.vue";
-import Layout from "@/modules/patient/layouts/Default.vue";
-
 import {
 computed,
 onBeforeMount,
@@ -27,7 +32,9 @@ shallowRef,
 watch,
 type Component as VueComponent,
 } from "vue";
+const to = ref("");
 
+import Layout from "@/modules/patient/layouts/Default.vue";
 import defaultValues from "@/modules/totem/default-values";
 import { findTotem } from "@/modules/totem/repositories/totem.repository";
 import { AlertProps } from "@patient/types";
@@ -43,6 +50,8 @@ const alertProps = ref<AlertProps>({
   },
 });
 
+const history = ref<string[]>([]);
+const last = ref<string>("");
 const data = ref({});
 
 const alert = ref(false);
@@ -60,7 +69,7 @@ const layout = ref({
   hideBack: true,
   hideCancel: false,
 });
-
+const isDev = import.meta.env.MODE === "development";
 const screenIndex = ref(0);
 const subScreenComponent = ref("");
 
@@ -89,12 +98,23 @@ const currentFlowScreen = computed(() => {
 const currentFlowScreenComponent = computed(() => {
   if (!currentFlowScreen.value) return components.value["Loading"];
   const importComponent = components.value[currentFlowScreen.value.component];
-  if(!importComponent) openFlowError('component-not-found');
+  if (!importComponent) openFlowError("component-not-found");
   return components.value[currentFlowScreen.value.component];
 });
 
 watch(screenIndex, (value: number) => {
-  if (value == 0) layout.value.hideBack = true;
+  if (value == 0) return layout.value.hideBack = true;
+  layout.value.hideBack = false;
+});
+
+watch(currentFlowScreen, (currentValue, oldValue) => {
+  if (
+    currentValue?.component === last.value ||
+    (!oldValue?.component && last.value === "")
+  )
+    return;
+  if(screenIndex.value === 0) return;
+  history.value.push(oldValue!.component);
 });
 
 const modules: Record<string, any> = import.meta.glob(
@@ -124,10 +144,19 @@ onBeforeUnmount(() => {
 function cancel() {
   screenIndex.value = 0;
   subScreenComponent.value = "";
+  last.value = "";
+  history.value = [];
 }
 
-function back() {
-  screenIndex.value--;
+function backHistory() {
+  if (history.value.length === 0) return;
+
+  last.value = history.value.pop()!;
+  const result = findScreenInTotemByComponentName(last.value);
+  if (result) {
+    screenIndex.value = result.index;
+    subScreenComponent.value = result.subScreenComponent;
+  }
 }
 function next() {
   const nextSubScreen = findNextSubscreen(
@@ -170,7 +199,7 @@ function toScreen(screenComponentName: string) {
 function setMainScreenByComponentName(componentName: string) {
   const findScreen = findScreenByComponentName(componentName);
 
-  if (!findScreen) return openFlowError('flow-not-found');;
+  if (!findScreen) return openFlowError("flow-not-found");
   subScreenComponent.value = "";
   screenIndex.value = totem.value.screens.indexOf(findScreen);
 }
@@ -191,7 +220,6 @@ function openFlowError(errorCode: string) {
 }
 
 const resetOnIdle = () => {
-  console.log("resetOnIdle");
   if (idleTimeout.value !== null) {
     clearTimeout(idleTimeout.value);
   }
@@ -211,6 +239,35 @@ function findScreenByComponentName(componentName: string) {
   return totem.value.screens.find(
     (screen) => screen.data.component === componentName
   );
+}
+function findScreenInTotemByComponentName(componentName: string) {
+  let result = null;
+
+  for (let i = 0; i < totem.value.screens.length; i++) {
+    const screen = totem.value.screens[i];
+    if (screen.data.component === componentName) {
+      result = {
+        index: i,
+        subScreenComponent: "",
+      };
+      break;
+    }
+
+    for (let j = 0; j < screen.data.subscreens.length; j++) {
+      const subscreen = screen.data.subscreens[j];
+      if (subscreen.component === componentName) {
+        result = {
+          index: i,
+          subScreenComponent: subscreen.component,
+        };
+        break;
+      }
+    }
+
+    if (result) break;
+  }
+
+  return result;
 }
 
 function findNextSubscreen(
