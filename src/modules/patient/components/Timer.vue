@@ -1,19 +1,18 @@
 <template>
-    <div class="text-end">
-        <v-progress-linear class="progress" height="30" v-model="porcentage" color="primary">
-            <span class="font-weight-bold text-secondary text-h4" v-if="!hideNumber">
-                {{ timer }}
-            </span>
-        </v-progress-linear>
-    </div>
+    <v-progress-linear class="progress" height="6" v-model="porcentage" color="primary">
+        <span class="font-weight-bold text-secondary text-h4" v-if="!hideNumber">
+            {{ timer }}
+        </span>
+    </v-progress-linear>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, withDefaults, watch } from 'vue'
+import { ref, computed, onMounted, withDefaults, watch, defineExpose } from 'vue'
 
 interface Props {
     time?: number
     hideNumber?: boolean
+    startManual?: boolean
 }
 
 interface PropsWithDefaults extends Props {
@@ -23,8 +22,15 @@ interface PropsWithDefaults extends Props {
 const props = withDefaults(defineProps<Props>(), {
     time: 15,
     hideNumber: false,
+    startManual: false
 })
-const emit = defineEmits(['timerEnd'])
+const emit = defineEmits<{
+    (event: 'end'): void
+}>()
+
+defineExpose({
+    start
+})
 
 const timer = ref(props.time);
 const interval = ref<any>();
@@ -35,7 +41,7 @@ watch(props, (current: PropsWithDefaults, old: PropsWithDefaults) => {
 
     timer.value = props.time
     clearTime()
-    startTimer()
+    start()
 })
 
 function clearTime() {
@@ -45,17 +51,27 @@ function clearTime() {
 
 const porcentage = computed(() => (timer.value * 100) / props.time);
 
-function startTimer() {
+function start() {
     interval.value = setInterval(() => {
         timer.value--;
     }, 1000);
 
     timeout.value = setTimeout(() => {
         clearInterval(interval.value);
-        emit('timerEnd');
+        emit('end');
     }, props.time * 1000);
 }
 
-onMounted(() => startTimer())
+onMounted(() => {
+    if (props.startManual) return 
+    
+    start()
+})
 
 </script>
+
+<style scoped>
+.progress {
+  transition: all 1s linear;
+}
+</style>

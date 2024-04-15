@@ -19,6 +19,11 @@ export interface AlertProps {
     text: Error | string
 }
 
+export interface LoadingProps {
+    text: string;
+    callback(loading: Ref<boolean>): void
+}
+
 interface Schedule {
     date: string;
     specialty: {

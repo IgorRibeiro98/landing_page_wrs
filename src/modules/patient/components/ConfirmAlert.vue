@@ -1,9 +1,6 @@
 <template>
   <v-dialog v-model="dialog" persistent fullscreen class="totem">
-      <div class="bg-white">
-        <v-img class="ml-15 mt-8" :src="logo" max-width="194"></v-img>
-      </div>
-
+    <BaseLayout class="bg-white">
       <div class="d-flex bg-white align-center justify-center fill-height w-100">
           <div>
             <p class="text-center mb-6" style="font-size: 1.4em">
@@ -28,6 +25,7 @@
             </div>
           </div>
       </div>
+    </BaseLayout>
   </v-dialog>
 </template>
 
@@ -37,12 +35,7 @@ import { computed } from "vue";
 
 import { AlertProps } from "@patient/types";
 
-import useTenantStore from "@/modules/tenant/store";
-const tenantStore = useTenantStore();
-
-const logo = computed(() => {
-  return tenantStore.tenant.logo || appLogo;
-});
+import BaseLayout from "./BaseLayout.vue";
 
 interface Props extends AlertProps {
   modelValue: boolean
