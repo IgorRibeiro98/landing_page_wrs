@@ -162,7 +162,7 @@ function save() {
     const formData = new FormData()
 
     Object.entries(payload).forEach(([key, value]: any) => {
-        formData.append(key, value)
+        formData.append(key, value ?? null)
     })
 
     if (file.value.eddited)
