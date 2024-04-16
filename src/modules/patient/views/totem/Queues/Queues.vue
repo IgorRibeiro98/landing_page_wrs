@@ -51,8 +51,6 @@ const data = computed({
 function checkQueue(queue: QueueTotem) {
   const currentWeekDayIso = new Date().getDay();
 
-  console.log({ currentWeekDayIso })
-
   const currentAttendanceHour = queue.attendance_hours.find((attendanceType) => {
     return attendanceType.weekday_iso == currentWeekDayIso
   })

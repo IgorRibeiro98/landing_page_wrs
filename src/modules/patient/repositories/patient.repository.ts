@@ -5,7 +5,7 @@ scheduleDate.setHours(scheduleDate.getHours() + 1)
 
 const patients: any = {
     '11111111111': {
-        id: '1234',
+        id: '11111111111',
         first_name: 'Jessica',
         schedules: [
             {
@@ -22,7 +22,7 @@ const patients: any = {
         ],
     },
     '22222222222': {
-        id: '1234',
+        id: '22222222222',
         first_name: 'Jose',
         schedules: [
             {
@@ -58,7 +58,7 @@ const patients: any = {
         ],
     },
     '33333333333': {
-        id: '1234',
+        id: '33333333333',
         first_name: 'Jessica',
         schedules: [
             {
@@ -109,7 +109,7 @@ const patients: any = {
         ],
     },
     '00000000000': {
-        id: '00000',
+        id: '00000000000',
         first_name: 'Mariana',
         schedules: [
             {
@@ -143,7 +143,13 @@ const patients: any = {
                 }
             },
         ]
-    }
+    },
+    '44444444444': {
+        id: '44444444444',
+        first_name: 'Mariana',
+        schedules: []
+    },
+
 }
 
 export function findByIdentifier(identifier: any): Promise<{ data: any }> {
@@ -151,7 +157,7 @@ export function findByIdentifier(identifier: any): Promise<{ data: any }> {
         setTimeout(() => {
             const cpfs = Object.keys(patients)
 
-            if (!cpfs.includes(identifier)) return rej(new Error(`Paciente ${identifier} não foi encontrado`))
+            if (!cpfs.includes(identifier)) return rej(`Não foi possível encontrar o seu cadastro`)
 
             const patient: any = patients[identifier]
 

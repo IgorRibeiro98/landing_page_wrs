@@ -12,18 +12,22 @@
       @alert="openAlert"
       @next="next"
       @to="toScreen($event)"
+      @cancel="cancel"
+      @loading="openLoading"
       v-model:data="data"
       :totem="totem"
       :screen="currentFlowScreen"
     >
     </component>
-  </Layout>
 
-  <ConfirmAlert v-model="alert" v-bind="alertProps" />
+    <ConfirmAlert v-model="alert" v-bind="alertProps" />
+    <Loading v-model="loading" v-bind="loadingProps"/>
+  </Layout>
 </template>
 
 <script lang="ts" setup>
 import ConfirmAlert from "@/modules/patient/components/ConfirmAlert.vue";
+import Loading from "@patient/components/Loading.vue";
 import {
 computed,
 onBeforeMount,
@@ -37,9 +41,12 @@ const to = ref("");
 import Layout from "@/modules/patient/layouts/Default.vue";
 import defaultValues from "@/modules/totem/default-values";
 import { findTotem } from "@/modules/totem/repositories/totem.repository";
-import { AlertProps } from "@patient/types";
+import { AlertProps, LoadingProps } from "@patient/types";
 import { onBeforeUnmount, onMounted } from "vue";
 import { useRoute, type RouteLocationNormalizedLoaded } from "vue-router";
+
+const alert = ref(false);
+const loading = ref(false);
 
 const alertProps = ref<AlertProps>({
   title: "",
@@ -50,11 +57,14 @@ const alertProps = ref<AlertProps>({
   },
 });
 
+const loadingProps = ref<LoadingProps>({
+  text: '',
+  callback: (_: boolean) => {}
+})
+
 const history = ref<string[]>([]);
 const last = ref<string>("");
 const data = ref({});
-
-const alert = ref(false);
 
 const route: RouteLocationNormalizedLoaded = useRoute();
 
@@ -141,9 +151,18 @@ onBeforeUnmount(() => {
   if (idleTimeout.value !== null) clearTimeout(idleTimeout.value);
 });
 
+function openLoading(lProps: LoadingProps) {
+  console.log('open loading')
+  console.log(lProps)
+  loading.value = true;
+  loadingProps.value = lProps
+  lProps.callback(loading)
+}
+
 function cancel() {
   screenIndex.value = 0;
   subScreenComponent.value = "";
+  data.value = {};
   last.value = "";
   history.value = [];
 }
@@ -225,7 +244,7 @@ const resetOnIdle = () => {
   }
 
   idleTimeout.value = window.setTimeout(() => {
-    if (screenIndex.value !== 0) clear();
+    if (screenIndex.value !== 0) cancel();
   }, idleScreenTimeoutSeconds.value * 1000);
 };
 
@@ -292,12 +311,6 @@ function findNextSubscreen(
   }
 
   return currentScreen.subscreens[currentIndex + 1];
-}
-
-function clear() {
-  screenIndex.value = 0;
-  subScreenComponent.value = "";
-  data.value = {};
 }
 
 function importModules() {

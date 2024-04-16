@@ -5,6 +5,7 @@ import { useSystemStore } from '@/stores/system'
 export const layouts = {
   default: () => import('@/layouts/Default.vue'),
   totem: () => import('@/layouts/Totem.vue'),
+  queue: () => import('@/layouts/Queue.vue'),
 }
 
 const routes: RouteRecordRaw[] = []

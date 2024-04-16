@@ -4,6 +4,12 @@ import { type RouteLocationRaw } from 'vue-router';
 declare global {
   type ScreenComponent = 'Identifier' | 'Schedule' | 'Signature' | 'Queues' | 'Loading'
 
+  interface Window {
+      api: {
+        print({value: string, site: string})
+      }
+  }
+
   interface ScreenField {
     id: number
     slug: string
@@ -39,11 +45,17 @@ declare global {
       birth_date: string;
     },
     password_send_type: string;
-    patient?: Patient;
-    queue?: Queue;
     password: Password;
+
+    patient?: PatientIdentifier;
+    queue?: QueueTotem;
+    ticket?: Ticket
   }
 
+  interface Ticket {
+    value: string;
+    site: string;
+  }
   // interface Queue {
   //     id: number;
   //     name: string;

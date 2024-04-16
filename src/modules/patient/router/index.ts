@@ -12,6 +12,17 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('@patient/views/NewFlow.vue')
             },
         ],
+    },
+    {
+        path: '/senha',
+        component: () => layouts.queue(),
+        children: [
+            {
+                path: '',
+                name: 'Password',
+                component: () => import('@patient/views/Password.vue')
+            },
+        ],
     }
 ]
 

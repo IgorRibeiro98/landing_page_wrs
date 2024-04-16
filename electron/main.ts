@@ -5,6 +5,10 @@ import { contentType } from 'mime-types'
 import { join, extname } from 'path'
 import { readFile } from 'fs';
 
+import API from './src/api';
+
+const api = new API()
+
 export interface InjectParams {
     mainWindow: BrowserWindow
     developmentServer: boolean
@@ -29,11 +33,15 @@ export class Main {
     onReady(callback: CallableFunction) {
         app.disableHardwareAcceleration();
 
+        api.register((key: string, method: Function) => {
+            ipcMain.handle(key, (_: any, payload: any) => method(payload))
+        })
+
         app.on('ready', (): void => {
             try {
-                const fullscreen: boolean = true
-                const autoHideMenuBar: boolean = true
-                const openDevTools: boolean = false
+                const fullscreen: boolean = false
+                const autoHideMenuBar: boolean = false
+                const openDevTools: boolean = true
 
                 this.createProtocol('app')
                 this.createFileProtocol('storage')
