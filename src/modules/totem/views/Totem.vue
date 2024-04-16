@@ -65,7 +65,7 @@ getTotem,
 import useAlertStore from "@/stores/alert";
 import useSystemStore from "@/stores/system";
 import { onMounted, ref, type Ref } from "vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 
 const headers: any = [
   { title: "ID", value: "id", align: "start", width: "5%" },
@@ -83,7 +83,7 @@ const headers: any = [
 ];
 
 const { openAlert, closeAlert, openConfirmAlert } = useAlertStore();
-
+const router = useRouter();
 const totem = ref<TotemItem>({
   name: "",
   description: "",
@@ -143,6 +143,15 @@ const options = ref<any>([
           .finally(() => {
             loading.value = false;
           });
+      })
+    }
+  },
+  {
+    title: "Executar",
+    action(totem: TotemItem) {
+      router.push({
+        name: 'totem.run',
+        params: { id: totem.id }
       })
     }
   }

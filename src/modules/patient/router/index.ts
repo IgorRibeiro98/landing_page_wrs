@@ -8,7 +8,7 @@ const routes: RouteRecordRaw[] = [
         children: [
             {
                 path: '',
-                name: 'Home',
+                name: 'totem.run',
                 component: () => import('@patient/views/NewFlow.vue')
             },
         ],
