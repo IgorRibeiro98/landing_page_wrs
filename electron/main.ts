@@ -6,6 +6,7 @@ import { join, extname } from 'path'
 import { readFile } from 'fs';
 
 import API from './src/api';
+import { Setting } from './src/setting';
 
 const api = new API()
 
@@ -31,34 +32,55 @@ export class Main {
     }
 
     onReady(callback: CallableFunction) {
+        const path: string = this.developmentServer ? process.cwd() : app.getPath('exe').replace(/[^\\]*.exe$/, '')
+
+        const settings = new Setting({
+            name: 'setting.json',
+            path,
+            default: {
+                openDevTools: false,
+                fullscreen: true,
+                autoHideMenuBar: true,
+                development: {
+                    shouldPrint: true,
+                },
+                printer: {
+                    password: 'Senha'
+                },
+                appURL: 'http://localhost:3000/#'
+            }
+        })
+
         app.disableHardwareAcceleration();
 
+        const injectedParams = {
+            settings,
+            developmentServer: this.developmentServer,
+        }
+
         api.register((key: string, method: Function) => {
-            ipcMain.handle(key, (_: any, payload: any) => method(payload))
+            ipcMain.handle(key, (_: any, payload: any) => method(payload, injectedParams))
         })
 
         app.on('ready', (): void => {
             try {
-                const fullscreen: boolean = false
-                const autoHideMenuBar: boolean = false
-                const openDevTools: boolean = true
-
                 this.createProtocol('app')
                 this.createFileProtocol('storage')
 
                 this.mainWindow = new BrowserWindow({
-                    fullscreen,
-                    autoHideMenuBar,
+                    fullscreen: settings.get('fullscreen'),
+                    autoHideMenuBar: settings.get('autoHideMenuBar'),
                     webPreferences: {
                         nodeIntegration: false,
                         contextIsolation: true,
                         sandbox: false,
                         preload: join(__dirname, 'src', 'preload.js'),
                     },
-                    title: 'App',
+                    title: 'Totem',
                 })
 
-                const url = this.developmentServer ? 'http://localhost:3000' : `app://index.html/#/`
+                // const url = this.developmentServer ? 'http://localhost:3000' : `app://index.html/#/`
+                const url = settings.get('appURL')
 
                 this.loadURLWithRetry(this.mainWindow, url);
 
@@ -67,7 +89,7 @@ export class Main {
                 })
 
                 this.mainWindow.webContents.on('did-finish-load', () => {
-                    if (openDevTools) this.mainWindow.webContents.openDevTools({ mode: 'detach' })
+                    if (settings.get('openDevTools')) this.mainWindow.webContents.openDevTools({ mode: 'detach' })
                 })
 
                 callback(this)

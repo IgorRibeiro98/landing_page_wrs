@@ -9,6 +9,12 @@
     "files": [
         "dist"
     ],
+    "extraFiles": [
+        {
+          "from": "setting.json",
+          "to": "setting.json"
+        }
+    ],
     "electronLanguages": [
         "pt-BR"
     ],
