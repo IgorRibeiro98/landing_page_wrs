@@ -1,6 +1,8 @@
 <template>
     <div class="fill-height d-flex align-center justify-center flex-column">
-        <v-icon color="success" icon="mdi-check-circle-outline" size="200" />
+        <div>
+            <img :src="checkCircle" />
+        </div>
 
         <h1 class="text-success">
             Senha gerada com sucesso! :)
@@ -10,9 +12,8 @@
         </p>
 
         <div class="w-100">
-            <Timer hide-number start-manual :time="15" ref="timer"  @end="$emit('next')" class="mt-4" />
+            <Timer hide-number start-manual :time="15" ref="timer" @end="$emit('next')" class="mt-4" />
         </div>
-
         <iframe :src="url" frameborder="0" class="rounded-xl border mt-6" height="200" v-if="!app"></iframe>
     </div>
 </template>
@@ -21,6 +22,8 @@
 import { computed, onBeforeMount, ref, onMounted } from 'vue'
 import Timer from '@patient/components/Timer.vue'
 import { AlertProps, LoadingProps } from '@/modules/patient/types';
+
+import checkCircle from '@/assets/icons/check-circle.svg'
 
 const props = defineProps<{
     data: Data
@@ -49,6 +52,7 @@ function print() {
             window.api.print(JSON.parse(JSON.stringify(props.data.ticket!)))
                 .then((res: any) => {
                     console.log({ res })
+                    emit('next')
                 })
                 .catch((error: any) => {
                     emit('alert', {
