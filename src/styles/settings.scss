@@ -127,6 +127,10 @@ $font-size:clamp(1.3rem, 1.7vw, 2.7rem) !important;
         text-transform: none !important;
         padding-top: 0.2em;
         padding-bottom: 0.2em;
+
+        .v-btn__content {
+            white-space: pre-wrap;
+        }
     }
 
     .v-text-field {
