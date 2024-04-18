@@ -66,7 +66,9 @@ const loadingProps = ref<LoadingProps>({
 
 const history = ref<string[]>([]);
 const last = ref<string>("");
-const data = ref({});
+const data = ref({
+  internal: {}
+});
 
 const route: RouteLocationNormalizedLoaded = useRoute();
 
@@ -164,7 +166,9 @@ function openLoading(lProps: LoadingProps) {
 function cancel() {
   screenIndex.value = 0;
   subScreenComponent.value = "";
-  data.value = {};
+  data.value = {
+    internal: {},
+  };
   last.value = "";
   history.value = [];
   clearSignatureAttempts()

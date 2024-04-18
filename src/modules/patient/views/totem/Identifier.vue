@@ -89,6 +89,7 @@ async function send() {
   findByIdentifier(getUnformattedIdentifier())
     .then((res) => {
       data.value.patient = res.data
+      data.value.internal.identifier = getUnformattedIdentifier()
       emit('next')
     })
     .catch((error) => {

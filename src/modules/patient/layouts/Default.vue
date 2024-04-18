@@ -1,35 +1,36 @@
 <template>
-  <v-container class="pt-8 px-12 d-flex flex-column totem" fluid style="height: 100%">
-    <div class="flex-grow-0">
+  <div class="d-flex flex-column flex-grow-1 totem" fluid>
+    <div>
       <div>
         <v-img :src="logo" max-width="194"></v-img>
       </div>
-      <div class="d-flex justify-space-between mt-8">
-        <v-btn variant="text" color="primary" @click="emit('back')" :disabled="hideBack">
+      <div class="mt-8 d-flex justify-space-between" style="">
+        <v-btn
+          variant="text"
+          color="primary"
+          @click="emit('back')"
+          :disabled="hideBack"
+        >
           <v-icon class="mr-2" size="30">mdi-chevron-left</v-icon>
           <span class="font-weight-bold">Voltar</span></v-btn
         >
-        <v-btn variant="text" color="primary" @click="emit('cancel')"
-        :disabled="hideCancel"
+        <v-btn
+          variant="text"
+          color="primary"
+          @click="emit('cancel')"
+          :disabled="hideCancel"
           ><span class="font-weight-bold">Cancelar</span></v-btn
         >
       </div>
     </div>
-    <div
-      style="width: 80%; height: 100%"
-      class="flex-grow-1 ma-auto d-flex flex-column"
-    >
-      <v-row class="ma-auto" no-gutters style="height: 100%; width: 100%">
-        <v-col>
-            <slot></slot>
-        </v-col>
-      </v-row>
-      <div class="text-center">
-        <v-divider class="my-4"></v-divider>
-        {{ date }} - {{ hour }}
-      </div>
+    <div style="width: 80%" class="mx-auto flex-grow-1">
+      <slot></slot>
     </div>
-  </v-container>
+    <div class="text-center">
+      <v-divider class="my-4"></v-divider>
+      {{ date }} - {{ hour }}
+    </div>
+  </div>
 </template>
 <script lang="ts" setup>
 import appLogo from "@/assets/logo.png";
@@ -43,15 +44,15 @@ interface Emits {
 }
 
 interface Props {
-  hideBack?: boolean
-  hideCancel?: boolean
+  hideBack?: boolean;
+  hideCancel?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   hideBack: false,
-  hideCancel: false
-})
-const emit = defineEmits<Emits>()
+  hideCancel: false,
+});
+const emit = defineEmits<Emits>();
 const tenantStore = useTenantStore();
 
 const logo = computed(() => {
@@ -66,22 +67,32 @@ const date = computed(() => {
   return `${day} de ${capitalizeFirstLetter(month)} de ${year}`;
 });
 
-const hour = ref('')
+const hour = ref("");
 let timerId: number = 0;
 
 function startHour() {
-  hour.value = new Date().toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' });
+  hour.value = new Date().toLocaleTimeString("pt-BR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
-const now = new Date();
- const msUntilNextMinute = 60000 - (now.getSeconds() * 1000 + now.getMilliseconds());
+  const now = new Date();
+  const msUntilNextMinute =
+    60000 - (now.getSeconds() * 1000 + now.getMilliseconds());
 
- setTimeout(() => {
-   hour.value = new Date().toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' });
+  setTimeout(() => {
+    hour.value = new Date().toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
-   timerId = setInterval(() => {
-     hour.value = new Date().toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' });
-   }, 60000);
- }, msUntilNextMinute);
+    timerId = setInterval(() => {
+      hour.value = new Date().toLocaleTimeString("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    }, 60000);
+  }, msUntilNextMinute);
 }
 onMounted(() => {
   startHour();
