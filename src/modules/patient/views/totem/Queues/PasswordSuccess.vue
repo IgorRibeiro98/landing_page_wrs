@@ -18,8 +18,8 @@
 <script setup lang="ts">
 import { AlertProps, LoadingProps } from "@/modules/patient/types";
 import Timer from "@patient/components/Timer.vue";
-import { computed, onBeforeMount, onMounted, ref } from "vue";
 
+import { computed, onBeforeMount, onMounted, ref, nextTick } from "vue";
 import checkCircle from "@/assets/icons/check-circle.svg";
 
 const props = defineProps<{
@@ -38,8 +38,8 @@ const emit = defineEmits<{
     (event: "loading", payload: LoadingProps): void;
 }>();
 
-const timer = ref();
-const isLoading = ref(true);
+const timer = ref<InstanceType<typeof Timer> | null>(null);
+const isLoading = ref(false)
 
 const app = computed(() => "api" in window ?? false);
 
@@ -49,8 +49,10 @@ function print() {
         callback(loading) {
             window.api
                 .print(JSON.parse(JSON.stringify(props.data.ticket!)))
-                .then((res: any) => {
-                    timer.value.start();
+                .then(() => {
+                    isLoading.value = false;
+                    loading.value = false;
+                    timer.value?.start();
                 })
                 .catch((error: any) => {
                     emit("alert", {
@@ -61,15 +63,12 @@ function print() {
                             label: "Já anotei a minha senha",
                             callback() {
                                 emit("next");
+                                isLoading.value = false;
+                                loading.value = false;
                             },
                         },
                     });
-                    console.log({ error });
                 })
-                .finally(() => {
-                    isLoading.value = false;
-                    loading.value = false;
-                });
         },
     });
 }
@@ -78,10 +77,12 @@ onBeforeMount(() => {
     if (app.value) return print();
 });
 
-onMounted(() => {
+onMounted(async () => {
+    await nextTick();
+
     if (!app.value) {
-        timer.value.start();
         isLoading.value = false;
+        timer.value?.start();
     }
 });
 </script>
