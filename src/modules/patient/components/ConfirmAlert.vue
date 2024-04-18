@@ -9,13 +9,15 @@
                 <div v-html="textToShow"></div>
             </p>
 
-            <div  v-if="action.type == 'choise'">
-                <v-btn variant="outlined" color="primary" class="mr-4 py-2" width="350" rounded @click="executeCallBack(false)">
+            <div  v-if="action.type == 'choise'" class="d-flex justify-center">
+              <div>
+                <v-btn variant="outlined" color="primary" class="mr-2" min-width="350" rounded @click="executeCallBack(false)">
                   {{action.rejectLabel}}
               </v-btn>
-              <v-btn variant="flat"  rounded width="350" color="primary" @click="executeCallBack()">
+              <v-btn variant="flat" min-width="350" rounded color="primary" @click="executeCallBack()">
                   {{action.acceptLabel}}
               </v-btn>
+              </div>
             </div>
 
             <div v-else class="d-flex justify-center">
