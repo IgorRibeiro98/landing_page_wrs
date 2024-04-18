@@ -1,7 +1,7 @@
 <template>
-  <v-row justify="center">
+  <v-row v-if="!isLoading" justify="center">
     <v-col cols="12" sm="auto">
-        <v-sheet @click="$emit('to', 'FaceRecognition')" height="200" v-ripple style="cursor: pointer; white-space: normal;" width="280" class="d-flex align-start justify-center flex-column px-4 py-10" color="transparent" border="sm" rounded="lg">
+        <v-sheet @click="$emit('to', 'FaceRecognition')" v-if="data.patient!.has_face_recognition" height="200" v-ripple style="cursor: pointer; white-space: normal;" width="280" class="d-flex align-start justify-center flex-column px-4 py-10" color="transparent" border="sm" rounded="lg">
           <img :src="faceIcon" height="64"/>
   
           Biometria facial
@@ -24,8 +24,8 @@
   </v-row>
 </template>
 <script lang="ts" setup>
-import { AlertProps } from "@patient/types";
-import { onMounted, ref } from "vue";
+import { AlertProps, Data } from "@patient/types";
+import { onBeforeMount, ref } from "vue";
 import faceIcon from "@/assets/icons/face-id.svg";
 import tokenIcon from "@/assets/icons/passcode-lock.svg";
 
@@ -36,12 +36,32 @@ interface Emit {
 }
 interface Props {
   subScreens: Record<string, any>;
+  data: Data
 }
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emit>();
-const screen = ref("")
 
-onMounted(() => {
+const isLoading = ref(true);
+
+onBeforeMount(() => {
+  if (!props.data.patient?.has_face_recognition) {
+    return emit('alert', {
+      title: 'Como gostaria de realizar o seu check-in?',
+      text: '',
+      action: {
+        type: 'choise',
+        acceptLabel: 'Agilizar com token',
+        rejectLabel: 'Ir para recepção',
+        callback(choice: boolean) {
+          if (choice) return emit('to', 'SendToken')
+
+          emit('to', 'Queues')
+        }
+      }
+    })
+  }
+
+  isLoading.value = false
 })
 </script>

@@ -38,6 +38,8 @@ type Component as VueComponent,
 } from "vue";
 const to = ref("");
 
+import { clearSignatureAttempts } from '@patient/repositories/signature.repository'
+
 import Layout from "@/modules/patient/layouts/Default.vue";
 import defaultValues from "@/modules/totem/default-values";
 import { findTotem } from "@/modules/totem/repositories/totem.repository";
@@ -165,6 +167,7 @@ function cancel() {
   data.value = {};
   last.value = "";
   history.value = [];
+  clearSignatureAttempts()
 }
 
 function backHistory() {

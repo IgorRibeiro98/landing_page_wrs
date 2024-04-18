@@ -39,12 +39,15 @@ interface Schedule {
 interface Patient {
     id: string;
     first_name: string;
+    phone_hint: string;
+    has_face_recognition: boolean;
     schedules: Schedule[]
 }
 
 export interface Data {
     patient?: Patient
     queue?: QueueTotem
+    code?: string
 }
 
 // id: '00000',

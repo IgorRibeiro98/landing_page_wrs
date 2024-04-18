@@ -7,6 +7,8 @@ const patients: any = {
     '11111111111': {
         id: '11111111111',
         first_name: 'Jessica',
+        phone_hint: '0251',
+        has_face_recognition: true,
         schedules: [
             {
                 date: new Date().toLocaleString(),
@@ -24,6 +26,8 @@ const patients: any = {
     '22222222222': {
         id: '22222222222',
         first_name: 'Jose',
+        phone_hint: '0251',
+        has_face_recognition: false,
         schedules: [
             {
                 date: new Date().toLocaleString(),
@@ -60,6 +64,8 @@ const patients: any = {
     '33333333333': {
         id: '33333333333',
         first_name: 'Jessica',
+        phone_hint: '0251',
+        has_face_recognition: false,
         schedules: [
             {
                 date: new Date().toLocaleString(),
@@ -111,6 +117,8 @@ const patients: any = {
     '00000000000': {
         id: '00000000000',
         first_name: 'Mariana',
+        phone_hint: '0251',
+        has_face_recognition: false,
         schedules: [
             {
                 date: new Date((new Date()).setDate((new Date().getDate() +2))).toLocaleString(),
@@ -147,6 +155,8 @@ const patients: any = {
     '44444444444': {
         id: '44444444444',
         first_name: 'Mariana',
+        phone_hint: '0251',
+        has_face_recognition: false,
         schedules: []
     },
 
