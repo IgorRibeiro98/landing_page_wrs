@@ -95,6 +95,7 @@
               </template>
               <template #append>
                 <v-card
+                  v-if="false"
                   variant="outlined"
                   v-ripple.stop
                   class="scale-up"
