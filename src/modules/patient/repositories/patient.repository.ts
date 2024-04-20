@@ -80,7 +80,7 @@ const patients: any = {
     id: '22222222222',
     first_name: 'Jose',
     phone_hint: '0251',
-    has_face_recognition: false,
+    has_face_recognition: true,
     schedules: [
       {
         id: "id01",
@@ -369,6 +369,20 @@ export function updatePatient(patient: any) {
 
       return res({
         data: patient
+      })
+    }, 1000)
+  })
+}
+
+export function recognizePatient(photo: string, identifier: string) {
+  return new Promise((res, rej) => {
+    setTimeout(() => {
+      if(identifier === '11111111111') return rej({
+        data: {}
+      });
+
+      return res({
+        data: {}
       })
     }, 1000)
   })

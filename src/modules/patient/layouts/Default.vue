@@ -23,7 +23,7 @@
         >
       </div>
     </div>
-    <div style="width: 80%" class="mx-auto flex-grow-1">
+    <div style="width: 80%" class="mx-auto flex-grow-1 d-flex flex-column">
       <slot></slot>
     </div>
     <div class="text-center">
