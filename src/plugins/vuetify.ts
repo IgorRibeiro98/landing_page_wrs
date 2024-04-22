@@ -57,7 +57,8 @@ export default createVuetify({
           secondary: '#243859',
           grey: '#abacac',
           background: "#F3F3F3",
-          keyboard: '#f94c07'
+          keyboard: '#f94c07',
+          scrollbar: '#757575',
         }
       },
       dark: {
