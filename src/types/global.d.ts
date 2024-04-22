@@ -1,13 +1,14 @@
 import { ComputedRef } from 'vue';
 import { type RouteLocationRaw } from 'vue-router';
+import type { ThemeDefinition } from 'vuetify/lib/framework.mjs';
 
 declare global {
   type ScreenComponent = 'Identifier' | 'Schedule' | 'Signature' | 'Queues' | 'Loading'
 
   interface Window {
-      api: {
-        print({value: string, site: string})
-      }
+    api: {
+      print({ value: string, site: string })
+    }
   }
 
   interface ScreenField {
@@ -247,8 +248,9 @@ declare global {
   interface Tenant {
     id: number;
     name: string;
-    logo: string;
-    theme: object;
+    provider_uri: string;
+    logo: string | File;
+    theme: ThemeDefinition;
     domain: string;
     updated_at: string;
     created_at: string;
