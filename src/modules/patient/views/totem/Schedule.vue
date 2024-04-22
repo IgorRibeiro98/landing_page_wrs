@@ -232,10 +232,9 @@ const maskIdentifier = computed(() => {
 function isDelayed(schedule: HydratedSchedule) {
   if(schedule.isToday === false) return false;
   const now = new Date();
-  const difference = Math.abs(schedule.date.getTime() - now.getTime());
-  const tolerance = delayInMinutes * 60 * 1000;
-  const isDelayed = difference >= tolerance;
-  return isDelayed;
+  const scheduleTimeWithDelay = schedule.date.getTime() + delayInMinutes * 60 * 1000; 
+
+  return now.getTime() > scheduleTimeWithDelay
 }
 
 function getWeekPrefix(schedule: HydratedSchedule) {
@@ -246,6 +245,10 @@ function getWeekPrefix(schedule: HydratedSchedule) {
 
 function processSchedules() {
   loading.value = true;
+
+  if (hasDelayedSchedule.value)
+    return emit('to', 'Queues')
+
   processPatientSchedule()
     .then(() => {
       emit("next");
