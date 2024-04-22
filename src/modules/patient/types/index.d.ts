@@ -51,6 +51,7 @@ interface Patient {
 export interface Data {
     internal: {
       identifier?: string;
+      faceRecognition?: string;
     },
     patient?: Patient
     queue?: QueueTotem

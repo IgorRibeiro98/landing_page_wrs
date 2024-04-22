@@ -9,7 +9,7 @@
         <p>Retire sua senha e aguarde ser chamado pelo painel da recepção.</p>
 
         <div class="w-100">
-            <Timer hide-number start-manual :time="15" ref="timer" @end="$emit('next')" class="mt-4" />
+            <Timer hide-number start-manual :time="15" ref="timer" @end="$emit('cancel')" class="mt-4" />
         </div>
         <iframe :src="url" frameborder="0" class="rounded-xl border mt-6" height="200" v-if="!app"></iframe>
     </div>
@@ -19,8 +19,8 @@
 import { AlertProps, LoadingProps } from "@/modules/patient/types";
 import Timer from "@patient/components/Timer.vue";
 
-import { computed, onBeforeMount, onMounted, ref, nextTick } from "vue";
 import checkCircle from "@/assets/icons/check-circle.svg";
+import { computed, nextTick, onBeforeMount, onMounted, ref } from "vue";
 
 const props = defineProps<{
     data: Data;
@@ -35,6 +35,7 @@ const url = computed(() => {
 const emit = defineEmits<{
     (event: "alert", payload: AlertProps): void;
     (event: "next"): void;
+    (event: "cancel"): void;
     (event: "loading", payload: LoadingProps): void;
 }>();
 
@@ -62,7 +63,7 @@ function print() {
                             type: "confirm",
                             label: "Já anotei a minha senha",
                             callback() {
-                                emit("next");
+                                emit("cancel");
                                 isLoading.value = false;
                                 loading.value = false;
                             },

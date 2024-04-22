@@ -1,7 +1,7 @@
 <template>
     <v-row class="fill-height">
-        <v-col cols="8" v-if="!$vuetify.display.smAndDown" class="d-flex align-center fill-height">
-            <svg width="80%" height="100%" viewBox="0 0 1031 1149" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <v-col cols="8" v-if="!$vuetify.display.smAndDown" class="d-flex align-center fill-height position-relative">
+            <svg style="position: absolute;right:0; top:0;left:0;bottom: 0;" width="100%" height="100%" viewBox="0 0 1031 1149" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g opacity="0.5" filter="url(#filter0_b_0_1)">
                     <ellipse cx="818" cy="588" rx="79" ry="80" style="fill: rgb(var(--v-theme-secondary));" />
                 </g>

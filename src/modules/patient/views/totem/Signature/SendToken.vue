@@ -1,5 +1,6 @@
 <template>
-  <v-row justify="center">
+  <div>
+    <v-row justify="center">
     <v-col cols="12">
       <h1>
         Enviamos um código SMS para o seu celular com final {{ data.patient?.phone_hint }} e para o seu app.
@@ -38,20 +39,21 @@
 
       <v-btn variant="text" class="mt-4 text-primary" @click="$emit('to', 'Queues')">
         Pular check-in rápido
-      </v-btn> 
+      </v-btn>
     </v-col>
 
     <v-col cols="12" md="4" lg="5" class="d-flex justify-center">
       <VirtualKeyboard always-visible />
     </v-col>
   </v-row>
+  </div>
 </template>
 <script lang="ts" setup>
-import { Data, AlertProps, LoadingProps } from "@patient/types";
-import { required } from '@/rules'
-import { ref, computed, onMounted } from 'vue'
+import { required } from '@/rules';
+import { AlertProps, Data, LoadingProps } from "@patient/types";
+import { computed, onMounted, ref } from 'vue';
 
-import { checkToken, sendToken, signature } from '@patient/repositories/signature.repository'
+import { checkToken, sendToken, signature } from '@patient/repositories/signature.repository';
 
 const props = defineProps<{
   data: Data
@@ -116,7 +118,7 @@ function sendSignature() {
   checkToken(getUnformattedCode())
     .then(() => {
 
-      emit('loading', { 
+      emit('loading', {
         text: 'Aguardando autorização da operadora',
         callback(loading) {
           signature(getUnformattedCode())
@@ -143,7 +145,7 @@ function sendSignature() {
           })
         }
       })
-     
+
     })
     .catch(error => {
       console.log({ error })

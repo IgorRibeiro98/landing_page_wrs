@@ -1,31 +1,33 @@
 <template>
-  <v-row justify="center">
-    <v-col cols="12" class="text-center">
-      <h1>O que você deseja fazer hoje?</h1>
-    </v-col>
-
-    <v-row justify="center">
-      <v-col cols="10">
-        <v-row justify="center">
-          <v-col cols="12" md="auto" v-for="(queue, index) in totem.queues" :key="index" class="d-flex justify-center">
-            <v-sheet v-ripple color="transparent" @click="checkQueue(queue)"
-              style="cursor: pointer; white-space: normal" border="sm" rounded class="d-flex pa-6" link min-height="80"
-              width="342" click="checkQueue(queue)">
-              <div class="mr-2">
-                <v-img :src="queue.data?.icon_src" width="32" height="32"> </v-img>
-              </div>
-              <p class="font-weight-medium">
-                {{ queue.data?.name }}
-              </p>
-            </v-sheet>
-          </v-col>
-        </v-row>
+  <div>
+    <v-row>
+      <v-col cols="12" class="text-center">
+        <h1>O que você deseja fazer hoje?</h1>
       </v-col>
+
+      <v-row justify="center">
+        <v-col cols="10">
+          <v-row justify="center">
+            <v-col cols="12" md="auto" v-for="(queue, index) in totem.queues" :key="index" class="d-flex justify-center">
+              <v-sheet v-ripple color="transparent" @click="checkQueue(queue)"
+                style="cursor: pointer; white-space: normal" border="sm" rounded class="d-flex pa-6" link min-height="80"
+                width="342" click="checkQueue(queue)">
+                <div class="mr-2">
+                  <v-img :src="queue.data?.icon_src" width="32" height="32"> </v-img>
+                </div>
+                <p class="font-weight-medium">
+                  {{ queue.data?.name }}
+                </p>
+              </v-sheet>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
     </v-row>
-  </v-row>
+  </div>
 </template>
 <script lang="ts" setup>
-import {computed} from 'vue'
+import { computed } from 'vue';
 
 import { AlertProps, Data } from "@patient/types";
 
@@ -69,7 +71,7 @@ function checkQueue(queue: QueueTotem) {
         }
       },
     });
-    
+
     data.value.queue = queue
 
     emit('next')
