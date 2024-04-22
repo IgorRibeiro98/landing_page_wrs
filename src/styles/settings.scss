@@ -106,7 +106,8 @@ $font-size:clamp(1.3rem, 1.7vw, 2.7rem) !important;
 
 .totem {
     font-size: 20px;
-
+    padding: 32px;
+    
     h1 {
         font-size: $font-size-h1;
         font-weight: 700 !important;

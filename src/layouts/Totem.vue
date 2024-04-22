@@ -1,6 +1,6 @@
 <template>
   <v-main class="d-flex flex-column" style="height: 100vh; overflow: auto">
-    <v-container class="flex-grow-1 d-flex" fluid>
+    <v-container class="flex-grow-1 d-flex pa-0" fluid>
       <RouterView />
     </v-container>
   </v-main>

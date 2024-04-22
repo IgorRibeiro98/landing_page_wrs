@@ -6,7 +6,7 @@
     </div>
     <p class="text-primary">{{ currentFlowScreen?.component }}</p>
   </div>
-  <Layout @back="backHistory" @cancel="cancel" v-bind="layout">
+  <Layout ref="layoutRef" @back="backHistory" @cancel="cancel" v-bind="layout">
     <component
       :is="currentFlowScreenComponent"
       @alert="openAlert"
@@ -15,6 +15,7 @@
       @cancel="cancel"
       @loading="openLoading"
       v-model:data="data"
+      :layoutRef="layoutRef"
       :totem="totem"
       :screen="currentFlowScreen"
     >
@@ -38,7 +39,7 @@ type Component as VueComponent,
 } from "vue";
 const to = ref("");
 
-import { clearSignatureAttempts } from '@patient/repositories/signature.repository'
+import { clearSignatureAttempts } from '@patient/repositories/signature.repository';
 
 import Layout from "@/modules/patient/layouts/Default.vue";
 import defaultValues from "@/modules/totem/default-values";
@@ -49,6 +50,7 @@ import { useRoute, type RouteLocationNormalizedLoaded } from "vue-router";
 
 const alert = ref(false);
 const loading = ref(false);
+const layoutRef = ref<InstanceType<typeof Layout>>();
 
 const alertProps = ref<AlertProps>({
   title: "",
@@ -104,6 +106,9 @@ const currentSubScreen = computed(() => {
 });
 
 const currentFlowScreen = computed(() => {
+  if(layoutRef.value) {
+    layoutRef.value.setStyles({})
+  }
   if (subScreenComponent.value === "") return currentScreen.value;
 
   return currentSubScreen.value;

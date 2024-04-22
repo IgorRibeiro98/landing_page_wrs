@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-column flex-grow-1 totem" fluid>
+  <div class="d-flex flex-column flex-grow-1 totem" :style="styles" fluid>
     <div>
       <div>
         <v-img :src="logo" width="194"></v-img>
@@ -24,7 +24,7 @@
       </div>
     </div>
     <div style="width: 80%" class="mx-auto flex-grow-1 d-flex flex-column">
-      <slot></slot>
+        <slot></slot>
     </div>
     <div class="text-center">
       <v-divider class="my-4"></v-divider>
@@ -54,7 +54,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 const emit = defineEmits<Emits>();
 const tenantStore = useTenantStore();
-
+const styles = ref<any>({});
 const logo = computed(() => {
   return tenantStore.tenant.logo || appLogo;
 });
@@ -94,6 +94,14 @@ function startHour() {
     }, 60000);
   }, msUntilNextMinute);
 }
+
+function setStyles(newStyles: any) {
+  styles.value = newStyles;
+}
+
+defineExpose({
+  setStyles,
+});
 onMounted(() => {
   startHour();
 });

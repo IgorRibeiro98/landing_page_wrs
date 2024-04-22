@@ -1,4 +1,5 @@
 <template>
+ <div>
   <v-row>
     <v-col cols="12">
       <h1 class="text-center">
@@ -26,13 +27,14 @@
       </v-sheet>
     </v-col>
   </v-row>
+ </div>
 </template>
 
 <script setup lang="ts">
 import { AlertProps, LoadingProps } from '@/modules/patient/types';
-import { computed } from 'vue'
+import { computed } from 'vue';
 
-import { createTicket } from '@/modules/patient/repositories/provider-queue.repository'
+import { createTicket } from '@/modules/patient/repositories/provider-queue.repository';
 
 interface Emit {
   (event: "alert", options: AlertProps): void;
