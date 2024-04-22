@@ -1,8 +1,8 @@
 <template>
   <div class="d-flex flex-column flex-grow-1">
-    <h1 class="text-center flex-grow-0 d-flex align-end justify-center mb-8">
+    <!-- <h1 class="text-center flex-grow-0 d-flex align-end justify-center mb-8">
       Status: Biometria com imagem
-    </h1>
+    </h1> -->
     <h1 class="text-center">
       <span v-show="videoIsRunning">
         Capturando em <span class="text-primary">{{ timer }}</span>
@@ -140,13 +140,15 @@ function startTimer() {
   }, 1000);
 }
 
-const startCamera = async () => {
+const startCamera = async (withTimer = true) => {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
     if (video.value) {
       video.value.srcObject = stream;
-      videoIsRunning.value = true;
-      startTimer();
+      if (withTimer) {
+        videoIsRunning.value = true;
+        startTimer();
+      }
     }
   } catch (err: any) {
     emit("alert", {
@@ -238,6 +240,7 @@ onMounted(() => {
   if(props.data.internal.faceRecognition) {
     printFaceImg.value = props.data.internal.faceRecognition
   }
+  startCamera(false)
 })
 </script>
 <style lang="scss" scoped>

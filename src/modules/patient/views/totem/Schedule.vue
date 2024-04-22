@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h1 class="text-center mb-8">
-      <p v-html="currentCase.title.value ?? currentCase.title"></p>
+    <h1 class="text-center mb-4" v-html="currentCase.title.value ?? currentCase.title">
     </h1>
+    <!-- {{$vuetify.display.name}} -->
     <v-sheet color="#dfdfdf" rounded v-if="hasOtherSchedules">
-      <v-row class="pa-2">
+      <v-row>
         <v-col cols="12" md="6">
           <p>
             Paciente: <b>{{ data.patient?.first_name }}</b>
@@ -13,7 +13,7 @@
         <v-col cols="12" md="6"> CPF: <b>{{ maskIdentifier }}</b></v-col>
       </v-row>
     </v-sheet>
-    <div style="max-height: 40vh; overflow-y: auto">
+    <div style="max-height: 38vh; overflow-y: auto">
       <div class=" d-flex flex-column ga-4">
         <v-card
           class="px-8 py-4"
@@ -43,7 +43,7 @@
     <h4 class="text-center mt-8" v-show="hasDelayedSchedule">
       Nossa tolerância é de {{ delayInMinutes }} minutos, devido ao atraso vamos te encaminhar para a recepção.
     </h4>
-    <v-row justify="center" class="mt-8">
+    <v-row justify="center" class="mt-4">
       <v-col cols="auto" v-for="button in currentCase.buttons">
         <v-btn class="px-8 py-2" :loading="button.loading?.value" rounded :color="button.color ?? 'primary'" @click="button.action">
           {{ button.text }}
@@ -157,7 +157,7 @@ const scheduleMapping = ref<Mapping[]>([
   },
 ]);
 
-const currentCase = computed(() => {
+const currentCase = computed<any>(() => {
   let caseType = "noSchedules";
   if (hasDelayedSchedule.value) caseType = "delaySchedules";
   else if (hasTodaySchedule.value) caseType = "hasSchedules";

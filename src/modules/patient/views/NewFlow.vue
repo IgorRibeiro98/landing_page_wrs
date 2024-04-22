@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isDev" style="position:absolute">
+  <div v-if="isDev" style="position:absolute;" class="text-center w-100">
     <div>
       Histórico:
       <span v-for="component in history">{{ component }} /</span>

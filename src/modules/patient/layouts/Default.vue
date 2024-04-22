@@ -2,9 +2,9 @@
   <div class="d-flex flex-column flex-grow-1 totem" fluid>
     <div>
       <div>
-        <v-img :src="logo" max-width="194"></v-img>
+        <v-img :src="logo" width="194"></v-img>
       </div>
-      <div class="mt-8 d-flex justify-space-between" style="">
+      <div class="mt-4 d-flex justify-space-between" style="">
         <v-btn
           variant="text"
           color="primary"
