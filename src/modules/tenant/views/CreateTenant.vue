@@ -126,8 +126,12 @@ const create = () => {
                 formData.append('logo', tenant.value.logo)
                 formData.append('theme', JSON.stringify(tenant.value.theme))
                 createTenant(formData)
-                    .then((resp) => {
-                        window.location.href = `http://${tenant.value.domain}.saludti.com.br:3000`
+                    .then(() => {
+                        const url = new URL(window.location.origin)
+
+                        url.host = tenant.value.domain
+
+                        window.location.href = url.toString()
                     })
                     .catch((err) => {
                         console.error(err)
