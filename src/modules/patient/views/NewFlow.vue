@@ -144,7 +144,7 @@ const modules: Record<string, any> = import.meta.glob(
 importModules();
 
 onBeforeMount(() => {
-  findTotem(id.value).then((response) => {
+  findTotem(id.value).then((response: any) => {
     totem.value = response.data;
   });
 });

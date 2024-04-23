@@ -10,9 +10,10 @@ const patients: any = {
     phone_hint: '0251',
     has_face_recognition: true,
     schedules: [
+      // new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-')+ ' '+ new Date().getHours() + ':' + new Date().getMinutes(),
       {
         id: "id01",
-        date: new Date().toISOString().split('T')[0] + ' '+ new Date().getHours() + ':' + new Date().getMinutes(),
+        date: new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' '+ new Date().getHours() + ':' + new Date().getMinutes(),
         doctor: {
           id: "doctor-01",
           name: "Pablo Antonio",
@@ -28,7 +29,7 @@ const patients: any = {
       },
       {
         id: "id02",
-        date: new Date().toISOString().split('T')[0] + ' '+ (new Date().getHours() + 1) + ':' + new Date().getMinutes(),
+        date: new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' '+ (new Date().getHours() + 1) + ':' + new Date().getMinutes(),
         doctor: {
           id: "doctor-02",
           name: "David Jesus",
@@ -44,7 +45,7 @@ const patients: any = {
       },
       {
         id: "id03",
-        date: new Date().toISOString().split('T')[0] + ' '+ (new Date().getHours() + 2) + ':' + new Date().getMinutes(),
+        date: new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' '+ (new Date().getHours() + 2) + ':' + new Date().getMinutes(),
         doctor: {
           id: "doctor-03",
           name: "Igor Ribeiro",
@@ -68,7 +69,7 @@ const patients: any = {
     schedules: [
       {
         id: "id01",
-        date: new Date().toISOString().split('T')[0] + ' '+ new Date().getHours() + ':' + new Date().getMinutes(),
+        date: new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' '+ new Date().getHours() + ':' + new Date().getMinutes(),
         doctor: {
           id: "doctor-01",
           name: "Pablo Antonio",
@@ -84,7 +85,7 @@ const patients: any = {
       },
       {
         id: "id02",
-        date: new Date().toISOString().split('T')[0] + ' '+ (new Date().getHours() + 1) + ':' + new Date().getMinutes(),
+        date: new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' '+ (new Date().getHours() + 1) + ':' + new Date().getMinutes(),
         doctor: {
           id: "doctor-02",
           name: "David Jesus",
@@ -100,7 +101,7 @@ const patients: any = {
       },
       {
         id: "id03",
-        date: new Date().toISOString().split('T')[0] + ' '+ (new Date().getHours() + 2) + ':' + new Date().getMinutes(),
+        date: new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' '+ (new Date().getHours() + 2) + ':' + new Date().getMinutes(),
         doctor: {
           id: "doctor-03",
           name: "João Silva",
@@ -116,7 +117,7 @@ const patients: any = {
       },
       {
         id: "id03",
-        date: new Date().toISOString().split('T')[0] + ' '+ (new Date().getHours() + 3) + ':' + new Date().getMinutes(),
+        date: new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' '+ (new Date().getHours() + 3) + ':' + new Date().getMinutes(),
         doctor: {
           id: "doctor-03",
           name: "Igor Ribeiro",
@@ -140,7 +141,7 @@ const patients: any = {
     schedules: [
       {
         id: "id01",
-        date: new Date().toISOString().split('T')[0] + ' 00:00:00',
+        date: new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' 00:00:00',
         doctor: {
           id: "doctor-01",
           name: "Pablo Antonio",
@@ -156,7 +157,7 @@ const patients: any = {
       },
       {
         id: "id01",
-        date: new Date().toISOString().split('T')[0] + ' 01:00:00',
+        date: new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' 01:00:00',
         doctor: {
           id: "doctor-01",
           name: "Pablo Antonio",
