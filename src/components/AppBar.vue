@@ -1,19 +1,19 @@
 <template>
   <v-app-bar color="nav-color" class="position-fixed">
     <template #prepend>
-      <v-img aspect-ratio="16/9" @click="$router.push({ path: '/' })" class="pointer mx-4" :src="logo" width="50"></v-img>
+      <v-img aspect-ratio="16/9" v-if="!$vuetify.display.mobile" @click="$router.push({ path: '/' })" class="pointer mx-4" :src="logo" width="50"></v-img>
       <v-slide-group show-arrows>
         <v-slide-group-item v-for="item in items" :value="item.route.name">
           <v-btn class="text-regular mx-1" @click="$router.push(item.route)"
             :active="$router.currentRoute.value.name == item.route.name">
             <v-icon class="mr-1">{{ item.icon }}</v-icon>
-            <span>{{ item.title }}</span>
+            <span v-if="!$vuetify.display.mobile">{{ item.title }}</span>
           </v-btn>
         </v-slide-group-item>
       </v-slide-group>
     </template>
     <template #append>
-      {{ user.name }}
+        {{ user.name }}
       
       <v-btn @click="toggleTheme" variant="text" :icon="themeIcon"></v-btn>
       <v-btn @click="logoutUser" :loading="loadingLogout" title="Sair" icon="mdi-exit-to-app"></v-btn>

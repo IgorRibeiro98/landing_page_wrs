@@ -45,7 +45,7 @@ export default createVuetify({
     }
   },
   display: {
-    mobileBreakpoint: 'md'
+    mobileBreakpoint: 'sm'
   },
   theme: {
     defaultTheme: 'light',
