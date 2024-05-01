@@ -13,8 +13,10 @@
       </v-slide-group>
     </template>
     <template #append>
+      {{ user.name }}
+      
       <v-btn @click="toggleTheme" variant="text" :icon="themeIcon"></v-btn>
-      <v-btn :loading="loadingLogout" title="Sair" icon="mdi-exit-to-app"></v-btn>
+      <v-btn @click="logoutUser" :loading="loadingLogout" title="Sair" icon="mdi-exit-to-app"></v-btn>
     </template>
   </v-app-bar>
 </template>
@@ -22,6 +24,12 @@
 import logo from "@/assets/logo.png";
 import { computed, ref } from "vue";
 import { useTheme } from "vuetify";
+import { signout } from '@/modules/auth/services/auth.service'
+import { storeToRefs } from 'pinia'
+
+import useUserStore from '@/stores/user'
+
+const {user} = storeToRefs(useUserStore())
 
 const theme = useTheme();
 const loadingLogout = ref(false);
@@ -38,6 +46,15 @@ const themeIcon = computed<string>(() => {
   }
   return "mdi-weather-night";
 });
+
+function logoutUser() {
+  loadingLogout.value = true
+
+  signout()
+    .finally(() => {
+      loadingLogout.value = false
+    })
+}
 
 const items = [
   {

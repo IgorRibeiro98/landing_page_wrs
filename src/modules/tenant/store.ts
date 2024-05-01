@@ -5,7 +5,6 @@ import { useTheme } from 'vuetify'
 
 const useTenantStore = defineStore('tenant', () => {
 
-
     const tenant = ref<Tenant>(JSON.parse(localStorage.getItem('tenant')!) ?? {
         id: 0,
         name: '',
@@ -30,8 +29,7 @@ const useTenantStore = defineStore('tenant', () => {
 
                     Object.assign(theme.themes.value, { light })
                 })
-                .catch((error) => {
-                    console.error({ error })
+                .catch((_) => {
                 })
         } catch (error) {
             console.error('Error');
