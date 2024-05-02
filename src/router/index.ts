@@ -4,7 +4,7 @@ import { setPageTitle } from '@/helpers/page';
 import guards from '@/router/guards';
 
 export type AuthorizaGuard = 'acl';
-export type Guard = 'auth';
+export type Guard = 'auth' | AuthorizaGuard;
 export type Slugs = {
   acl?: string;
 }
