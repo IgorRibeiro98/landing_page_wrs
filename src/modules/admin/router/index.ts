@@ -4,18 +4,18 @@ import { layouts } from '@/router'
 const routes: RouteRecordRaw[] = [
     {
         path: '/',
+        name: 'home',
         redirect: {
           name: 'totem.view'
         },
-
-        // component: () => layouts.default(),
-        // children: [
-        //     {
-        //         path: '',
-        //         name: 'admin-home',
-        //         component: () => import('@admin/views/Home.vue')
-        //     }
-        // ],
+        component: () => layouts.blank(),
+        children: [
+            {
+                path: 'login',
+                name: 'login',
+                component: () => import('@admin/views/Login.vue')
+            }
+        ],
     }
 ]
 

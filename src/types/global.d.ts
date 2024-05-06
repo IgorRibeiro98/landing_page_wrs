@@ -335,7 +335,6 @@ declare global {
     id: string
     name: string
     slug: string
-
   }
 
   interface User {
@@ -347,6 +346,6 @@ declare global {
     created_at: string
     updated_at: string
     scopes_count: number
-    scopes: Scope[]
+    scopes: string[]
   }
 }

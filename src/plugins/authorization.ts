@@ -12,7 +12,7 @@ class Authorization {
         scopes_count: 0,
         scopes: [],
     };
-    scopes: Scope[] = [];
+    scopes: string[] = [];
 
     constructor() {
         try {
@@ -20,7 +20,7 @@ class Authorization {
             this.user = { ...userStore.user };
             this.scopes = this.user.scopes! ?? [];
         } catch (error) {
-            console.error(error)
+            // console.error(error)
         }
 
     }
@@ -31,14 +31,14 @@ class Authorization {
                 const slugs = slugsParam.split("&");
 
                 return slugs.every((slug) => {
-                    return this.scopes.some((scope) => scope.slug === slug);
+                    return this.scopes.some((scope) => scope === slug);
                 });
             }
 
             const slugs = slugsParam.split("|");
 
             return slugs.some((slug) => {
-                return this.scopes.some((scope) => scope.slug === slug);
+                return this.scopes.some((scope) => scope === slug);
             });
 
         }

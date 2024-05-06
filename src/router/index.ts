@@ -27,12 +27,22 @@ interface ModuleMap {
 
 export const layouts = {
   default: () => import('@/layouts/Default.vue'),
+  blank: () => import('@/layouts/Blank.vue'),
   totem: () => import('@/layouts/Totem.vue'),
   queue: () => import('@/layouts/Queue.vue'),
 }
 
 
-const routes: RouteRecordRaw[] = []
+const routes: RouteRecordRaw[] = [
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: () => import('@/components/NotFound.vue'),
+    meta: {
+      layout: layouts.blank(),
+    }
+  }
+]
 
 const routeModules: ModuleMap = import.meta.glob('@/modules/*/router/*.ts', { eager: true });
 
@@ -49,6 +59,7 @@ router.beforeEach((to, from) => {
   const { setBreadcrumbs } = useSystemStore()
   setBreadcrumbs([])
   const meta = to.meta as Meta;
+
   if (meta.title) {
     setPageTitle(meta.title);
   }
@@ -57,7 +68,7 @@ router.beforeEach((to, from) => {
     for (const guard of meta.guards) {
       const result = guards[guard](to, from);
       if (result === true) continue;
-      if (result === false) return { name: from.name || 'login' };
+      if (result === false) return { name: from.name || 'not-found' };
       return result;
     }
   }

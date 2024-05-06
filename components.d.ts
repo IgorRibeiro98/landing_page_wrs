@@ -16,6 +16,7 @@ declare module 'vue' {
     IFrameVue: typeof import('./src/components/IFrameVue.vue')['default']
     LayoutView: typeof import('./src/components/LayoutView.vue')['default']
     NavigationDrawer: typeof import('./src/components/NavigationDrawer.vue')['default']
+    NotFound: typeof import('./src/components/NotFound.vue')['default']
     PrintPassword: typeof import('./src/components/PrintPassword.vue')['default']
     RichText: typeof import('./src/components/RichText.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

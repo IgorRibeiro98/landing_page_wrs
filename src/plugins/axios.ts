@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios from 'axios'
 import { AxiosError, AxiosInstance } from 'axios'
 
 import { retriveToken, login } from '@/modules/auth/services/auth.service'
@@ -50,7 +50,7 @@ const processQueue = (error: any, token: string = '') => {
     });
   
     failedQueue = [];
-  };
+};
   
 
 async function checkUnauthorizedError(error: AxiosError) { 
