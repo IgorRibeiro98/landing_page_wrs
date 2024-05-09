@@ -22,6 +22,10 @@ export const useAuthStore = defineStore('user', () => {
     })
 
     function setAuthUser(user: User) {
+        user.scopes = [
+            'totem.view',
+            'totem.edit'
+        ]
         localStorage.setItem('user', JSON.stringify(user));
         authUser.value = user
     }

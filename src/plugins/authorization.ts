@@ -15,14 +15,9 @@ class Authorization {
     scopes: string[] = [];
 
     constructor() {
-        try {
-            const userStore = useUserStore();
-            this.user = { ...userStore.user };
-            this.scopes = this.user.scopes! ?? [];
-        } catch (error) {
-            // console.error(error)
-        }
-
+        const userStore = useUserStore();
+        this.user = { ...userStore.user };
+        this.scopes = this.user.scopes! ?? [];
     }
     _authorization(slugsParam: string): boolean {
 

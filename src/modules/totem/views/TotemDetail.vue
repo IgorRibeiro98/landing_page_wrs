@@ -60,12 +60,14 @@ const totem = ref<Totem>({
 const actions = reactive([
   {
     title: "Gerenciar Filas",
+    slug: 'totem.update.queues',
     to: {
       name: "queue.detail",
     },
   },
   {
     title: "Gerenciar telas",
+    slug: 'totem.update.screens',
     to: {
       name: "screen.totem.manager",
       params: {

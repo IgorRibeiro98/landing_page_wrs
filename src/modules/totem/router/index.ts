@@ -16,6 +16,16 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/totem',
     component: () => layouts.default(),
+    meta: {
+      title: 'Totem',
+      slugs: {
+        acl: "totem.view"
+      },
+      guards: [
+        'auth',
+        'acl'
+      ]
+    },
     children: [
       {
         path: '',
