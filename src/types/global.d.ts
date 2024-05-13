@@ -256,6 +256,15 @@ declare global {
     created_at: string;
   }
 
+  interface Role {
+    id: string,
+    name: string,
+    is_default: boolean,
+    scopes: Scope[] | string[]
+    level: number,
+    users?: any[]
+  }
+
   type FormComponent = 'VAutocomplete' | 'VTextField' | 'VTextarea' | 'VFileInput' | 'RichText' | 'VSwitch'
 
   interface FormItem {
@@ -337,6 +346,12 @@ declare global {
     slug: string
   }
 
+  interface ScopeCategory {
+    id: string,
+    name: string,
+    scopes: Scope[] | string[]
+  }
+
   interface User {
     id: string
     name: string
@@ -348,4 +363,6 @@ declare global {
     scopes_count: number
     scopes: string[]
   }
+
+
 }
