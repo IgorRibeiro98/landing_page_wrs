@@ -60,14 +60,14 @@ const totem = ref<Totem>({
 const actions = reactive([
   {
     title: "Gerenciar Filas",
-    slug: 'totem.update.queues',
+    slug: 'totem.queue.view',
     to: {
       name: "queue.detail",
     },
   },
   {
     title: "Gerenciar telas",
-    slug: 'totem.update.screens',
+    slug: 'totem.screen.view',
     to: {
       name: "screen.totem.manager",
       params: {
@@ -99,10 +99,10 @@ function loadTotem() {
     },
   ]);
   findTotem(Number(route.params.id))
-    .then((response) => {
+    .then((response: any) => {
       totem.value = response.data;
     })
-    .catch((error) => {
+    .catch((error: any) => {
       openAlert("Erro", error);
     });
 }

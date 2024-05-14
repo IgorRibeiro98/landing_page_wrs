@@ -123,7 +123,7 @@
           </v-expansion-panels>
 
           <div class="mt-4">
-            <v-badge color="info" v-model="allQueueIsAdded">
+            <v-badge color="info" v-model="allQueueIsAdded" v-if="authorization.acl('totem.queue.create')">
               <template #badge>
                 <v-tooltip>
                   <template #activator="{ props }">
@@ -162,6 +162,7 @@
             @click="save"
             :disabled="disableSaveButton"
             :loading="isLoading"
+            v-if="authorization.acl('totem.queue.create|totem.queue.update')"
           >
             Salvar
           </v-btn>
@@ -208,6 +209,8 @@ import AttendanceTypeDialog from '@/modules/totem/components/dialog/AttendanceTy
 
 import defaultData from '@/modules/totem/default-values';
 import { useRoute, useRouter } from "vue-router";
+
+import authorization from "@/plugins/authorization";
 
 const { setBreadcrumbs } = useSystemStore();
 
@@ -563,7 +566,7 @@ function loadQueues() {
 
 function loadQueueTotem() {
   findTotem(totemId.value)
-    .then((res) => {
+    .then((res: any) => {
       totem.value = res.data;
 
       res.data.queues.forEach((queue: any) => {
@@ -575,7 +578,7 @@ function loadQueueTotem() {
         });
       });
     })
-    .catch((error) => {
+    .catch((error: any) => {
       openAlert(`Erro para carregar Totem ${1}`, error);
     });
 }

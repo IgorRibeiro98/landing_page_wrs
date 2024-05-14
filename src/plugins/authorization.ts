@@ -15,12 +15,11 @@ class Authorization {
     scopes: string[] = [];
 
     constructor() {
-        const userStore = useUserStore();
-        this.user = { ...userStore.user };
-        this.scopes = this.user.scopes! ?? [];
+        
     }
     _authorization(slugsParam: string): boolean {
-
+        if (!this.user.id.length) this.setUserFromStore();
+        
         if (this.scopes.length) {
             if (slugsParam.includes("&")) {
                 const slugs = slugsParam.split("&");
@@ -40,6 +39,47 @@ class Authorization {
 
         return false
     }
+
+    setUserFromStore() {
+        const userStore = useUserStore();
+
+        this.user = { ...userStore.user,
+            scopes: [
+                'totem.view',
+                'totem.create',
+                'totem.update',
+                'totem.delete',
+    
+                'totem.queue.view',
+                'totem.queue.create',
+                'totem.queue.update',
+                'totem.queue.delete',
+    
+                'totem.screen.view',
+                'totem.screen.attach',
+                'totem.screen.update',
+                'totem.screen.delete',
+    
+                'queue.view',
+                'queue.create',
+                'queue.update',
+                'queue.delete',
+    
+                'attendance_type.view',
+                'attendance_type.create',
+                'attendance_type.update',
+                'attendance_type.delete',
+
+                'acl.view',
+                'acl.create',
+                'acl.update',
+                'acl.delete',
+            ]
+        };
+
+        this.scopes = this.user.scopes! ?? [];
+    }
+
     acl(slugsParam: string): boolean {
         if (!this.scopes.length) {
             const userStore = useUserStore();

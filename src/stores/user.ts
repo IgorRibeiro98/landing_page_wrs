@@ -24,7 +24,29 @@ export const useAuthStore = defineStore('user', () => {
     function setAuthUser(user: User) {
         user.scopes = [
             'totem.view',
-            'totem.edit'
+            'totem.create',
+            'totem.update',
+            'totem.delete',
+
+            'totem.queue.view',
+            'totem.queue.create',
+            'totem.queue.update',
+            'totem.queue.delete',
+
+            'totem.screen.view',
+            'totem.screen.create',
+            'totem.screen.update',
+            'totem.screen.delete',
+
+            'queue.view',
+            'queue.create',
+            'queue.update',
+            'queue.delete',
+
+            'attendance_type.view',
+            'attendance_type.create',
+            'attendance_type.update',
+            'attendance_type.delete'
         ]
         localStorage.setItem('user', JSON.stringify(user));
         authUser.value = user
