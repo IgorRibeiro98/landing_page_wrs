@@ -10,16 +10,16 @@ class Authorization {
         created_at: '',
         updated_at: '',
         scopes_count: 0,
-        scopes: [],
+        slugs: [],
     };
     scopes: string[] = [];
 
     constructor() {
-        
+
     }
     _authorization(slugsParam: string): boolean {
         if (!this.user.id.length) this.setUserFromStore();
-        
+
         if (this.scopes.length) {
             if (slugsParam.includes("&")) {
                 const slugs = slugsParam.split("&");
@@ -43,55 +43,51 @@ class Authorization {
     setUserFromStore() {
         const userStore = useUserStore();
 
-        this.user = { ...userStore.user,
-            scopes: [
+        this.user = {
+            ...userStore.user,
+            slugs: [
                 'totem.view',
                 'totem.create',
                 'totem.update',
                 'totem.delete',
-    
+
                 'totem.queue.view',
                 'totem.queue.create',
                 'totem.queue.update',
                 'totem.queue.delete',
-    
-                'totem.screen.view',
-                'totem.screen.attach',
-                'totem.screen.update',
-                'totem.screen.delete',
-    
-                'queue.view',
-                'queue.create',
-                'queue.update',
-                'queue.delete',
-    
-                'attendance_type.view',
-                'attendance_type.create',
-                'attendance_type.update',
-                'attendance_type.delete',
 
-                'acl.view',
-                'acl.create',
-                'acl.update',
-                'acl.delete',
+                // 'totem.screen.view',
+                // 'totem.screen.create',
+                // 'totem.screen.update',
+                // 'totem.screen.delete',
+
+                // 'queue.view',
+                // 'queue.create',
+                // 'queue.update',
+                // 'queue.delete',
+
+                // 'attendance_type.view',
+                // 'attendance_type.create',
+                // 'attendance_type.update',
+                // 'attendance_type.delete'
             ]
         };
 
-        this.scopes = this.user.scopes! ?? [];
+        this.scopes = this.user.slugs! ?? [];
     }
 
     acl(slugsParam: string): boolean {
         if (!this.scopes.length) {
             const userStore = useUserStore();
-            if (userStore.user.scopes?.length) {
-                this.scopes = userStore.user.scopes;
+            if (userStore.user.slugs?.length) {
+                this.scopes = userStore.user.slugs;
             }
         }
         return this._authorization(slugsParam)
     }
 
     setScopesByUser(user: User): void {
-        this.scopes = user.scopes! ?? [];
+        this.scopes = user.slugs! ?? [];
     }
 
 }

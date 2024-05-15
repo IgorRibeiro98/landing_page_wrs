@@ -361,7 +361,7 @@ declare global {
     created_at: string
     updated_at: string
     scopes_count: number
-    scopes: string[]
+    slugs: string[]
   }
 
 

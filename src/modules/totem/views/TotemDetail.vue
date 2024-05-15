@@ -1,10 +1,5 @@
 <template>
-  <View
-    :title="totem.name"
-    enable-action
-    :actions="actions"
-    :description="totem.description"
-  >
+  <View :title="totem.name" enable-action :actions="actions" :description="totem.description">
     <v-row>
       <v-col cols="12">
         <div class="d-flex align-center">

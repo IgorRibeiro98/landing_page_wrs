@@ -2,12 +2,12 @@ import client from '@/plugins/axios'
 
 export function loginPopUp(url: string): Window {
 
-    const dualScreenLeft = window.screenLeft !==  undefined ? window.screenLeft : window.screenX;
-    const dualScreenTop = window.screenTop !==  undefined   ? window.screenTop  : window.screenY;
+    const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+    const dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screenY;
 
     const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
     const height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
-    
+
     const w = 300;
     const h = 300;
 
@@ -53,5 +53,5 @@ export function getToken(payload: AuthorizationPayload) {
 }
 
 export function introspect() {
-    return client.get('user')
+    return client.get('me')
 }
