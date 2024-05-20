@@ -1,10 +1,12 @@
 import { defineStore } from "pinia";
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue';
+
+import { introspect } from '@/modules/auth/repositories/auth.repository';
 
 export const useAuthStore = defineStore('user', () => {
 
     const emptyUser = {
-        id: '',
+        id: 0,
         name: '',
         email: '',
         email_verified_at: null,
@@ -26,7 +28,16 @@ export const useAuthStore = defineStore('user', () => {
         authUser.value = user
     }
 
-    return { authUser, user, setAuthUser }
+    function loadUser() {
+        if (!localStorage.getItem('accessToken')) return
+
+        introspect()
+            .then(res => {
+                setAuthUser(res.data)
+            })
+    }
+
+    return { authUser, user, setAuthUser, loadUser }
 
 })
 
