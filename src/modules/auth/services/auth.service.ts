@@ -1,4 +1,4 @@
-import { loginRedirect, getToken, type AuthorizationPayload, introspect, revokeToken } from '@/modules/auth/repositories/auth.repository'
+import { getToken, introspect, loginRedirect, revokeToken, type AuthorizationPayload } from '@/modules/auth/repositories/auth.repository'
 
 import userUserStore from '@/stores/user'
 
@@ -57,19 +57,24 @@ async function signout() {
 async function retriveToken(payload: AuthorizationPayload) {
     const store = userUserStore()
 
-    return getToken(payload)
-        .then(res => {
+    return new Promise(async (response, rej) => {
+        getToken(payload)
+        .then(async (res) => {
             localStorage.setItem('expiresIn', (new Date().getTime() + res.data.expires_in * 1000).toString())
             localStorage.setItem('accessToken', `${res.data.token_type} ${res.data.access_token}`)
             localStorage.setItem('refreshToken', res.data.refresh_token)
 
             if (payload.grant_type == 'authorization_code') {
-                introspect()
+                await introspect()
                     .then(res => {
                         store.setAuthUser(res.data)
                     })
             }
+            
+            response(res)
         })
+        .catch(rej)
+    })
 }
 
 export { login, retriveToken, signout }

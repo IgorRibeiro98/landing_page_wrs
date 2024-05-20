@@ -1,24 +1,35 @@
 <template>
     <div class="w-100 h-100 d-flex align-center justify-center">
         <v-sheet class="pa-4 text-center" rounded width="400">
-            Aguarde que estamos te autenticando...
+            <div v-if="!error">
+                Aguarde que estamos te autenticando...
+    
+                <v-progress-linear indeterminate color="primary" class="mt-4">
+                </v-progress-linear>
+            </div>
 
-            <v-progress-linear indeterminate color="primary" class="mt-4">
-            </v-progress-linear>
+            <div v-else>
+                Não foi possivel se autenticar, por favor tente novamente mais tarde.
+
+                <v-btn color="primary" @click="login">
+                    Voltar para login
+                </v-btn>
+            </div>
         </v-sheet>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { retriveToken } from '@/modules/auth/services/auth.service'
+import { login, retriveToken } from '@/modules/auth/services/auth.service';
 
 const route = useRoute()
 const router = useRouter()
 
 const isLoading = ref(false)
+const error = ref(false)
 
 onMounted(() => {
     isLoading.value = true 
@@ -34,6 +45,9 @@ onMounted(() => {
         router.push({
             name: 'totem.view'
         })
+    })
+    .catch(() => {
+        error.value = true
     })
     .finally(() => {
         isLoading.value = false
