@@ -4,6 +4,10 @@ export function required(value: any) {
     return value || 'Campo obrigatório'
 }
 
+export function requiredArray(value: any[]): boolean | string {
+    return Array.isArray(value) && value.length > 0 || 'Este campo é obrigatório'
+}
+
 
 export function email(value: string): boolean | string {
     const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;

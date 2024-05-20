@@ -14,11 +14,16 @@ class Authorization {
     };
     scopes: string[] = [];
 
-    constructor() {
-
+    setUserStore() {
+        const userStore = useUserStore();
+        this.user = { ...userStore.user };
+        this.scopes = this.user.scopes! ?? [];
     }
+
     _authorization(slugsParam: string): boolean {
-        if (!this.user.id.length) this.setUserFromStore();
+        if (!this.user.id) {
+            this.setUserStore();
+        }
 
         if (this.scopes.length) {
             if (slugsParam.includes("&")) {

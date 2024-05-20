@@ -11,7 +11,7 @@
       <v-col cols="12">
         <v-data-table :headers="headers" :items="items" :loading="loading" :items-per-page="-1">
           <template #[`item.name`]="{ item }">
-            <RouterLink :to="{ name: 'totem.detail', params: { id: item.id} }">
+            <RouterLink :to="{ name: 'totem.detail', params: { id: item.id } }">
               {{ item.name }}
             </RouterLink>
           </template>
@@ -37,12 +37,12 @@
               </template>
               <v-list>
                 <template v-for="(option, index) in options">
-                  <v-list-item link @click="option.action(item)" :key="index" v-if="authorization.acl(option.slug)" >
+                  <v-list-item link @click="option.action(item)" :key="index" v-if="authorization.acl(option.slug)">
                     <v-list-item-title>
                       {{ option.title }}
                     </v-list-item-title>
                   </v-list-item>
-                  </template>
+                </template>
               </v-list>
             </v-menu>
           </template>
@@ -52,17 +52,17 @@
       </v-col>
     </v-row>
     <TotemDialog @close="clearTotem" @save="
-      loadTotens(false);
-    clearTotem();
-    " v-model:totem="totem" v-model="dialog"></TotemDialog>
+          loadTotens(false);
+        clearTotem();
+        " v-model:totem="totem" v-model="dialog"></TotemDialog>
   </v-sheet>
 </template>
 
 <script lang="ts" setup>
 import TotemDialog from "@/modules/totem/components/TotemDialog.vue";
 import {
-deleteTotem,
-getTotem,
+  deleteTotem,
+  getTotem,
 } from "@/modules/totem/repositories/totem.repository";
 import useAlertStore from "@/stores/alert";
 import useSystemStore from "@/stores/system";

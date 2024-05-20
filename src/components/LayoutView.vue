@@ -1,5 +1,5 @@
 <template>
-    <v-sheet color="white" rounded>
+    <v-sheet color="surface" rounded>
         <v-row>
             <v-col class="d-flex align-center">
                 <h1>
