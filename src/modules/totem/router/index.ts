@@ -23,7 +23,7 @@ const routes: RouteRecordRaw[] = [
       },
       guards: [
         'auth',
-        'acl'
+        'acl',
       ]
     },
     children: [

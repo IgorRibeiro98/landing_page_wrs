@@ -1,7 +1,7 @@
-import { RouteRecordRaw as RouteRecord, createRouter, createWebHashHistory, RouteMeta } from 'vue-router'
-import { useSystemStore } from '@/stores/system'
 import { setPageTitle } from '@/helpers/page';
 import guards from '@/router/guards';
+import { useSystemStore } from '@/stores/system';
+import { RouteMeta, RouteRecordRaw as RouteRecord, createRouter, createWebHashHistory } from 'vue-router';
 
 export type AuthorizaGuard = 'acl';
 export type Guard = 'auth' | AuthorizaGuard;
@@ -35,6 +35,12 @@ export const layouts = {
 
 const routes: RouteRecordRaw[] = [
   {
+    path: '/',
+    redirect: {
+      name: 'totem.view'
+    }
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
     component: () => import('@/components/NotFound.vue'),
@@ -63,11 +69,12 @@ router.beforeEach((to, from) => {
   if (meta.title) {
     setPageTitle(meta.title);
   }
-
+  
   if (meta.guards?.length) {
     for (const guard of meta.guards) {
       const result = guards[guard](to, from);
       if (result === true) continue;
+
       if (result === false) return { name: from.name || 'not-found' };
       return result;
     }
