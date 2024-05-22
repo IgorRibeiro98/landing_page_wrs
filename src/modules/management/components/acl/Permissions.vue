@@ -33,11 +33,11 @@ interface ComponentScopeCategory extends ScopeCategory {
 }
 
 interface Props {
-    modelValue: Scope[]
+    modelValue: Scope[]|string[]
 }
 
 interface Emits {
-    (e: 'update:modelValue', value: Scope[]): void
+    (e: 'update:modelValue', value: Scope[]|string[]): void
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -58,7 +58,7 @@ const scopeCategoriesComputed = computed(() => {
         }
     })
 });
-const scopes = defineModel<Scope[]>({
+const scopes = defineModel<Scope[]|string[]>({
     required: true
 });
 
@@ -104,9 +104,7 @@ const markAll = (category: ComponentScopeCategory) => {
 
 const removeAllCategoryScopes = (category: ComponentScopeCategory) => {
     const newScopes = scopes.value.filter((scope) => {
-        if (!category.scopes.find(categoryScope => categoryScope.slug === scope.slug)) {
-            return scope.slug
-        }
+        return !category.scopes.find(categoryScope => categoryScope.slug === scope);
     });
 
     scopes.value = newScopes;

@@ -1,14 +1,12 @@
 <template>
-    <template v-if="!loading">
-        <v-row>
-            <v-col cols="12" class="d-flex">
-                <h4 class="text-h4 font-weight-bold">ACL</h4>
-                <v-spacer></v-spacer>
-            </v-col>
-        </v-row>
-        <v-row>
-            <v-col cols="12">
-                <v-data-table-server :headers="headers" :items="filteredRoles" hover @click:row="goToRole"
+    <LayoutView  icon="mdi-shield-key-outline" title="ACL">
+        <template #action>
+            <v-btn color="primary" :to="{ name: 'management.acl.create' }">
+                Nova Role
+            </v-btn>
+        </template>
+        <template #content>
+            <v-data-table-server :headers="headers" :items="filteredRoles" hover @click:row="goToRole"
                     :loading="tableLoading" :items-length="paginate.total" v-model:items-per-page="paginate.per_page"
                     @update:itemsPerPage="loadRoles" @update:page="loadRoles">
                     <template #top>
@@ -19,9 +17,7 @@
                             </v-col>
                             <v-spacer></v-spacer>
                             <v-col cols="12" md="2" class="d-flex align-center justify-end">
-                                <v-btn color="primary" :to="{ name: 'management.acl.create' }">
-                                    Nova Role
-                                </v-btn>
+                                
                             </v-col>
                         </v-row>
                     </template>
@@ -44,13 +40,15 @@
                         </v-menu>
                     </template>
                 </v-data-table-server>
-            </v-col>
-        </v-row>
-    </template>
+        </template>
+
+    </LayoutView>
 </template>
 <script setup lang="ts">
 // import { errorMessage, successMessage } from '@/helpers/alert';
+import LayoutView from '@/components/LayoutView.vue'
 import { deleteRole, getAllRolesPaginate } from '@/modules/management/repositories/acl.repository';
+import { useSystemStore } from "@/stores/system";
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -65,41 +63,32 @@ const paginate = ref({
     total: 0,
     to: 2
 });
+
+const { setBreadcrumbs } = useSystemStore()
+
+setBreadcrumbs([
+    { title: "ACL", name: "true", to: "" },
+]);
 const headers: any[] = [
     {
         title: 'Nome',
         value: 'name',
-        headerProps: {
-            class: 'font-weight-bold'
-        }
     },
     {
         title: 'Nível',
         value: 'level',
-        headerProps: {
-            class: 'font-weight-bold'
-        }
     },
     {
         title: 'Permissões',
         value: 'scopes_count',
-        headerProps: {
-            class: 'font-weight-bold'
-        }
     },
     {
         title: 'Padrão',
         value: 'is_default',
-        headerProps: {
-            class: 'font-weight-bold'
-        }
     },
     {
         title: 'Ações',
         value: 'actions',
-        headerProps: {
-            class: 'font-weight-bold'
-        }
 
     }
 ];

@@ -1,5 +1,7 @@
 <template>
-    <v-form v-model="validate" lazy-validation @submit.prevent="save">
+    <LayoutView  icon="mdi-shield-key-outline" :title="title">
+        <template #content>
+            <v-form v-model="validate" lazy-validation @submit.prevent="save">
         <v-row>
             <v-col cols="12" md="3">
                 <div class="mb-1">
@@ -32,12 +34,16 @@
             </v-window>
         </v-col>
     </v-row>
+        </template>
+    </LayoutView>
 </template>
 <script setup lang="ts">
 import Validator from '@/helpers/validator'
 import Permissions from '@/modules/management/components/acl/Permissions.vue'
 import RoleUsers from '@/modules/management/components/acl/RoleUsers.vue'
 import useAlertStore from "@/stores/alert";
+import { useSystemStore } from "@/stores/system";
+
 
 // import { getAllUsersByRoleId } from '@/modules/user/repositories/userRepository'
 import { computed, onMounted, ref, shallowRef } from 'vue'
@@ -45,7 +51,6 @@ import { computed, onMounted, ref, shallowRef } from 'vue'
 interface Props {
     modelValue: Role
     showUsersTab?: boolean
-
 }
 
 interface Emits {
@@ -76,6 +81,19 @@ const props = withDefaults(defineProps<Props>(), {
     showUsersTab: true
 })
 
+const role = defineModel<Role>({
+    required: true
+})
+
+const title = computed(() => role.value.id ? role.value.name : 'Criar grupo de permissões')
+
+const { setBreadcrumbs } = useSystemStore()
+
+setBreadcrumbs([
+    { title: "ACL", name: "true", to:{name:  "management.acl"} },
+    { title: title.value, name: "true", to: "" },
+]);
+
 const emit = defineEmits<Emits>()
 
 const { openAlert } = useAlertStore();
@@ -98,14 +116,11 @@ const tabs = ref<Tab[]>([
     // }
 ])
 
-const role = defineModel<Role>({
-    required: true
-})
 
 const save = () => {
     if (!role.value.scopes.length) {
         openAlert(
-            "Selecione pelo menos uma permissão"
+            "Selecione pelo menos uma permissão", 'É necessário selecionar pelo menos uma permissão'
         );
     }
     if (validate.value && role.value.scopes.length) {
