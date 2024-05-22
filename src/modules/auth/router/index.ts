@@ -1,5 +1,5 @@
-import { type RouteRecordRaw } from 'vue-router'
-import { layouts } from '@/router'
+import { layouts } from '@/router';
+import { type RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
     {
@@ -11,6 +11,17 @@ const routes: RouteRecordRaw[] = [
                 name: 'auth-callback',
                 component: () => import('@/modules/auth/views/Callback.vue')
             },
+        ],
+    },
+    {
+        path: '/login',
+        component: () => layouts.blank(),
+        children: [
+            {
+                path: '',
+                name: 'login',
+                component: () => import('@/modules/auth/views/Login.vue')
+            }
         ],
     }
 ]

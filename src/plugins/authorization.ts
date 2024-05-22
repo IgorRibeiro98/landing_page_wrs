@@ -2,7 +2,7 @@ import useUserStore from '@/stores/user';
 
 class Authorization {
     user: User = {
-        id: '',
+        id: 0,
         name: '',
         email: '',
         email_verified_at: null,
@@ -17,7 +17,7 @@ class Authorization {
     setUserStore() {
         const userStore = useUserStore();
         this.user = { ...userStore.user };
-        this.scopes = this.user.scopes! ?? [];
+        this.scopes = this.user.slugs! ?? [];
     }
 
     _authorization(slugsParam: string): boolean {
@@ -50,32 +50,6 @@ class Authorization {
 
         this.user = {
             ...userStore.user,
-            slugs: [
-                'totem.view',
-                'totem.create',
-                'totem.update',
-                'totem.delete',
-
-                'totem.queue.view',
-                'totem.queue.create',
-                'totem.queue.update',
-                'totem.queue.delete',
-
-                // 'totem.screen.view',
-                // 'totem.screen.create',
-                // 'totem.screen.update',
-                // 'totem.screen.delete',
-
-                // 'queue.view',
-                // 'queue.create',
-                // 'queue.update',
-                // 'queue.delete',
-
-                // 'attendance_type.view',
-                // 'attendance_type.create',
-                // 'attendance_type.update',
-                // 'attendance_type.delete'
-            ]
         };
 
         this.scopes = this.user.slugs! ?? [];
