@@ -1,9 +1,9 @@
 <template>
-    <v-navigation-drawer v-model="drawer" :rail="rail" permanent color="primary" class="position-fixed">
+    <v-navigation-drawer v-model="drawer" :rail="rail" permanent color="nav-color" class="position-fixed">
         <v-list density="compact" nav>
             <v-list-item>
                 <template #prepend>
-                    <Avatar :user="authUser" color="secondary" size="24" />
+                    <Avatar :user="authUser" color="nav-color-accent" size="24" :show-tooltip="rail" />
                 </template>
                 <template #title>
                     <span class="pl-4 font-weight-semi-bold">{{
@@ -13,15 +13,12 @@
             </v-list-item>
         </v-list>
         <v-divider />
-        <v-btn color="primary" size="28" class="toggle-rail-drawer"
+        <v-btn color="nav-color" variant="flat" size="28" class="toggle-rail-drawer"
             :icon="rail ? 'mdi-chevron-right' : 'mdi-chevron-left'" @click.stop="toggleRail"></v-btn>
         <v-list class="mt-3" nav>
             <template v-for="(drawerItem, index) in items" :key="index">
                 <DrawerItem :item="drawerItem" :rail="rail" />
             </template>
-        </v-list>
-        <v-list density="compact" nav class="logout">
-            <DrawerItem :item="logoutItem" :rail="rail" />
         </v-list>
 
     </v-navigation-drawer>
@@ -59,18 +56,15 @@ const route = useRoute();
 const userStore = useAuthStore();
 const authUser = userStore.user;
 
-const toggleRail = () => {
+function toggleRail() {
+    rail.value = !rail.value
     localStorage.setItem("rail", rail.value.toString());
-    if (rail.value) {
-        return (rail.value = false);
-    }
-    rail.value = true;
 };
 
 onBeforeMount(() => {
     const railValue = localStorage.getItem("rail");
     if (railValue) {
-        rail.value = !(railValue == "true");
+        rail.value = railValue == "true";
     }
 });
 </script>

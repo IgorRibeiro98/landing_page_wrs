@@ -1,9 +1,9 @@
 <template>
-    <v-avatar color="primary" :size="size" :density="density">
+    <v-avatar :color="color" :size="size" :density="density">
         <span>
             {{ user?.name.split(' ').map((n) => n[0]).join('') }}
         </span>
-        <v-tooltip v-if="showTooltip" activator="parent" location="top" content-class="bg-primary">
+        <v-tooltip v-if="showTooltip" activator="parent" location="top" :content-class="`bg-${color}`">
             <span>
                 {{ user?.name }}
             </span>
@@ -17,13 +17,17 @@ interface Props {
     size?: string | number
     density?: 'default' | 'comfortable' | 'compact'
     showTooltip?: boolean
+    color?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
     size: 'default',
     density: 'default',
-    showTooltip: false
+    showTooltip: false,
+    color: 'primary'
 })
 
 </script>
-<scoped scoped lang="scss"></scoped>
+
+<scoped scoped lang="scss">
+</scoped>

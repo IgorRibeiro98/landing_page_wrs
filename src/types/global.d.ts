@@ -361,7 +361,8 @@ declare global {
     created_at: string
     updated_at: string
     scopes_count: number
-    slugs: string[]
+    slugs: string[],
+    role: Role[]
   }
 
   interface DrawerItem {

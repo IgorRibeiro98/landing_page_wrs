@@ -19,43 +19,57 @@ import NavigationDrawer from "@/components/NavigationDrawer.vue";
 import { RouterView } from "vue-router";
 
 const drawerItems = ref<DrawerItem[]>([
+  // {
+  //   icon: 'mdi-monitor-vertical',
+  //   title: 'Totens',
+  //   route: {
+  //     name: 'totem.view',
+  //   }
+  // },
+  // {
+  //   icon: 'mdi-account-group',
+  //   title: 'Filas',
+  //   route: {
+  //     name: 'queue.view',
+  //   }
+  // },
+  // {
+  //   icon: 'mdi-sitemap-outline',
+  //   title: 'Tipo de Atendimento',
+  //   route: {
+  //     name: 'attendance-type.view',
+  //   }
+  // },
   {
-    icon: 'mdi-monitor-vertical',
-    title: 'Totens',
+    icon: 'mdi-account-supervisor',
+    title: 'Usuário',
     route: {
-      name: 'totem.view',
+      name: 'user.view',
     }
   },
   {
-    icon: 'mdi-account-group',
-    title: 'Filas',
+    icon: 'mdi-shield-key-outline',
+    title: 'ACL',
     route: {
-      name: 'queue.view',
+      name: 'management.acl',
     }
   },
-  {
-    icon: 'mdi-sitemap-outline',
-    title: 'Tipo de Atendimento',
-    route: {
-      name: 'attendance-type.view',
-    }
-  },
-  {
-    icon: 'mdi-cog',
-    title: 'Gerenciamento',
-    route: {
-      name: '#',
-    },
-    items: [
-      {
-        icon: 'mdi-shield-key-outline',
-        title: 'ACL',
-        route: {
-          name: 'management.acl',
-        }
-      },
-    ]
-  },
+  // {
+  //   icon: 'mdi-cog',
+  //   title: 'Gerenciamento',
+  //   route: {
+  //     name: '#',
+  //   },
+  //   items: [
+  //     {
+  //       icon: 'mdi-shield-key-outline',
+  //       title: 'ACL',
+  //       route: {
+  //         name: 'management.acl',
+  //       }
+  //     },
+  //   ]
+  // },
 ])
 
 

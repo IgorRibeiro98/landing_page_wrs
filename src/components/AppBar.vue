@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar color="nav-color" class="position-fixed">
+  <v-app-bar color="nav-color" class="position-fixed" elevation="0">
     <template #prepend>
       <v-img aspect-ratio="16/9" v-if="!$vuetify.display.mobile" @click="$router.push({ path: '/' })" class="pointer mx-4" :src="logo" width="50"></v-img>
       <v-slide-group show-arrows>
@@ -13,8 +13,6 @@
       </v-slide-group>
     </template>
     <template #append>
-        {{ user.name }}
-      
       <v-btn @click="toggleTheme" variant="text" :icon="themeIcon"></v-btn>
       <v-btn @click="logoutUser" :loading="loadingLogout" title="Sair" icon="mdi-exit-to-app"></v-btn>
     </template>

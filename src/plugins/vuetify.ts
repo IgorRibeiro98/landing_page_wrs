@@ -62,6 +62,8 @@ export default createVuetify({
           background: "#F3F3F3",
           keyboard: '#f94c07',
           scrollbar: '#757575',
+          'nav-color': '#072b47',
+          'nav-color-accent': '#a4b1bb'
         }
       },
       dark: {
@@ -85,6 +87,8 @@ export default createVuetify({
           'on-analytics-secondary': '#101010',
           scrollbar: '#BDBDBD',
           keyboard: '#f94c07',
+          'nav-color': '#072b47',
+          'nav-color-accent': '#a4b1bb'
         }
       }
     }

@@ -73,6 +73,7 @@ const themeList = computed(() => {
     return [
         { name: 'Primária', value: 'primary', show: true, component: shallowRef(Init), props: {} },
         { name: 'Secundária', value: 'secondary', show: true, component: shallowRef(Init), props: {} },
+        { name: 'Cor da navegação lateral', value: 'nav-color', show: true, component: shallowRef(Init), props: {} },
         { name: 'Teclado', value: 'keyboard', show: true, component: shallowRef(VirtualKeyboard), props: { alwaysVisible: true } },
         { name: 'Erro', value: 'error', show: showAdvanced.value, component: shallowRef(VBtn), props: { color: 'error', text: 'Hello World', size: 'x-large' } },
         { name: 'Info', value: 'info', show: showAdvanced.value, component: shallowRef(VBtn), props: { color: 'info', text: 'Hello World', size: 'x-large' } },
