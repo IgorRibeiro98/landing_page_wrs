@@ -1,5 +1,5 @@
 <template>
-    <LayoutView  icon="mdi-shield-key-outline" title="ACL">
+    <LayoutView icon="mdi-shield-key-outline" title="ACL">
         <template #action>
             <v-btn color="primary" :to="{ name: 'management.acl.create' }">
                 Nova Role
@@ -7,39 +7,39 @@
         </template>
         <template #content>
             <v-data-table-server :headers="headers" :items="filteredRoles" hover @click:row="goToRole"
-                    :loading="tableLoading" :items-length="paginate.total" v-model:items-per-page="paginate.per_page"
-                    @update:itemsPerPage="loadRoles" @update:page="loadRoles">
-                    <template #top>
-                        <v-row>
-                            <v-col cols="12" md="4" class="d-flex align-center">
-                                <v-text-field density="compact" hide-details="auto" placeholder="Pesquisar..."
-                                    append-inner-icon="mdi-magnify" variant="outlined" v-model="search"></v-text-field>
-                            </v-col>
-                            <v-spacer></v-spacer>
-                            <v-col cols="12" md="2" class="d-flex align-center justify-end">
-                                
-                            </v-col>
-                        </v-row>
-                    </template>
-                    <template #item.is_default="{ item }">
-                        <span>{{ item.is_default ? 'Sim' : 'Não' }}</span>
-                    </template>
-                    <template #item.actions="{ item }">
-                        <v-menu location="right">
-                            <template v-slot:activator="{ props }">
-                                <v-btn icon="mdi-dots-vertical" variant="plain" v-bind="props"></v-btn>
+                :loading="tableLoading" :items-length="paginate.total" v-model:items-per-page="paginate.per_page"
+                @update:itemsPerPage="loadRoles" @update:page="loadRoles">
+                <template #top>
+                    <v-row>
+                        <v-col cols="12" md="4" class="d-flex align-center">
+                            <v-text-field density="compact" hide-details="auto" placeholder="Pesquisar..."
+                                append-inner-icon="mdi-magnify" variant="outlined" v-model="search"></v-text-field>
+                        </v-col>
+                        <v-spacer></v-spacer>
+                        <v-col cols="12" md="2" class="d-flex align-center justify-end">
+
+                        </v-col>
+                    </v-row>
+                </template>
+                <template #item.is_default="{ item }">
+                    <span>{{ item.is_default ? 'Sim' : 'Não' }}</span>
+                </template>
+                <template #item.actions="{ item }">
+                    <v-menu location="right">
+                        <template v-slot:activator="{ props }">
+                            <v-btn icon="mdi-dots-horizontal" variant="plain" v-bind="props"></v-btn>
+                        </template>
+                        <v-list>
+                            <template v-for="(action) in tableActions">
+                                <v-list-item @click="action.action({ ...item })"
+                                    v-if="action.show ? action.show(item) : true">
+                                    <v-list-item-title>{{ action.title }}</v-list-item-title>
+                                </v-list-item>
                             </template>
-                            <v-list>
-                                <template v-for="(action) in tableActions">
-                                    <v-list-item @click="action.action({ ...item })"
-                                        v-if="action.show ? action.show(item) : true">
-                                        <v-list-item-title>{{ action.title }}</v-list-item-title>
-                                    </v-list-item>
-                                </template>
-                            </v-list>
-                        </v-menu>
-                    </template>
-                </v-data-table-server>
+                        </v-list>
+                    </v-menu>
+                </template>
+            </v-data-table-server>
         </template>
 
     </LayoutView>
@@ -87,9 +87,9 @@ const headers: any[] = [
         value: 'is_default',
     },
     {
-        title: 'Ações',
         value: 'actions',
-
+        align: "center",
+        width: "2%"
     }
 ];
 
