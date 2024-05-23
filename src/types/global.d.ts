@@ -364,5 +364,12 @@ declare global {
     slugs: string[]
   }
 
+  interface DrawerItem {
+    icon: string
+    title: string
+    route: any,
+    items?: DrawerItem[]
+    acl?: string
+  }
 
 }
