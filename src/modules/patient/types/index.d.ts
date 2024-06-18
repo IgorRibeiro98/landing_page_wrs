@@ -37,6 +37,9 @@ export interface Schedule {
   conventant: {
     id: string;
     name: string
+  },
+  guide?: {
+    url: string;
   }
 }
 
@@ -51,6 +54,7 @@ interface Patient {
 export interface Data {
     internal: {
       identifier?: string;
+      birthDate?: string;
       faceRecognition?: string;
     },
     patient?: Patient

@@ -8,6 +8,7 @@ const patients: any = {
     id: '00000000000',
     first_name: 'João',
     phone_hint: '0251',
+    birth_date: '00/00/0000',
     has_face_recognition: true,
     schedules: [
       // new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-')+ ' '+ new Date().getHours() + ':' + new Date().getMinutes(),
@@ -66,6 +67,7 @@ const patients: any = {
     first_name: 'Jessica',
     phone_hint: '0251',
     has_face_recognition: true,
+    birth_date: '11/11/1111',
     schedules: [
       {
         id: "id01",
@@ -82,6 +84,9 @@ const patients: any = {
           id: "conv-01",
           name: "Unimed",
         },
+        guide: {
+          url: 'https://drive.google.com/file/d/1-K9QNOdOmcPNOSR1hfbxGCo04OkOERZ4/preview'
+        }
       },
       {
         id: "id02",
@@ -98,6 +103,9 @@ const patients: any = {
           id: "conv-02",
           name: "Amil",
         },
+        guide: {
+          url: 'https://drive.google.com/file/d/1-K9QNOdOmcPNOSR1hfbxGCo04OkOERZ4/preview'
+        }
       },
       {
         id: "id03",
@@ -137,6 +145,7 @@ const patients: any = {
     id: '22222222222',
     first_name: 'Jose',
     phone_hint: '0251',
+    birth_date: '22/22/2222',
     has_face_recognition: true,
     schedules: [
       {
@@ -177,6 +186,7 @@ const patients: any = {
     id: '33333333333',
     first_name: 'Jessica',
     phone_hint: '0251',
+    birth_date: '33/33/3333',
     has_face_recognition: false,
     schedules: [
       {
@@ -313,6 +323,7 @@ const patients: any = {
     id: '44444444444',
     first_name: 'Mariana',
     phone_hint: '0251',
+    birth_date: '44/44/4444',
     has_face_recognition: false,
     schedules: []
   },
@@ -327,6 +338,24 @@ export function findByIdentifier(identifier: any): Promise<{ data: any }> {
       if (!cpfs.includes(identifier)) return rej(`Não foi possível encontrar o seu cadastro`)
 
       const patient: any = patients[identifier]
+
+      return res({
+        data: patient
+      })
+    }, 2000)
+  })
+}
+
+export function checkBirthDate(identifier: string, birthDate: string): Promise<{data: any}> {
+  return new Promise((res, rej) => {
+    setTimeout(() => {
+      const cpfs = Object.keys(patients)
+
+      if (!cpfs.includes(identifier)) return rej(`Não foi possível encontrar o seu cadastro`)
+
+      const patient: any = patients[identifier]
+
+      if (patient.birth_date !== birthDate) return rej(`Data de nascimento inválida`)
 
       return res({
         data: patient

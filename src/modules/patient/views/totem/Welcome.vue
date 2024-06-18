@@ -1,20 +1,14 @@
 <template>
-  <div class="text-white">
-    <h1 class="text-center mb-4">Bem-vindo às Leve Clinicas!</h1>
-    <p class="text-center text-primary">
-      Para retirar sua senha, responda a pergunta abaixo:
-    </p>
-    <div class="mt-8">
-      <p class="text-center">Você possui consulta agendada?</p>
-
-      <v-row>
-        <v-col class="d-flex" cols="12">
-          <v-btn class="mx-auto" height="120" width="400" color="primary" @click="emit('next')">Sim</v-btn>
-        </v-col>
-        <v-col class="d-flex" cols="12">
-          <v-btn class="mx-auto" height="120" width="400" color="primary" @click="emit('to', 'Queues')">Não</v-btn>
-        </v-col>
-      </v-row>
+  <div class="text-white fill-height d-flex align-center justify-center">
+    <div>
+      <h1 class="text-center mb-4">Bem-vindo</h1>
+      <div class="mt-8">
+        <v-row>
+          <v-col class="d-flex" cols="12">
+            <v-btn class="mx-auto" height="120" width="400" color="primary" @click="emit('next')">Iniciar Atendimento</v-btn>
+          </v-col>
+        </v-row>
+      </div>
     </div>
   </div>
 </template>
