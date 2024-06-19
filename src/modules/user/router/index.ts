@@ -15,13 +15,13 @@ const routes: RouteRecordRaw[] = [
                 'acl',
             ]
         },
-        children: [
-            {
-                path: '',
-                name: 'user.view',
-                component: () => import('@/modules/user/views/User.vue')
-            },
-        ]
+        // children: [
+        //     {
+        //         path: '',
+        //         name: 'user.view',
+        //         component: () => import('@/modules/user/views/User.vue')
+        //     },
+        // ]
     }
 ]
 

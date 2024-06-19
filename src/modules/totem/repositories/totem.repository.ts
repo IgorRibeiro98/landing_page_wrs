@@ -464,6 +464,35 @@ export function findTotem(id: number | string): any {
             "traits": []
           },
           {
+            "id": 100,
+            "screen_id": 60,
+            "totem_id": 10,
+            "order": 3,
+            "data": {
+              "id": 6,
+              "name": "Contato",
+              "component": "PatientInfo",
+              "description": "componente para o início do atendimento",
+              "question_id": null,
+              "created_at": "2024-04-22T23:01:24.000000Z",
+              "updated_at": "2024-04-22T23:01:24.000000Z",
+              "subscreens": [
+                {
+                  "id": 1,
+                  "name": "ContactInfo",
+                  "component": "ContactInfo",
+                  "description": "Componente para confirmação de cadastro utilizando a data de nascimento",
+                  "screen_id": 3,
+                  "order": 0,
+                  "created_at": "2024-06-13T22:52:01.000000Z",
+                  "updated_at": "2024-06-13T22:52:01.000000Z"
+                }
+              ]
+            },
+            "fields": [],
+            "traits": []
+          },
+          {
             "id": 7,
             "screen_id": 3,
             "totem_id": 1,

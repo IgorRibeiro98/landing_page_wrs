@@ -12,5 +12,6 @@ services:
 
 networks:
   app:
-    name: karaoke
+    name: autoatendimento
+    external: true
     driver: bridge
