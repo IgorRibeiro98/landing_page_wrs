@@ -3,42 +3,25 @@
     <v-col cols="12" md="11">
       <v-row>
         <v-col cols="12">
-          <h1>Digite seu CPF no campo abaixo</h1>
-        </v-col>
-
-        <v-col cols="12" md="7">
-          <v-form v-model="form">
-            <v-text-field
-              ref="formElement"
-              :autofocus="true"
-              :disabled="isLoading"
-              v-model="identifier"
-              :rules="[required, cpf]"
-              v-mask="'###.###.###-##'"
-              placeholder="000.000.000-00"
-              number
-            >
-            </v-text-field>
-          </v-form>
-
-          <v-row no-gutters>
+          <v-row no-gutters justify="center">
             <v-col cols="12" md="6">
-              <v-btn
-                color="primary"
-                block
-                rounded
-                @click="send()"
-                :loading="isLoading"
-                :disabled="isLoading"
-              >
+              <h1>Digite seu CPF no campo abaixo</h1>
+
+              <v-form v-model="form">
+                <v-text-field ref="formElement" :autofocus="true" :disabled="isLoading" v-model="identifier"
+                  :rules="[required, cpf]" v-mask="'###.###.###-##'" placeholder="000.000.000-00" number>
+                </v-text-field>
+              </v-form>
+
+              <v-btn color="primary" block rounded @click="send()" :loading="isLoading" :disabled="isLoading">
                 Continuar
               </v-btn>
             </v-col>
           </v-row>
         </v-col>
 
-        <v-col cols="12" md="5" class="d-flex justify-center">
-          <VirtualKeyboard always-visible/>
+        <v-col cols="12" class="d-flex justify-center">
+          <VirtualKeyboard always-visible />
         </v-col>
       </v-row>
     </v-col>
@@ -100,20 +83,20 @@ async function send() {
 
 function openAlert(text: string | Error) {
   emit("alert", {
-        title: `Ops, ${text}! :(`,
-        text: "Não se preocupe! Vamos te encaminhar para a recepção",
-        action: {
-          type: "choise",
-          rejectLabel: "Tentar novamente",
-          acceptLabel: "Ok, entendi",
-          callback(accept: boolean) {
-            if (!accept) {
-              identifier.value = "";
-              setTimeout(() => formElement.value!.focus(), 500)
-            }
-            else emit("to", 'Queues');
-          }
+    title: `Ops, ${text}! :(`,
+    text: "Não se preocupe! Vamos te encaminhar para a recepção",
+    action: {
+      type: "choise",
+      rejectLabel: "Tentar novamente",
+      acceptLabel: "Ok, entendi",
+      callback(accept: boolean) {
+        if (!accept) {
+          identifier.value = "";
+          setTimeout(() => formElement.value!.focus(), 500)
         }
+        else emit("to", 'Queues');
+      }
+    }
   });
 }
 </script>
