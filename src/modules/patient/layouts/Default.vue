@@ -1,31 +1,34 @@
 <template>
   <div class="d-flex flex-column flex-grow-1 totem" :style="styles" fluid>
-    <div>
-      <div>
+    <div class="d-flex justify-space-between mb-4">
+      <v-btn
+        variant="text"
+        color="primary"
+        @click="emit('back')"
+        v-if="!hideBack"
+      >
+        <v-icon class="mr-2" size="30">mdi-chevron-left</v-icon>
+        <span class="font-weight-bold">Voltar</span></v-btn
+      >
+      <v-spacer></v-spacer>
+      <div v-if="!$vuetify.display.xs">
         <v-img :src="logo" width="194"></v-img>
       </div>
-      <div class="mt-4 d-flex justify-space-between" style="">
-        <v-btn
-          variant="text"
-          color="primary"
-          @click="emit('back')"
-          :disabled="hideBack"
-        >
-          <v-icon class="mr-2" size="30">mdi-chevron-left</v-icon>
-          <span class="font-weight-bold">Voltar</span></v-btn
-        >
-        <v-btn
-          variant="text"
-          color="primary"
-          @click="emit('cancel')"
-          :disabled="hideCancel"
-          ><span class="font-weight-bold">Cancelar</span></v-btn
-        >
-      </div>
+      <v-spacer></v-spacer>
+
+      <v-btn
+        variant="text"
+        color="primary"
+        @click="emit('cancel')"
+        v-if="!hideCancel"
+        ><span class="font-weight-bold">Cancelar</span></v-btn
+      >
     </div>
+
     <div style="width: 80%" class="mx-auto flex-grow-1 d-flex flex-column">
         <slot></slot>
     </div>
+    
     <div class="text-center">
       <v-divider class="my-4"></v-divider>
       {{ date }} - {{ hour }}
@@ -56,7 +59,7 @@ const emit = defineEmits<Emits>();
 const tenantStore = useTenantStore();
 const styles = ref<any>({});
 const logo = computed(() => {
-  return tenantStore.tenant.logo || appLogo;
+  return appLogo;
 });
 const keyboard = ref(false);
 const date = computed(() => {

@@ -1,52 +1,40 @@
 <template>
-  <v-row justify="center" no-gutters>
-    <v-col cols="12" md="11">
-      <v-row>
+      <h1 class="mb-4 text-center">Verificação de Identidade</h1>
 
-        <v-col cols="12">
+      <p class="mb-4">
+        <b>{{ data.patient!.first_name }}</b>
+        Para a sua segurança, precisamos que você selecione a sua data de nascimento.
+      </p>
 
-          <v-row no-gutters justify="center">
-            <v-col cols="12" md="6">
-              <h1>Digite a sua data de nascimento</h1>
-
-
-              <v-form v-model="form">
-                <v-text-field ref="formElement" :autofocus="true" :disabled="isLoading" v-model="birthDate"
-                  :rules="[required]" v-mask="'##/##/####'" placeholder="00/00/0000" number>
-                </v-text-field>
-              </v-form>
-
-
-              <v-btn color="primary" block rounded @click="send()" :loading="isLoading" :disabled="isLoading">
-                Continuar
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-col>
-
-        <v-col cols="12" class="d-flex justify-center">
-          <VirtualKeyboard always-visible />
-        </v-col>
-      </v-row>
-    </v-col>
-  </v-row>
+      <div>
+        <v-row>
+          <v-col v-for="(sugestion, index) of sugestions" :key="index" cols="12" md="3">
+            <v-btn @click="send(sugestion)" stacked width="100%" :disabled="isLoading">
+              <v-icon icon="mdi-calendar" size="35" color="primary"></v-icon>
+              <span class="font-weight-regular">
+                {{ sugestion }}
+              </span>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </div>
 </template>
 
 <script lang="ts" setup>
-import VirtualKeyboard from "@/components/VirtualKeyboard.vue";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 
-import { required } from "@/rules";
-import { checkBirthDate } from "@patient/repositories/patient.repository";
+import { checkBirthDate, getBirthDateSugestion } from "@patient/repositories/patient.repository";
 
 const birthDate = ref("");
 const form = ref(false);
 const formElement = ref<HTMLFormElement>()!
+const sugestions = ref([])
 
-import { AlertProps, Data } from "@patient/types";
+import { AlertProps, Data, LoadingProps } from "@patient/types";
 
 interface Emit {
   (event: "alert", options: AlertProps): void;
+  (event: 'loading', options: LoadingProps): void;
   (event: "next"): void;
   (event: "to", value: string): void;
   (event: "update:data", value: any): void;
@@ -64,21 +52,27 @@ const data = computed({
   set: (value: Data) => emit('update:data', value)
 })
 
-async function send() {
-  if (!form.value) return;
-
+async function send(date: any) {
   isLoading.value = true;
 
-  checkBirthDate(props.data.internal.identifier!, birthDate.value)
+  emit('loading', {
+    text: 'Aguarde enquanto validamos a sua data de nascimento',
+    callback(loading) {
+      checkBirthDate(props.data.internal.identifier!, date)
     .then((res) => {
       data.value.patient = res.data
-      data.value.internal.birthDate = birthDate.value
+      data.value.internal.birthDate = date
       emit('next')
     })
     .catch((error) => {
       openAlert(error)
     })
-    .finally(() => (isLoading.value = false));
+    .finally(() => {
+      isLoading.value = false
+      loading.value = false
+    });
+    }
+  })
 }
 
 function openAlert(text: string | Error) {
@@ -99,4 +93,11 @@ function openAlert(text: string | Error) {
     }
   });
 }
+
+onMounted(() => {
+  getBirthDateSugestion(data.value.patient!.id)
+    .then(res => {
+      sugestions.value = res.data
+    })
+})
 </script>

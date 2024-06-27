@@ -257,7 +257,7 @@ declare global {
   }
 
   interface Role {
-    id: string,
+    id: number,
     name: string,
     is_default: boolean,
     scopes: Scope[] | string[]
@@ -362,7 +362,8 @@ declare global {
     updated_at: string
     scopes_count: number
     slugs: string[],
-    role: Role[]
+    role_id?: number | null,
+    role: Omit<Role, 'level' | 'is_default', 'users'>
   }
 
   interface DrawerItem {

@@ -9,7 +9,7 @@
     <v-form ref="formElement" @submit.prevent="next">
       <FormBuilder class="mt-5" v-model="patient" :form="form"/>
       <v-row justify="center">
-        <v-col cols="5">
+        <v-col cols="12" md="5">
           <v-btn type="submit" block rounded="lg" color="primary"
             >Continuar</v-btn
           >

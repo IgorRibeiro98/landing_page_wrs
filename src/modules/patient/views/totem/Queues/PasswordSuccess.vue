@@ -29,7 +29,7 @@ const props = defineProps<{
 const url = computed(() => {
     const params = new URLSearchParams(props.data.ticket! as any);
 
-    return window.location.origin + `qwert/#/senha?${params.toString()}`;
+    return window.location.origin + `#/senha?${params.toString()}`;
 });
 
 const emit = defineEmits<{

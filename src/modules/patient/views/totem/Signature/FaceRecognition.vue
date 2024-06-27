@@ -14,7 +14,7 @@
       style="flex-grow: 1; background: #4b4b4b"
     >
       <div
-        style="width: 70%"
+        style="width: 50%"
         class="d-flex flex-column justify-center align-center flex-grow-1 mx-auto position-relative"
       >
         <video

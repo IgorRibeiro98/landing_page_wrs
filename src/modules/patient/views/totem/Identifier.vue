@@ -1,31 +1,40 @@
 <template>
-  <v-row justify="center" no-gutters>
-    <v-col cols="12" md="11">
-      <v-row>
-        <v-col cols="12">
-          <v-row no-gutters justify="center">
-            <v-col cols="12" md="6">
-              <h1>Digite seu CPF no campo abaixo</h1>
+      <v-row no-gutters>
+        <v-col cols="12" md="6">
+          <h1>Digite seu CPF no campo abaixo</h1>
 
-              <v-form v-model="form">
-                <v-text-field ref="formElement" :autofocus="true" :disabled="isLoading" v-model="identifier"
-                  :rules="[required, cpf]" v-mask="'###.###.###-##'" placeholder="000.000.000-00" number>
-                </v-text-field>
-              </v-form>
+          <v-form v-model="form">
+            <v-text-field
+              ref="formElement"
+              :autofocus="true"
+              :disabled="isLoading"
+              v-model="identifier"
+              :rules="[required, cpf]"
+              v-mask="'###.###.###-##'"
+              placeholder="000.000.000-00"
+              number
+            >
+            </v-text-field>
+          </v-form>
 
-              <v-btn color="primary" block rounded @click="send()" :loading="isLoading" :disabled="isLoading">
+          <v-btn
+                color="primary"
+                block
+                rounded
+                @click="send()"
+                :loading="isLoading"
+                :disabled="isLoading"
+              >
                 Continuar
-              </v-btn>
-            </v-col>
-          </v-row>
+          </v-btn>
         </v-col>
 
-        <v-col cols="12" class="d-flex justify-center">
-          <VirtualKeyboard always-visible />
+        <v-col cols="12" md="6" justify="center" class="d-flex justify-center">
+          <div>
+            <VirtualKeyboard always-visible/>
+          </div>
         </v-col>
       </v-row>
-    </v-col>
-  </v-row>
 </template>
 
 <script lang="ts" setup>

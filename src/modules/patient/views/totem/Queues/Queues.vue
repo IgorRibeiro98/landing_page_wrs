@@ -5,13 +5,11 @@
         <h1>O que você deseja fazer hoje?</h1>
       </v-col>
 
-      <v-row justify="center">
-        <v-col cols="10">
-          <v-row justify="center">
-            <v-col cols="12" md="auto" v-for="(queue, index) in totem.queues" :key="index" class="d-flex justify-center">
+          <v-row justify="center" no-gutters>
+            <v-col cols="12" md="auto" v-for="(queue, index) in totem.queues" :key="index" class="d-flex justify-center ma-1">
               <v-sheet v-ripple color="transparent" @click="checkQueue(queue)"
                 style="cursor: pointer; white-space: normal" border="sm" rounded class="d-flex pa-6" link min-height="80"
-                width="342" click="checkQueue(queue)">
+                max-width="342" min-width="300" click="checkQueue(queue)">
                 <div class="mr-2">
                   <v-img :src="queue.data?.icon_src" width="32" height="32"> </v-img>
                 </div>
@@ -21,8 +19,6 @@
               </v-sheet>
             </v-col>
           </v-row>
-        </v-col>
-      </v-row>
     </v-row>
   </div>
 </template>

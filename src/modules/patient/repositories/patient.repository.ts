@@ -330,6 +330,50 @@ const patients: any = {
 
 }
 
+function randomDate(start: Date, end: Date): Date {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
+
+function generateBirthDates(patientBirthDateString: string): string[] {
+  const [day, month, year] = patientBirthDateString.split('/');
+  const patientBirthDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+
+  const birthDates: Date[] = [];
+
+  for (let i = 0; i < 2; i++) {
+      const start = new Date(patientBirthDate.getFullYear() - 10, 0, 1);
+      const end = new Date(patientBirthDate.getFullYear() + 10, 11, 31);
+      birthDates.push(randomDate(start, end));
+  }
+
+  birthDates.push(patientBirthDate);
+
+  return birthDates.map(date => `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`);
+}
+
+function shuffleArray(array: any[]): any[] {
+  for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+export function getBirthDateSugestion(identifier: any): Promise<{ data: any }>{
+  return new Promise((res, rej) => {
+
+    const cpfs = Object.keys(patients)
+
+    if (!cpfs.includes(identifier)) return rej(`Não foi possível encontrar o seu cadastro`)
+
+    const patient: any = patients[identifier]
+
+    return res({
+      data: shuffleArray([...generateBirthDates(patient.birth_date), patient.birth_date])
+    })
+  })
+}
+
 export function findByIdentifier(identifier: any): Promise<{ data: any }> {
   return new Promise((res, rej) => {
     setTimeout(() => {

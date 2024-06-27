@@ -7,7 +7,7 @@
     </p>
     <FormBuilder class="mt-5" :form="form" v-model="patient" />
     <v-row justify="center">
-      <v-col cols="5">
+      <v-col cols="12" md="5">
         <v-btn block rounded="lg" color="primary" @click="$emit('next')"
           >Continuar</v-btn
         >

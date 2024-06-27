@@ -30,12 +30,12 @@
 import ConfirmAlert from "@/modules/patient/components/ConfirmAlert.vue";
 import Loading from "@patient/components/Loading.vue";
 import {
-computed,
-onBeforeMount,
-ref,
-shallowRef,
-watch,
-type Component as VueComponent,
+  computed,
+  onBeforeMount,
+  ref,
+  shallowRef,
+  watch,
+  type Component as VueComponent,
 } from "vue";
 const to = ref("");
 
@@ -83,7 +83,7 @@ type Component = Record<string, VueComponent>;
 const components = shallowRef<Component>({} as Component);
 const layout = ref({
   hideBack: true,
-  hideCancel: false,
+  hideCancel: true,
 });
 const isDev = import.meta.env.MODE === "development";
 const screenIndex = ref(0);
@@ -122,8 +122,15 @@ const currentFlowScreenComponent = computed(() => {
 });
 
 watch(screenIndex, (value: number) => {
-  if (value == 0) return layout.value.hideBack = true;
-  layout.value.hideBack = false;
+  if (value == 0) return layout.value = {
+    hideBack: true,
+    hideCancel: true
+  };
+
+  layout.value = {
+    hideBack: false,
+    hideCancel: false
+  };
 });
 
 watch(currentFlowScreen, (currentValue, oldValue) => {
