@@ -6,8 +6,8 @@
             <template #item:icon="{props, on}">
                 <v-file-input v-model="icon.file" v-on="on" v-bind="props">
                     <template #prepend-inner>
-                      <div class="d-flex align-center">
-                        <img :src="file.preview" height="30"/>
+                      <div class="d-flex align-center" v-if="file.preview">
+                        <img width="30" :src="file.preview" height="30"/>
                       </div>
                     </template>
                 </v-file-input>
@@ -30,10 +30,10 @@
 import FormBuilder from "@/components/FormBuilder/Form.vue";
 import { computed, ref } from 'vue';
 
-import { createAttendanceType, updateAttendanceType } from '@/modules/totem/repositories/attendance-type.repository';
-import { AxiosResponse } from "axios";
-
 import defaultData from '@/modules/totem/default-values';
+import { createAttendanceType, updateAttendanceType } from '@/modules/totem/repositories/attendance-type.repository';
+import useAlertStore from '@/stores/alert';
+import { AxiosResponse } from "axios";
 
 interface Props {
     modelValue: AttendanceTypeData
@@ -41,7 +41,7 @@ interface Props {
 }
 
 const validate = ref(false)
-
+const { openAlert } = useAlertStore()
 const props = withDefaults(defineProps<Props>(), {
   hideActions: false
 })
@@ -90,6 +90,7 @@ const form = ref<FormItem[]>([
     component: "VTextField",
     value: "name",
     label: "Nome",
+    required: true,
     props: {
       trueValue: 1,
       falseValue: 0,
@@ -104,6 +105,7 @@ const form = ref<FormItem[]>([
     component: "VFileInput",
     value: "icon",
     label: "Ícone",
+    required: true,
     props: {
       trueValue: 1,
       falseValue: 0,
@@ -131,7 +133,7 @@ const form = ref<FormItem[]>([
       falseValue: 0,
     },
     on: {
-        
+
     },
     cols: {
       cols: 6,
@@ -162,7 +164,8 @@ function save() {
     const formData = new FormData()
 
     Object.entries(payload).forEach(([key, value]: any) => {
-        formData.append(key, value ?? null)
+      if(!value) return
+        formData.append(key, value)
     })
 
     if (file.value.eddited)
@@ -172,11 +175,14 @@ function save() {
 
     promise
     .then((res) => {
-        clear()
+      emit('submit', promise)
+      clear()
         return res
     })
+    .catch((error) => {
+        openAlert('Erro ao salvar tipo de atendimento', error)
+    })
     .finally(() => {
-        emit('submit', promise)
         isLoading.value = false
     })
 }

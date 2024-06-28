@@ -313,7 +313,7 @@ declare global {
     id?: number
     name: string
     icon: string
-    description: string | null
+    description?: string
     created_at?: string
     updated_at?: string
   }

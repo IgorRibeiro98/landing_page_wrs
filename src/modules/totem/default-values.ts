@@ -13,11 +13,11 @@ export const totem: Totem = {
 export const attendanceType: AttendanceTypeData = {
     name: '',
     icon: '',
-    description: null,
+    description: undefined,
 }
 
 
 export default {
     attendanceType,
     totem
-} 
+}

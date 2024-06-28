@@ -5,7 +5,7 @@ export function getTotem() {
 }
 
 export function findTotem(id: number | string): any {
-  // return axios.get(`/totem/${id}`)
+  return axios.get(`/totem/${id}`)
   return new Promise(res => {
     res({
       data: {
