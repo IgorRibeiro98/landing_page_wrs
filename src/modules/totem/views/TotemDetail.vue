@@ -1,5 +1,13 @@
 <template>
   <View :title="totem.name" enable-action :actions="actions" :description="totem.description">
+    <template #action-prepend>
+        <v-btn color="primary" prepend-icon="mdi-play" @click="$router.push({
+           name: 'totem.run',
+          params: { id: totem.id }
+        })">
+          Executar
+        </v-btn>
+    </template>
     <v-row>
       <v-col cols="12">
         <div class="d-flex align-center">

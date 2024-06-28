@@ -31,21 +31,19 @@
         </v-col>
         <v-col cols="12" md="8" class="h-100">
             <v-sheet width="100%" height="100%" border class="d-flex justify-center align-center">
-                <div>
                     <component :is="colorItem.component" v-bind="colorItem.props" />
-                </div>
             </v-sheet>
         </v-col>
     </v-row>
 </template>
 <script setup lang="ts">
-import { ref, computed, onMounted, shallowRef } from 'vue'
-import { useTheme } from 'vuetify'
-import Init from '@patient/views/totem/Init.vue'
 import VirtualKeyboard from '@/components/VirtualKeyboard.vue';
+import Init from '@patient/views/totem/Init.vue';
+import { computed, onMounted, ref, shallowRef } from 'vue';
+import { useTheme } from 'vuetify';
 import { VBtn } from 'vuetify/components/VBtn';
-import { VSheet } from 'vuetify/components/VSheet';
 import { VCard } from 'vuetify/components/VCard';
+import { VSheet } from 'vuetify/components/VSheet';
 
 
 interface Props {
@@ -75,16 +73,16 @@ const themeList = computed(() => {
         { name: 'Secundária', value: 'secondary', show: true, component: shallowRef(Init), props: {} },
         { name: 'Cor da navegação lateral', value: 'nav-color', show: true, component: shallowRef(Init), props: {} },
         { name: 'Teclado', value: 'keyboard', show: true, component: shallowRef(VirtualKeyboard), props: { alwaysVisible: true } },
-        { name: 'Erro', value: 'error', show: showAdvanced.value, component: shallowRef(VBtn), props: { color: 'error', text: 'Hello World', size: 'x-large' } },
-        { name: 'Info', value: 'info', show: showAdvanced.value, component: shallowRef(VBtn), props: { color: 'info', text: 'Hello World', size: 'x-large' } },
-        { name: 'Sucesso', value: 'success', show: showAdvanced.value, component: shallowRef(VBtn), props: { color: 'success', text: 'Hello World', size: 'x-large' } },
-        { name: 'Alerta', value: 'warning', show: showAdvanced.value, component: shallowRef(VBtn), props: { color: 'warning', text: 'Hello World', size: 'x-large' } },
-        { name: 'Plano de fundo', value: 'background', show: showAdvanced.value, component: shallowRef(VSheet), props: { color: 'background', width: '400px', height: '400px' } },
-        { name: 'Superfície', value: 'surface', show: showAdvanced.value, component: shallowRef(VSheet), props: { color: 'surface', width: '400px', height: '400px' } },
-        { name: 'Variante da Superfície', value: 'surface-variant', show: showAdvanced.value, component: shallowRef(VSheet), props: { color: 'surface-variant', width: '400px', height: '400px' } },
+        { name: 'Erro', value: 'error', show: showAdvanced.value, component: shallowRef(VBtn), props: { color: '#B00020', text: 'Hello World', size: 'x-large' } },
+        { name: 'Info', value: 'info', show: showAdvanced.value, component: shallowRef(VBtn), props: { color: '#2196F3', text: 'Hello World', size: 'x-large' } },
+        { name: 'Sucesso', value: 'success', show: showAdvanced.value, component: shallowRef(VBtn), props: { color: '#4CAF50', text: 'Hello World', size: 'x-large' } },
+        { name: 'Alerta', value: 'warning', show: showAdvanced.value, component: shallowRef(VBtn), props: { color: '#FB8C00', text: 'Hello World', size: 'x-large' } },
+        { name: 'Plano de fundo', value: 'background', show: showAdvanced.value, component: shallowRef(VSheet), props: { color: '#FFFFFF', width: '400px', height: '400px' } },
+        { name: 'Superfície', value: 'surface', show: showAdvanced.value, component: shallowRef(VSheet), props: { color: '#FFFFFF', width: '400px', height: '400px' } },
+        { name: 'Variante da Superfície', value: 'surface-variant', show: showAdvanced.value, component: shallowRef(VSheet), props: { color: '#424242', width: '400px', height: '400px' } },
         { name: 'Cor do texto no plano de fundo', value: 'on-background', show: showAdvanced.value, component: shallowRef(VCard), props: { color: 'background', title: 'Hello World', width: '200px', height: '200px' } },
         { name: 'Cor do texto na superfície', value: 'on-surface', show: showAdvanced.value, component: shallowRef(VCard), props: { color: 'surface', title: 'Hello World', width: '200px', height: '200px' } },
-        { name: 'Cor do texto na variação da superfície', value: 'on-surface-variant', show: showAdvanced.value, component: shallowRef(VCard), props: { color: 'surface-variant', title: 'Hello World', width: '200px', height: '200px' } },
+        { name: 'Cor do texto na variação da superfície', value: 'on-surface-variant', show: showAdvanced.value, component: shallowRef(VCard), props: { color: '#EEEEEE', title: 'Hello World', width: '200px', height: '200px' } },
         { name: 'Cor do texto na primária', value: 'on-primary', show: showAdvanced.value, component: shallowRef(VCard), props: { color: 'primary', title: 'Hello World', width: '200px', height: '200px' } },
         { name: 'Cor do texto na secundária', value: 'on-secondary', show: showAdvanced.value, component: shallowRef(VCard), props: { color: 'secondary', title: 'Hello World', width: '200px', height: '200px' } },
         { name: 'Cor do texto no sucesso', value: 'on-success', show: showAdvanced.value, component: shallowRef(VCard), props: { color: 'success', title: 'Hello World', width: '200px', height: '200px' } },
@@ -116,7 +114,7 @@ function resetTheme() {
 }
 
 onMounted(() => {
-    backupTheme = Object.freeze(JSON.parse(JSON.stringify(theme.current.value)))
+    backupTheme = Object.freeze(JSON.parse(JSON.stringify(theme.computedThemes.value.light)))
 })
 </script>
 <style lang="scss" scoped>

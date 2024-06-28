@@ -19,18 +19,25 @@
   </v-app-bar>
 </template>
 <script setup lang="ts">
-import logo from "@/assets/logo.png";
+import appLogo from "@/assets/logo.png";
+import { signout } from '@/modules/auth/services/auth.service';
+import { storeToRefs } from 'pinia';
 import { computed, ref } from "vue";
 import { useTheme } from "vuetify";
-import { signout } from '@/modules/auth/services/auth.service'
-import { storeToRefs } from 'pinia'
 
-import useUserStore from '@/stores/user'
+import useTenantStore from '@/modules/tenant/store';
+import useUserStore from '@/stores/user';
 
 const {user} = storeToRefs(useUserStore())
 
+const tenantStore = useTenantStore()
+
 const theme = useTheme();
 const loadingLogout = ref(false);
+
+const logo = computed<any>(() => {
+  return tenantStore.tenant.logo ?? appLogo;
+})
 
 function toggleTheme() {
   theme.global.name.value = theme.global.current.value.dark ? "light" : "dark";

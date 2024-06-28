@@ -58,9 +58,7 @@ export default createVuetify({
         colors: {
           primary: '#f94c07',
           secondary: '#243859',
-          background: "#F3F3F3",
           keyboard: '#f94c07',
-          surface: "#e2e2e2",
           scrollbar: '#757575',
           'nav-color': '#072b47',
           'nav-color-accent': '#a4b1bb'

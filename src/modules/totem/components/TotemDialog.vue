@@ -5,11 +5,15 @@
 import Dialog from "@/components/Dialog.vue";
 import { createTotem, updateTotem } from "@/modules/totem/repositories/totem.repository";
 import useAlertStore from "@/stores/alert";
+import { useRouter } from "vue-router";
+
 import { computed, ref } from "vue";
 const props = defineProps<{
   modelValue: boolean;
   totem: TotemItem;
 }>();
+
+const router = useRouter();
 
 const emit = defineEmits<{
   (event: "update:modelValue", value: boolean): void;
@@ -74,7 +78,17 @@ function save() {
   loading.value = true;
   const promise = isUpdate.value
     ? updateTotem(internalTotem.value.id, internalTotem.value)
-    : createTotem(internalTotem.value);
+    : createTotem(internalTotem.value).then(res => {
+      router.push({
+        name: 'totem.detail',
+        params: {
+          id: res.data.id
+        }
+      })
+
+      return res
+    });
+
   promise
     .then(() => {
       dialog.value = false;

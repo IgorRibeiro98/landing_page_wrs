@@ -6,6 +6,7 @@
     </div>
     <p class="text-primary">{{ currentFlowScreen?.component }}</p>
   </div>
+
   <Layout ref="layoutRef" @back="backHistory" @cancel="cancel" v-bind="layout">
     <component
       :is="currentFlowScreenComponent"
@@ -18,6 +19,7 @@
       :layoutRef="layoutRef"
       :totem="totem"
       :screen="currentFlowScreen"
+      :traits="currentScreen?.traits ?? []"
     >
     </component>
 
@@ -46,7 +48,7 @@ import defaultValues from "@/modules/totem/default-values";
 import { findTotem } from "@/modules/totem/repositories/totem.repository";
 import { AlertProps, LoadingProps } from "@patient/types";
 import { onBeforeUnmount, onMounted } from "vue";
-import { useRoute, type RouteLocationNormalizedLoaded } from "vue-router";
+import { useRoute, useRouter, type RouteLocationNormalizedLoaded } from "vue-router";
 
 const alert = ref(false);
 const loading = ref(false);
@@ -72,6 +74,8 @@ const data = ref({
   internal: {}
 });
 
+const router = useRouter()
+
 const route: RouteLocationNormalizedLoaded = useRoute();
 
 const id = computed(() => route.params.id as string);
@@ -93,14 +97,14 @@ const idleTimeout = ref<number | null>(null);
 const idleScreenTimeoutSeconds = ref<number>(60 * 5);
 
 const currentScreen = computed(() => {
-  return totem.value.screens[screenIndex.value]?.data;
+  return totem.value.screens[screenIndex.value];
 });
 
 const currentSubScreen = computed(() => {
   if (subScreenComponent.value === "") return undefined;
 
   return findSubscreenByComponentName(
-    currentScreen.value,
+    currentScreen.value?.data,
     subScreenComponent.value
   );
 });
@@ -109,7 +113,7 @@ const currentFlowScreen = computed(() => {
   if(layoutRef.value) {
     layoutRef.value.setStyles({})
   }
-  if (subScreenComponent.value === "") return currentScreen.value;
+  if (subScreenComponent.value === "") return currentScreen.value?.data;
 
   return currentSubScreen.value;
 });
@@ -153,6 +157,20 @@ importModules();
 onBeforeMount(() => {
   findTotem(id.value).then((response: any) => {
     totem.value = response.data;
+  }).catch((error: any) => {
+    openAlert({
+      title: 'Falha ao encontrar o totem',
+      text: error.response.data.message,
+      action: {
+        type: "confirm",
+        label: "Ok",
+        callback() {
+          router.push({
+            name: 'totem.view'
+          });
+        }
+      },
+    })
   });
 });
 
@@ -198,7 +216,7 @@ function backHistory() {
 }
 function next() {
   const nextSubScreen = findNextSubscreen(
-    currentScreen.value,
+    currentScreen.value?.data,
     currentSubScreen.value
   );
 
@@ -222,7 +240,7 @@ function nextScreen() {
 
 function toScreen(screenComponentName: string) {
   const findSubScreen = findSubscreenByComponentName(
-    currentScreen.value,
+    currentScreen.value?.data,
     screenComponentName
   );
   // debugger

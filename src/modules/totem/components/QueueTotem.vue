@@ -7,7 +7,7 @@
       <v-sheet
         min-height="60"
         min-width="60"
-        class="bg-primary pa-2 rounded mb-n4 mr-4 d-flex align-center justify-center"
+        class="pa-2 border-md border-primary rounded mb-n4 mr-4 d-flex align-center justify-center"
       >
         <v-img :src="queue.data!.icon_src" />
       </v-sheet>
@@ -22,14 +22,14 @@
       </div>
     </v-card-title>
 
-    <v-card-text class="py-0">
+    <v-card-text class="pt-0 pb-4">
       <v-chip-group show-arrows>
         <v-chip v-for="(type, index) of queue.attendance_types" :key="index">
           {{ type.data!.name }}
         </v-chip>
       </v-chip-group>
 
-      <span v-if="messages">
+      <span v-if="messages" >
         {{ messages }}
       </span>
 

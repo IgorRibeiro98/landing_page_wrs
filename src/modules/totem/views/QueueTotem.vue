@@ -72,7 +72,7 @@
               </template>
 
               <div class="d-flex justify-end mt-2">
-                <v-btn v-if="authorization.acl(permission)" color="error" variant="tonal" @click="openDeleteDialog(data)">
+                <v-btn v-if="authorization.acl(permission)" color="error" @click="openDeleteDialog(data)">
                   Remover
                 </v-btn>
               </div>
@@ -98,11 +98,11 @@
         </v-col>
 
         <v-col class="d-flex align-end justify-end">
-          <v-btn class="mr-4" variant="tonal" color="error" @click="redirectToTotemDetail" :disabled="isLoading">
+          <v-btn class="mr-4" color="error" @click="redirectToTotemDetail" :disabled="isLoading">
             Cancelar
           </v-btn>
 
-          <v-btn variant="tonal" color="primary" @click="save" :disabled="disableSaveButton" :loading="isLoading"
+          <v-btn color="primary" @click="save" :disabled="disableSaveButton" :loading="isLoading"
             v-if="authorization.acl('totem.queue.create|totem.queue.update')">
             Salvar
           </v-btn>
@@ -143,7 +143,6 @@ import defaultData from '@/modules/totem/default-values';
 import { useRoute, useRouter } from "vue-router";
 
 import authorization from "@/plugins/authorization";
-import auth from "@/router/guards/auth";
 
 const { setBreadcrumbs } = useSystemStore();
 

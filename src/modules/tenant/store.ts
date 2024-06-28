@@ -1,7 +1,7 @@
+import { getTenant } from "@/modules/tenant/repositories/tenant.repository";
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { getTenant } from "@/modules/tenant/repositories/tenant.repository";
-import { useTheme } from 'vuetify'
+import { useTheme } from 'vuetify';
 
 const useTenantStore = defineStore('tenant', () => {
 
@@ -25,9 +25,10 @@ const useTenantStore = defineStore('tenant', () => {
                         ...resp.data,
                         theme: JSON.parse(resp.data.theme),
                     }
-                    const light = Object.assign({}, theme.themes.value.light, tenant.value.theme)
 
-                    Object.assign(theme.themes.value, { light })
+                    const colors = Object.assign({}, theme.current.value.colors, tenant.value.theme.colors)
+                    
+                    Object.assign(theme.themes.value.light, { colors })
                 })
                 .catch((_) => {
                 })
