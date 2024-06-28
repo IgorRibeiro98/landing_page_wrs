@@ -58,8 +58,8 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<Emits>();
 const tenantStore = useTenantStore();
 const styles = ref<any>({});
-const logo = computed(() => {
-  return appLogo;
+const logo = computed<any>(() => {
+  return tenantStore.tenant.logo ?? appLogo;
 });
 const keyboard = ref(false);
 const date = computed(() => {
