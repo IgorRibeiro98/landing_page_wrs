@@ -12,10 +12,10 @@
   </v-main>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
 import AppBar from "@/components/AppBar.vue";
 import Breadcrumb from "@/components/BreadCrumb.vue";
 import NavigationDrawer from "@/components/NavigationDrawer.vue";
+import { ref } from 'vue';
 import { RouterView } from "vue-router";
 
 const drawerItems = ref<DrawerItem[]>([
@@ -40,11 +40,18 @@ const drawerItems = ref<DrawerItem[]>([
   //     name: 'attendance-type.view',
   //   }
   // },
+  // {
+  //   icon: 'mdi-account-supervisor',
+  //   title: 'Usuário',
+  //   route: {
+  //     name: 'user.view',
+  //   }
+  // },
   {
-    icon: 'mdi-account-supervisor',
-    title: 'Usuário',
+    icon: 'mdi-city-variant-outline',
+    title: 'Tenant',
     route: {
-      name: 'user.view',
+      name: 'tenant.create',
     }
   },
   {

@@ -13,7 +13,7 @@
                         <v-text-field v-model="tenant.domain" v-bind="props"
                             :rules="[...props.rules, validateDomainExists]">
                             <template #append-inner>
-                                <span class="text-caption font-italic">.saludti.com.br</span>
+                                <span class="text-caption font-italic">.{{ domain }}</span>
                             </template>
                         </v-text-field>
                     </template>
@@ -23,11 +23,10 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import logo from '@/assets/logo.png'
+import logo from '@/assets/logo.png';
+import FormBuilder from '@/components/FormBuilder/Form.vue';
 import { validateDomain } from '@/modules/tenant/repositories/tenant.repository';
-import FormBuilder from '@/components/FormBuilder/Form.vue'
-import rules from '@/helpers/rules';
+import { computed, ref } from 'vue';
 
 interface Props {
     modelValue: Tenant
@@ -37,6 +36,7 @@ interface Emits {
     (event: 'update:modelValue', value: Tenant): void
 }
 
+const domain = window.location.hostname
 
 const props = defineProps<Props>()
 

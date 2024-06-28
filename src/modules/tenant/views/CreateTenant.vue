@@ -39,13 +39,13 @@
     </v-row>
 </template>
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useTheme } from 'vuetify'
-import { createTenant } from '@/modules/tenant/repositories/tenant.repository'
 import TenantInfo from '@/modules/tenant/components/TenantInfo.vue'
 import TenantLogo from '@/modules/tenant/components/TenantLogo.vue'
 import TenantTheme from '@/modules/tenant/components/TenantTheme.vue'
-import type { Component } from 'vue';
+import { createTenant } from '@/modules/tenant/repositories/tenant.repository'
+import type { Component } from 'vue'
+import { onMounted, ref } from 'vue'
+import { useTheme } from 'vuetify'
 
 interface Item {
     title: string
@@ -94,7 +94,7 @@ const items = ref<Item[]>([
         component: TenantTheme
     }
 ])
-const step = ref<number>(2)
+const step = ref<number>(0)
 
 const pagesWithError = ref<number[]>([])
 
@@ -129,8 +129,8 @@ const create = () => {
                     .then(() => {
                         const url = new URL(window.location.origin)
 
-                        url.host = tenant.value.domain
-
+                        url.host = `${tenant.value.domain}.${url.hostname}`
+                        console.log(url.toString())
                         window.location.href = url.toString()
                     })
                     .catch((err) => {
