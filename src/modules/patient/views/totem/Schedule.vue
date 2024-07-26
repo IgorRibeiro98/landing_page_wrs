@@ -1,7 +1,9 @@
 <template>
   <div>
-    <h1 class="text-center mb-4" v-html="currentCase.title.value ?? currentCase.title">
-    </h1>
+    <h1
+      class="text-center mb-4"
+      v-html="currentCase.title.value ?? currentCase.title"
+    ></h1>
     <!-- {{$vuetify.display.name}} -->
     <v-sheet color="#dfdfdf" rounded v-if="hasOtherSchedules">
       <v-row>
@@ -10,17 +12,18 @@
             Paciente: <b>{{ data.patient?.first_name }}</b>
           </p>
         </v-col>
-        <v-col cols="12" md="6"> CPF: <b>{{ maskIdentifier }}</b></v-col>
+        <v-col cols="12" md="6">
+          CPF: <b>{{ maskIdentifier }}</b></v-col
+        >
       </v-row>
     </v-sheet>
     <div style="max-height: 38vh; overflow-y: auto">
-      <div class=" d-flex flex-column ga-4">
+      <div class="d-flex flex-column ga-4">
         <v-card
           class="px-8 py-4"
           rounded="lg"
           variant="outlined"
           :disabled="schedule.isDelayed"
-
           v-for="schedule in schedules"
         >
           <v-row no-gutters>
@@ -41,11 +44,18 @@
       </div>
     </div>
     <h4 class="text-center mt-8" v-show="hasDelayedSchedule">
-      Nossa tolerância é de {{ delayInMinutes }} minutos, devido ao atraso vamos te encaminhar para a recepção.
+      Nossa tolerância é de {{ delayInMinutes }} minutos, devido ao atraso vamos
+      te encaminhar para a recepção.
     </h4>
     <v-row justify="center" class="mt-4">
       <v-col cols="auto" v-for="button in currentCase.buttons">
-        <v-btn class="px-8 py-2" :loading="button.loading?.value" rounded :color="button.color ?? 'primary'" @click="button.action">
+        <v-btn
+          class="px-8 py-2"
+          :loading="button.loading?.value"
+          rounded
+          :color="button.color ?? 'primary'"
+          @click="button.action"
+        >
           {{ button.text }}
         </v-btn>
       </v-col>
@@ -53,9 +63,13 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { processPatientSchedule } from '@/modules/patient/repositories/patient.repository';
+import {
+  getSchedules,
+  processPatientSchedule,
+} from "@/modules/patient/repositories/patient.repository";
 import { AlertProps, AppointmentSchedule, Data } from "@patient/types";
 import { ComputedRef, computed, onMounted, ref } from "vue";
+import { useDate } from 'vuetify';
 
 interface Emit {
   (event: "alert", options: AlertProps): void;
@@ -65,7 +79,7 @@ interface Emit {
 }
 
 interface Props {
-  data: Data
+  data: Data;
 }
 
 interface HydratedSchedule extends Omit<AppointmentSchedule, "date"> {
@@ -87,7 +101,6 @@ interface Mapping {
   props?: Record<string, any>;
 }
 
-
 interface Case {
   title: string | ComputedRef<string>;
   buttons: any[];
@@ -99,18 +112,26 @@ const emit = defineEmits<Emit>();
 // alterar aqui quando for definido o tempo de tolerância
 const delayInMinutes = 15;
 const loading = ref(false);
-const schedules = computed<HydratedSchedule[]>(() => {
-  if(!props.data.patient) return [];
-  return props.data.patient!.schedules!.appointment.map((schedule) => {
+const schedules = ref<HydratedSchedule[]>([]);
+const date = useDate();
 
+const scheduless = computed<HydratedSchedule[]>(() => {
+  if (!props.data.patient) return [];
+
+  if (props.data.patient.current_schedule_count === 0) return [];
+
+  return props.data.patient!.schedules!.appointment.map((schedule) => {
     const date = new Date(schedule.schedule_date);
 
     const dateStr = date.toLocaleDateString("pt-BR");
-    
+
     const data = {
       ...schedule,
       date,
-      time: date.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
+      time: date.toLocaleTimeString("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
       formattedDateStr: dateStr,
       isToday: dateStr === todayStr,
       isDelayed: false,
@@ -120,7 +141,6 @@ const schedules = computed<HydratedSchedule[]>(() => {
     return data;
   });
 });
-
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);
@@ -227,30 +247,33 @@ const hasOtherSchedules = computed(() => {
 });
 
 const maskIdentifier = computed(() => {
-  if(!props.data.internal.identifier) return "";
-  const identifier = props.data.internal.identifier
-  return identifier.substring(0, 4).padEnd(identifier.length, "X").replace(/(\w{3})(\w{3})(\w{3})(\w{2})/, "$1.$2.$3-$4");
-})
+  if (!props.data.internal.identifier) return "";
+  const identifier = props.data.internal.identifier;
+  return identifier
+    .substring(0, 4)
+    .padEnd(identifier.length, "X")
+    .replace(/(\w{3})(\w{3})(\w{3})(\w{2})/, "$1.$2.$3-$4");
+});
 
 function isDelayed(schedule: HydratedSchedule) {
-  if(schedule.isToday === false) return false;
+  if (schedule.isToday === false) return false;
   const now = new Date();
-  const scheduleTimeWithDelay = schedule.date.getTime() + delayInMinutes * 60 * 1000; 
+  const scheduleTimeWithDelay =
+    schedule.date.getTime() + delayInMinutes * 60 * 1000;
 
-  return now.getTime() > scheduleTimeWithDelay
+  return now.getTime() > scheduleTimeWithDelay;
 }
 
 function getWeekPrefix(schedule: HydratedSchedule) {
   const date = schedule.date;
   const week = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-  return week[date.getDay()]
-};
+  return week[date.getDay()];
+}
 
 function processSchedules() {
   loading.value = true;
 
-  if (hasDelayedSchedule.value)
-    return emit('to', 'Queues')
+  if (hasDelayedSchedule.value) return emit("to", "Queues");
 
   processPatientSchedule()
     .then(() => {
@@ -259,35 +282,95 @@ function processSchedules() {
     .catch((error) => {
       emit("alert", {
         title: "Ops, algo deu errado!",
-        text: 'Falha ao processar seus agendamentos, te encaminharemos para a recepção.',
+        text: "Falha ao processar seus agendamentos, te encaminharemos para a recepção.",
         action: {
           type: "confirm",
           label: "Ok",
           callback() {
             emit("to", "Queues");
-          }
+          },
         },
       });
     })
     .finally(() => {
       loading.value = false;
-    })
+    });
 }
 onMounted(() => {
-  if (schedules.value.length === 0) {
-    emit("alert", {
-      title: "Ops, você não possui consulta agendada hoje :(",
-      text: `Deseja realizar outro tipo de serviço?`,
-      action: {
-        type: "choise",
-        rejectLabel: "Finalizar",
-        acceptLabel: "Ver outros serviços",
-        callback(accept: boolean) {
-          if (accept) return emit("to", "Queues");
-          emit("cancel");
-        },
-      },
-    });
+  if (props.data.patient!.current_schedule_count === 0) {
+    showEmptySchedulesAlert();
+    return;
   }
+  loadSchedules();
 });
+
+function loadSchedules() {
+  loading.value = true;
+  const now = new Date();
+  const initialDate = date.format(now, "keyboardDate");
+  const finalDate = date.format(now, "keyboardDate");
+
+  getSchedules(props.data.patient!.id, initialDate, finalDate)
+    .then((resp) => {
+      return;
+      schedules.value = props.data.patient!.schedules!.appointment.map((schedule) => {
+        const date = new Date(schedule.schedule_date);
+
+        const dateStr = date.toLocaleDateString("pt-BR");
+
+        const data = {
+          ...schedule,
+          date,
+          time: date.toLocaleTimeString("pt-BR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          formattedDateStr: dateStr,
+          isToday: dateStr === todayStr,
+          isDelayed: false,
+        };
+
+        data.isDelayed = isDelayed(data);
+        return data;
+      });
+    })
+    .catch((err) => {
+      openAlert(err);
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+}
+function showEmptySchedulesAlert() {
+  emit("alert", {
+    title: "Ops, você não possui consulta agendada hoje :(",
+    text: `Deseja realizar outro tipo de serviço?`,
+    action: {
+      type: "choise",
+      rejectLabel: "Finalizar",
+      acceptLabel: "Ver outros serviços",
+      callback(accept: boolean) {
+        if (accept) return emit("to", "Queues");
+        emit("cancel");
+      },
+    },
+  });
+}
+
+function openAlert(text: string | Error) {
+  emit("alert", {
+    title: `Ops, ${text}! :(`,
+    text: "Não se preocupe! Vamos te encaminhar para a recepção",
+    action: {
+      type: "choise",
+      rejectLabel: "Tentar novamente",
+      acceptLabel: "Ok, entendi",
+      callback(accept: boolean) {
+        if (accept) {
+          emit("to", "Queues");
+        }
+      },
+    },
+  });
+}
 </script>

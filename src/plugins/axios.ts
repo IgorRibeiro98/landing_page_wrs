@@ -18,6 +18,16 @@ const client: AxiosInstance = axios.create({
     }
 })
 
+/**
+ * @todo trocar para o .env
+ */
+export const agent: AxiosInstance = axios.create({
+    baseURL: import.meta.env.VITE_APP_AGENT_URL,
+    headers: {
+        Accept: "application/json",
+    }
+})
+
 client.interceptors.request.use(async (config) => {
     const accessToken = localStorage.getItem("accessToken") as string;
 
@@ -48,12 +58,12 @@ const processQueue = (error: any, token: string = '') => {
         prom(token);
       }
     });
-  
+
     failedQueue = [];
 };
-  
 
-async function checkUnauthorizedError(error: AxiosError) { 
+
+async function checkUnauthorizedError(error: AxiosError) {
     if (error.config && error.response && error.response.status === 401 && !error.config?.url?.includes('/token')) {
         if (!refreshRequest) {
             refreshRequest = retriveToken({
@@ -86,7 +96,7 @@ async function checkUnauthorizedError(error: AxiosError) {
 
         })
     }
-        
+
     return Promise.reject(error)
 }
 

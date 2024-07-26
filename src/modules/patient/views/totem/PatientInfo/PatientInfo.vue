@@ -71,7 +71,7 @@ const form = ref<FormItem[]>([
   {
     component: "VTextField",
     value: "social_name",
-    label: "Nome socia",
+    label: "Nome social",
     cols: {
       cols: 12,
       md: 4,
@@ -178,6 +178,7 @@ const form = ref<FormItem[]>([
 
 function next() {
   if(!formElement.value.validate()) return;
+
 
   emit('to', 'ContactInfo')
 }

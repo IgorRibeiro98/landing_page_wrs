@@ -1,10 +1,10 @@
 <template>
-  <div v-if="isDev" style="position:absolute;" class="text-center w-100">
+  <div @click.middle="hideHistory = true" v-if="isDev && !hideHistory" style="position:absolute;bottom:60px" class="text-center w-100">
     <div>
       Histórico:
       <span v-for="component in history">{{ component }} /</span>
     </div>
-    <p class="text-primary">{{ currentFlowScreen?.component }}</p>
+    <p class="bg-red text-white font-weight-bold">{{ currentFlowScreen?.component }}</p>
   </div>
 
   <Layout ref="layoutRef" @back="backHistory" @cancel="cancel" v-bind="layout">
@@ -53,7 +53,7 @@ import { useRoute, useRouter, type RouteLocationNormalizedLoaded } from "vue-rou
 const alert = ref(false);
 const loading = ref(false);
 const layoutRef = ref<InstanceType<typeof Layout>>();
-
+const hideHistory = ref(false);
 const alertProps = ref<AlertProps>({
   title: "",
   text: "",

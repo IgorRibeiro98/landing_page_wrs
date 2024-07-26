@@ -1,4 +1,6 @@
 
+import { agent } from '@/plugins/axios';
+
 const scheduleDate = new Date()
 
 scheduleDate.setHours(scheduleDate.getHours() + 1)
@@ -228,6 +230,7 @@ export function getChallengeByIdentifier(identifier: string): Promise<{ data: {
   name: string,
   birthDays: string[]
 } }> {
+  return agent.get(`/patient/${identifier}/challenge`);
   return new Promise((res, rej) => {
     setTimeout(() => {
       const cpfs = Object.keys(patients)
@@ -247,8 +250,13 @@ export function getChallengeByIdentifier(identifier: string): Promise<{ data: {
   })
 }
 
-export function checkBirthDate(identifier: string, birthDate: string): Promise<{data: any}> {
-  
+export function checkBirthDate(identifier: string, birth: string): Promise<{data: any}> {
+  return agent.get('/patient/search', {
+    params: {
+      identifier,
+      birth,
+    }
+  });
   return new Promise((res, rej) => {
     setTimeout(() => {
       const cpfs = Object.keys(patients)
@@ -261,6 +269,26 @@ export function checkBirthDate(identifier: string, birthDate: string): Promise<{
 
       return res({
         data: patient
+      })
+    }, 2000)
+  })
+}
+
+export function getSchedules(identifier: string, initialdate: string, finaldate: string) {
+  return agent.get(`/patient/${identifier}/schedule`, {
+    params: {
+      initialdate,
+      finaldate
+    }
+  })
+}
+
+export function updatePatientData(identifier: string, data: any): Promise<{ data: any }> {
+  // return agent.put(`/patient/${identifier}`, data);
+  return new Promise((res, rej) => {
+    setTimeout(() => {
+      return res({
+        data: {}
       })
     }, 2000)
   })

@@ -5,11 +5,15 @@
       Estas informações serão utilizadas caso seja necessário o hospital entrar
       em contato com você.
     </p>
-
-    <FormBuilder class="mt-5" :form="form" v-model="patient!.data" />
+    <FormBuilder class="mt-5" :form="form" v-model="data.patient!.data" />
     <v-row justify="center">
       <v-col cols="12" md="5">
-        <v-btn block rounded="lg" color="primary" @click="$emit('next')"
+        <v-btn
+          block
+          rounded="lg"
+          color="primary"
+          @click="updateData"
+          :loading="loading"
           >Continuar</v-btn
         >
       </v-col>
@@ -18,9 +22,10 @@
 </template>
 <script lang="ts" setup>
 import FormBuilder from "@/components/FormBuilder/Form.vue";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 
-import { Data, Patient, PatientData } from "@patient/types";
+import { updatePatientData } from "@/modules/patient/repositories/patient.repository";
+import { AlertProps, Data, Patient, PatientData } from "@patient/types";
 
 interface Props {
   data: Data;
@@ -29,37 +34,19 @@ interface Emit {
   (event: "to", payload: string): void;
   (event: "update:data", value: any): void;
   (event: "next"): void;
+  (event: "alert", options: AlertProps): void;
 }
 
 interface LocalPatient extends Patient {
   data: PatientData & {
-    telephone?: string
-    cellphone?: string
-  }
+    telephone?: string;
+    cellphone?: string;
+  };
 }
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emit>();
-
-const patient = computed<LocalPatient>({
-  get() {
-    const phone = (props.data.patient!.data.ddd_phone ?? '').concat(props.data.patient!.data.phone_number);
-
-    const cellphone = (props.data.patient!.data.ddd_cellphone ?? '').concat(props.data.patient!.data.cellphone_number);
-    
-    const data: LocalPatient  = props.data.patient!
-
-    data.data.telephone = phone;
-    data.data.cellphone = cellphone
-
-    return data;
-  },
-  set(value) {
-    emit("update:data", { patient: value });
-  }
-})
-
-
+const loading = ref(false);
 const form = ref<FormItem[]>([
   {
     component: "VTextField",
@@ -70,6 +57,9 @@ const form = ref<FormItem[]>([
       cols: 12,
       md: 3,
     },
+    props: {
+      type: "number",
+    },
   },
   {
     component: "VTextField",
@@ -79,6 +69,9 @@ const form = ref<FormItem[]>([
     cols: {
       cols: 12,
       md: 3,
+    },
+    props: {
+      type: "number",
     },
   },
   {
@@ -102,7 +95,7 @@ const form = ref<FormItem[]>([
     },
     props: {
       items: ["Residencial", "Comercial", "Outro"],
-    }
+    },
   },
   {
     component: "VTextField",
@@ -155,7 +148,7 @@ const form = ref<FormItem[]>([
     },
     props: {
       items: ["SP", "RJ", "MG", "PR", "RS"],
-    }
+    },
   },
   {
     component: "VAutocomplete",
@@ -167,9 +160,43 @@ const form = ref<FormItem[]>([
       md: 6,
     },
     props: {
-      items: ["São Paulo", "Rio de Janeiro", "Belo Horizonte", "Curitiba", "Porto Alegre"],
-    }
+      items: [
+        "São Paulo",
+        "Rio de Janeiro",
+        "Belo Horizonte",
+        "Curitiba",
+        "Porto Alegre",
+      ],
+    },
   },
 ]);
 
+function updateData() {
+  loading.value = true;
+  updatePatientData(props.data.patient!?.id, props.data.patient!?.data ?? {})
+    .then(() => {
+      emit("next");
+    })
+    .catch((error) => {
+      openAlert(error);
+    })
+    .finally(() => (loading.value = false));
+}
+
+function openAlert(text: string | Error) {
+  emit("alert", {
+    title: `Ops, ${text}! :(`,
+    text: "Não se preocupe! Vamos te encaminhar para a recepção",
+    action: {
+      type: "choise",
+      rejectLabel: "Tentar novamente",
+      acceptLabel: "Ok, entendi",
+      callback(accept: boolean) {
+        if (accept) {
+          emit("to", "Queues");
+        }
+      },
+    },
+  });
+}
 </script>

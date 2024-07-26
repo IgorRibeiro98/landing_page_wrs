@@ -73,6 +73,10 @@ export interface PatientData {
   complement: string;
   state_cd: string;
   city: string;
+
+  // campos tratados no front;
+  cellphone?: string;
+  telephone?: string
 }
 
 export interface Patient {
@@ -90,6 +94,7 @@ export interface Patient {
     foreigner_id?: string;
     data: PatientData;
     first_name: string;
+    current_schedule_count: number;
     schedules?: {
       appointment: AppointmentSchedule[]
     }
