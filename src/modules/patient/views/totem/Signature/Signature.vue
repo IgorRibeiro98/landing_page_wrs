@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row v-if="!isLoading" justify="center">
-      
+
       <v-col cols="12" sm="auto" v-for="action in actions">
         <v-sheet
           @click="action.click()"
@@ -41,7 +41,7 @@
 import faceIcon from "@/assets/icons/face-id.svg";
 import tokenIcon from "@/assets/icons/passcode-lock.svg";
 import { AlertProps, Data } from "@patient/types";
-import { onBeforeMount, reactive, ref } from "vue";
+import { computed, onBeforeMount, reactive, ref } from "vue";
 
 interface Emit {
   (event: "alert", options: AlertProps): void;
@@ -63,9 +63,9 @@ const isLoading = ref(true);
 const actions = reactive([
   {
     click: () => emit('to', 'FaceRecognition'),
-    title: 'Assinatura PDF Biometria facial',
+    title: 'Assinatura via Biometria facial',
     image: faceIcon,
-    show: props.data.patient!.has_face_recognition,
+    show: true,
     trait: 'faceRecognition'
   },
   {
@@ -77,20 +77,27 @@ const actions = reactive([
   },
   {
     click: () => emit('to', 'PDFSignature'),
-    title: 'Assinatura do PDF',
+    title: 'Assinatura do Guia via tablet',
     show: true,
     icon: 'mdi-file-pdf-box',
     trait: 'pdfSignature'
   },
 ])
 
+const hasSomeTrait = computed<boolean>(() => {
+  return props.traits?.some(trait => trait.enabled) ?? false;
+});
+
 function hasTrait(slug: string): boolean {
   return props.traits?.some(trait => trait.data.slug === slug && trait.enabled) ?? false;
 }
 
-onBeforeMount(() => {
 
-  // if (!props.data.patient?.has_face_recognition && ) {
+onBeforeMount(() => {
+  if (!hasSomeTrait.value)
+    return emit("to", "Queues");
+
+  // if (!props.data.patient?.has_face_recognition) {
   //   return emit("alert", {
   //     title: "Como gostaria de realizar o seu check-in?",
   //     text: "",

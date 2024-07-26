@@ -27,6 +27,21 @@ export function openAttendance(sequences: number[]): Promise<any> {
     })
 }
 
+export function getGuidesBySchedules(ids: string[]): Promise<{
+  data: any
+}> {
+  return new Promise((res, rej) => {
+    setTimeout(() => {
+      return res({
+        data: [
+          `https://drive.google.com/file/d/1-K9QNOdOmcPNOSR1hfbxGCo04OkOERZ4/preview`,
+          'https://drive.google.com/file/d/1-K9QNOdOmcPNOSR1hfbxGCo04OkOERZ4/preview'
+        ]
+      })
+    }, 2000)
+  })
+}
+
 export function signatureGuide() {
     return new Promise((res, rej) => {
 

@@ -21,7 +21,7 @@ import { computed, onMounted, ref } from "vue";
 
 import HelpToSign from '@patient/components/HelpSignatureFlow.vue';
 
-import { signatureGuide } from '@patient/repositories/schedule.repository';
+import { getGuidesBySchedules, signatureGuide } from '@patient/repositories/schedule.repository';
 
 const props = defineProps<{
     data: Data
@@ -39,9 +39,7 @@ const emit = defineEmits<{
 const isLoading = ref(false)
 const showSignatureHelp = ref(false)
 
-const urls = computed(() => {
-    return props.data.patient?.schedules.map(schedule => schedule.guide?.url).filter(v => v) ?? []
-})
+const urls = ref<string[]>([])
 
 function signature() {
     isLoading.value = true
@@ -58,8 +56,38 @@ function signature() {
         })
 }
 
+const scheduleIds = computed(() => {
+  return props.data.patient?.schedules?.appointment.map(schedule => schedule.schedule_sequence) ?? []
+})
+
+function loadGuides() {
+    emit('loading', {
+        text: 'Aguarde um momento, estamos caregando as suas guias',
+        callback(loading) {
+          getGuidesBySchedules(scheduleIds.value)
+            .then(res => {
+              urls.value = res.data
+            })
+            .catch(error => {
+              emit('alert', {
+                title: error,
+                text: 'Não se preocupe, vamos te encaminhar para a recepção =D',
+                action: {
+                  type: 'confirm',
+                  label: 'Ok',
+                  callback() {
+                    emit('to', 'Queues')
+                  }
+                }
+              })
+            })
+            .finally(() => (loading.value = false))
+        }
+    })
+}
+
 onMounted(() => {
-    if (!urls.value.length) emit('to', 'Queues')
+    loadGuides()
 })
 
 </script>
