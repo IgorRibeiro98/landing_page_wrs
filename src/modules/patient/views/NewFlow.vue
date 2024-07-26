@@ -31,6 +31,7 @@
 <script lang="ts" setup>
 import ConfirmAlert from "@/modules/patient/components/ConfirmAlert.vue";
 import Loading from "@patient/components/Loading.vue";
+
 import {
   computed,
   onBeforeMount,
@@ -39,14 +40,13 @@ import {
   watch,
   type Component as VueComponent,
 } from "vue";
-const to = ref("");
 
 import { clearSignatureAttempts } from '@patient/repositories/signature.repository';
 
 import Layout from "@/modules/patient/layouts/Default.vue";
 import defaultValues from "@/modules/totem/default-values";
 import { findTotem } from "@/modules/totem/repositories/totem.repository";
-import { AlertProps, LoadingProps } from "@patient/types";
+import { AlertProps, Data, LoadingProps } from "@patient/types";
 import { onBeforeUnmount, onMounted } from "vue";
 import { useRoute, useRouter, type RouteLocationNormalizedLoaded } from "vue-router";
 
@@ -70,8 +70,9 @@ const loadingProps = ref<LoadingProps>({
 
 const history = ref<string[]>([]);
 const last = ref<string>("");
-const data = ref({
-  internal: {}
+
+const data = ref<Data>({
+  internal: {},
 });
 
 const router = useRouter()

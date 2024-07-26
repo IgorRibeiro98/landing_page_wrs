@@ -4,330 +4,204 @@ const scheduleDate = new Date()
 scheduleDate.setHours(scheduleDate.getHours() + 1)
 
 const patients: any = {
-  '00000000000': {
-    id: '00000000000',
-    first_name: 'João',
-    phone_hint: '0251',
-    birth_date: '00/00/0000',
-    has_face_recognition: true,
-    schedules: [
-      // new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-')+ ' '+ new Date().getHours() + ':' + new Date().getMinutes(),
-      {
-        id: "id01",
-        date: new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' '+ new Date().getHours() + ':' + new Date().getMinutes(),
-        doctor: {
-          id: "doctor-01",
-          name: "Pablo Antonio",
-        },
-        specialty: {
-          id: "fwefwefwefwef",
-          name: "Ortopedia",
-        },
-        conventant: {
-          id: "conv-01",
-          name: "Unimed",
-        },
-      },
-      {
-        id: "id02",
-        date: new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' '+ (new Date().getHours() + 1) + ':' + new Date().getMinutes(),
-        doctor: {
-          id: "doctor-02",
-          name: "David Jesus",
-        },
-        specialty: {
-          id: "fwefwefwefwef2",
-          name: "Cardiologia",
-        },
-        conventant: {
-          id: "conv-02",
-          name: "Amil",
-        },
-      },
-      {
-        id: "id03",
-        date: new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' '+ (new Date().getHours() + 2) + ':' + new Date().getMinutes(),
-        doctor: {
-          id: "doctor-03",
-          name: "Igor Ribeiro",
-        },
-        specialty: {
-          id: "fwefwefwefwef3",
-          name: "Urologista",
-        },
-        conventant: {
-          id: "conv-03",
-          name: "Sulamerica",
-        },
-      },
-    ],
+  '22222222222': {
+    id: "1234567",
+    name: "João Neto",
+    social_name: null,
+    cpf: "22222222222",
+    birth: "22/22/2222",
+    passport: null,
+    rg: "4809040800",
+    sex_cd: "M",
+    nacionality_id: "10",
+    religion_id: "37",
+    merital_status_id: "2",
+    foreigner_id: null,
+    first_name: "João",
+    data: {
+        id: "1",
+        patient_id: "12345678",
+        ddi_phone: null,
+        ddd_phone: null,
+        phone_number: "101010101",
+        ddi_cellphone: null,
+        ddd_cellphone: "11",
+        cellphone_number: "947029695",
+        email: "teste@teste.com.br",
+        address_type_id: "1",
+        zip_code: "09632090",
+        street: "Rua Teste",
+        number: "10",
+        complement: "Ap. 9",
+        state_cd: "SP",
+        city: "São Paulo"
+    },
+    schedules: {
+      appointment: [
+        {
+          schedule_sequence: "56868939",
+          procedure_type: "Consulta",
+          schedule_date:  new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' '+ new Date().getHours() + ':' + new Date().getMinutes(),
+          establishment_code: "1",
+          establishment_description: "Hospital TESTE",
+          patient_code: "1117253",
+          agreement_code: "340",
+          agreement_description: "Bradesco Saúde S/A ",
+          category_code: "3",
+          category_description: "Coletivo (Saúde Top) ou (Hospitalar)",
+          plan_code: "18",
+          plan_description: "Rede Nacional ",
+          product_code: "",
+          product_description: "",
+          card_number: "123456789101112",
+          card_validity: "14-JUN-23",
+          card_digit: "15",
+          doctor_code: "159159",
+          doctor_name: "Leandro Menezes",
+          crm: "123456",
+          council_state: "CRM-SP",
+          specialty_code: "8",
+          specialty_description: "Cardiologia",
+          duration: "30",
+          location_description: "Rua tESTE, 10 - Teste / São Paulo-SP | Torre A - 1º Andar",
+          requires_authorization: 1,
+          schedule_sector_code: "402"
+        }
+      ]
+    }
   },
   '11111111111': {
-    id: '11111111111',
-    first_name: 'Jessica',
-    phone_hint: '0251',
-    has_face_recognition: true,
-    birth_date: '11/11/1111',
-    schedules: [
-      {
-        id: "id01",
-        date: new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' '+ new Date().getHours() + ':' + new Date().getMinutes(),
-        doctor: {
-          id: "doctor-01",
-          name: "Pablo Antonio",
+        id: "1303468",
+        name: "Maria Silva",
+        social_name: null,
+        cpf: "11111111111",
+        birth: "11/11/1111",
+        passport: null,
+        rg: "1234567890",
+        sex_cd: "F",
+        nacionality_id: "10",
+        religion_id: "37",
+        merital_status_id: "2",
+        foreigner_id: null,
+        first_name: "Maria",
+        data: {
+            id: "2",
+            patient_id: "158777",
+            ddi_phone: null,
+            ddd_phone: null,
+            phone_number: "202020202",
+            ddi_cellphone: null,
+            ddd_cellphone: "11",
+            cellphone_number: "947029696",
+            email: "maria.silva@teste.com.br",
+            address_type_id: "1",
+            zip_code: "09632091",
+            street: "Rua Teste",
+            number: "6",
+            complement: "Ap. 99",
+            state_cd: "SP",
+            city: "São Paulo"
         },
-        specialty: {
-          id: "fwefwefwefwef",
-          name: "Ortopedia",
-        },
-        conventant: {
-          id: "conv-01",
-          name: "Unimed",
-        },
-        guide: {
-          url: 'https://drive.google.com/file/d/1-K9QNOdOmcPNOSR1hfbxGCo04OkOERZ4/preview'
+        schedules: {
+            appointment: [
+                {
+                    schedule_sequence: "56868940",
+                    procedure_type: "Consulta",
+                    schedule_date: new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' '+ new Date().getHours() + ':' + new Date().getMinutes(),
+                    establishment_code: "1",
+                    establishment_description: "Hospital TESTE",
+                    patient_code: "1117254",
+                    agreement_code: "340",
+                    agreement_description: "Bradesco Saúde S/A ",
+                    category_code: "3",
+                    category_description: "Coletivo (Saúde Top) ou (Hospitalar)",
+                    plan_code: "18",
+                    plan_description: "Rede Nacional ",
+                    product_code: "",
+                    product_description: "",
+                    card_number: "44444444444444",
+                    card_validity: "15-JUN-23",
+                    card_digit: "16",
+                    doctor_code: "123672",
+                    doctor_name: "Ana da Costa",
+                    crm: "159159",
+                    council_state: "CRM-SP",
+                    specialty_code: "8",
+                    specialty_description: "Cardiologia",
+                    duration: "30",
+                    location_description: "Rua Teste, 1211 - Diadema / São Paulo-SP | Torre A - 1º Andar",
+                    requires_authorization: 1,
+                    schedule_sector_code: "402"
+                }
+            ]
         }
-      },
-      {
-        id: "id02",
-        date: new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' '+ (new Date().getHours() + 1) + ':' + new Date().getMinutes(),
-        doctor: {
-          id: "doctor-02",
-          name: "David Jesus",
-        },
-        specialty: {
-          id: "fwefwefwefwef2",
-          name: "Cardiologia",
-        },
-        conventant: {
-          id: "conv-02",
-          name: "Amil",
-        },
-        guide: {
-          url: 'https://drive.google.com/file/d/1-K9QNOdOmcPNOSR1hfbxGCo04OkOERZ4/preview'
-        }
-      },
-      {
-        id: "id03",
-        date: new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' '+ (new Date().getHours() + 2) + ':' + new Date().getMinutes(),
-        doctor: {
-          id: "doctor-03",
-          name: "João Silva",
-        },
-        specialty: {
-          id: "fwefwefwefwef3",
-          name: "Dermatologia",
-        },
-        conventant: {
-          id: "conv-03",
-          name: "Sulamerica",
-        },
-      },
-      {
-        id: "id03",
-        date: new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' '+ (new Date().getHours() + 3) + ':' + new Date().getMinutes(),
-        doctor: {
-          id: "doctor-03",
-          name: "Igor Ribeiro",
-        },
-        specialty: {
-          id: "fwefwefwefwef3",
-          name: "Urologista",
-        },
-        conventant: {
-          id: "conv-03",
-          name: "Sulamerica",
-        },
-      },
-    ],
-  },
-  '22222222222': {
-    id: '22222222222',
-    first_name: 'Jose',
-    phone_hint: '0251',
-    birth_date: '22/22/2222',
-    has_face_recognition: true,
-    schedules: [
-      {
-        id: "id01",
-        date: new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' 00:00:00',
-        doctor: {
-          id: "doctor-01",
-          name: "Pablo Antonio",
-        },
-        specialty: {
-          id: "fwefwefwefwef",
-          name: "Ortopedia",
-        },
-        conventant: {
-          id: "conv-01",
-          name: "Unimed",
-        },
-      },
-      {
-        id: "id01",
-        date: new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' 01:00:00',
-        doctor: {
-          id: "doctor-01",
-          name: "Pablo Antonio",
-        },
-        specialty: {
-          id: "fwefwefwefwef",
-          name: "Ortopedia",
-        },
-        conventant: {
-          id: "conv-01",
-          name: "Unimed",
-        },
-      },
-    ],
   },
   '33333333333': {
-    id: '33333333333',
-    first_name: 'Jessica',
-    phone_hint: '0251',
-    birth_date: '33/33/3333',
-    has_face_recognition: false,
-    schedules: [
-      {
-        id: "id01",
-        date: '2025-01-01 15:30:00',
-        doctor: {
-          id: "doctor-01",
-          name: "Pablo Antonio",
-        },
-        specialty: {
-          id: "fwefwefwefwef",
-          name: "Ortopedia",
-        },
-        conventant: {
-          id: "conv-01",
-          name: "Unimed",
-        },
+      id: "999999",
+      name: "Carlos Pereira",
+      social_name: null,
+      cpf: "33333333333",
+      birth: "33/33/3333",
+      passport: null,
+      rg: "2345678901",
+      sex_cd: "M",
+      nacionality_id: "10",
+      religion_id: "37",
+      merital_status_id: "2",
+      foreigner_id: null,
+      first_name: "Carlos",
+      data: {
+          id: "3",
+          patient_id: "1111111",
+          ddi_phone: null,
+          ddd_phone: null,
+          phone_number: "303030303",
+          ddi_cellphone: null,
+          ddd_cellphone: "11",
+          cellphone_number: "947029697",
+          email: "carlos@teste.com.br",
+          address_type_id: "1",
+          zip_code: "09632092",
+          street: "Rua Carvalho",
+          number: "9",
+          complement: "Ap. 1",
+          state_cd: "SP",
+          city: "São Bernardo do Campo"
       },
-      {
-        id: "id02",
-        date: '2025-04-17 15:30:00',
-        doctor: {
-          id: "doctor-02",
-          name: "David Jesus",
-        },
-        specialty: {
-          id: "fwefwefwefwef2",
-          name: "Cardiologia",
-        },
-        conventant: {
-          id: "conv-02",
-          name: "Amil",
-        },
-      },
-      {
-        id: "id03",
-        date: '2025-05-12 15:30:00',
-        doctor: {
-          id: "doctor-03",
-          name: "João Silva",
-        },
-        specialty: {
-          id: "fwefwefwefwef3",
-          name: "Dermatologia",
-        },
-        conventant: {
-          id: "conv-03",
-          name: "Sulamerica",
-        },
-      },
-      {
-        id: "id03",
-        date: '2025-06-12 15:30:00',
-        doctor: {
-          id: "doctor-03",
-          name: "Igor Ribeiro",
-        },
-        specialty: {
-          id: "fwefwefwefwef3",
-          name: "Urologista",
-        },
-        conventant: {
-          id: "conv-03",
-          name: "Sulamerica",
-        },
-      },
-      {
-        id: "id03",
-        date: '2025-06-12 15:30:00',
-        doctor: {
-          id: "doctor-03",
-          name: "Igor Ribeiro",
-        },
-        specialty: {
-          id: "fwefwefwefwef3",
-          name: "Urologista",
-        },
-        conventant: {
-          id: "conv-03",
-          name: "Sulamerica",
-        },
-      },
-      {
-        id: "id03",
-        date: '2025-06-12 15:30:00',
-        doctor: {
-          id: "doctor-03",
-          name: "Igor Ribeiro",
-        },
-        specialty: {
-          id: "fwefwefwefwef3",
-          name: "Urologista",
-        },
-        conventant: {
-          id: "conv-03",
-          name: "Sulamerica",
-        },
-      },
-      {
-        id: "id03",
-        date: '2025-06-12 15:30:00',
-        doctor: {
-          id: "doctor-03",
-          name: "Igor Ribeiro",
-        },
-        specialty: {
-          id: "fwefwefwefwef3",
-          name: "Urologista",
-        },
-        conventant: {
-          id: "conv-03",
-          name: "Sulamerica",
-        },
-      },
-      {
-        id: "id03",
-        date: '2025-06-12 15:30:00',
-        doctor: {
-          id: "doctor-03",
-          name: "Igor Ribeiro",
-        },
-        specialty: {
-          id: "fwefwefwefwef3",
-          name: "Urologista",
-        },
-        conventant: {
-          id: "conv-03",
-          name: "Sulamerica",
-        },
-      },
-    ],
+      schedules: {
+          appointment: [
+              {
+                  schedule_sequence: "777777",
+                  procedure_type: "Consulta",
+                  schedule_date: new Date().toLocaleDateString('pt-BR').split('/').reverse().join('-') + ' '+ new Date().getHours() + ':' + new Date().getMinutes(),
+                  establishment_code: "1",
+                  establishment_description: "Hospital TESTE",
+                  patient_code: "56456",
+                  agreement_code: "340",
+                  agreement_description: "Bradesco Saúde S/A ",
+                  category_code: "3",
+                  category_description: "Coletivo (Saúde Top) ou (Hospitalar)",
+                  plan_code: "18",
+                  plan_description: "Rede Nacional ",
+                  product_code: "",
+                  product_description: "",
+                  card_number: "775223024414013",
+                  card_validity: "16-JUN-23",
+                  card_digit: "17",
+                  doctor_code: "123673",
+                  doctor_name: "Pedro da Costa",
+                  crm: "966455",
+                  council_state: "CRM-SP",
+                  specialty_code: "8",
+                  specialty_description: "Cardiologia",
+                  duration: "30",
+                  location_description: "Rua Dois, 1 - Bio Ne / São Paulo-SP | Torre X - 2º Andar",
+                  requires_authorization: 1,
+                  schedule_sector_code: "402"
+              }
+          ]
+      }
   },
-  '44444444444': {
-    id: '44444444444',
-    first_name: 'Mariana',
-    phone_hint: '0251',
-    birth_date: '44/44/4444',
-    has_face_recognition: false,
-    schedules: []
-  },
-
 }
 
 function randomDate(start: Date, end: Date): Date {
@@ -335,8 +209,7 @@ function randomDate(start: Date, end: Date): Date {
 }
 
 function generateBirthDates(patientBirthDateString: string): string[] {
-  const [day, month, year] = patientBirthDateString.split('/');
-  const patientBirthDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+  const patientBirthDate = new Date(patientBirthDateString.replaceAll('-', '/'));
 
   const birthDates: Date[] = [];
 
@@ -348,33 +221,13 @@ function generateBirthDates(patientBirthDateString: string): string[] {
 
   birthDates.push(patientBirthDate);
 
-  return birthDates.map(date => `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`);
+  return birthDates.map(date => date.toLocaleDateString('pt-BR'));
 }
 
-function shuffleArray(array: any[]): any[] {
-  for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
-export function getBirthDateSugestion(identifier: any): Promise<{ data: any }>{
-  return new Promise((res, rej) => {
-
-    const cpfs = Object.keys(patients)
-
-    if (!cpfs.includes(identifier)) return rej(`Não foi possível encontrar o seu cadastro`)
-
-    const patient: any = patients[identifier]
-
-    return res({
-      data: shuffleArray([...generateBirthDates(patient.birth_date), patient.birth_date])
-    })
-  })
-}
-
-export function findByIdentifier(identifier: any): Promise<{ data: any }> {
+export function getChallengeByIdentifier(identifier: string): Promise<{ data: {
+  name: string,
+  birthDays: string[]
+} }> {
   return new Promise((res, rej) => {
     setTimeout(() => {
       const cpfs = Object.keys(patients)
@@ -383,14 +236,19 @@ export function findByIdentifier(identifier: any): Promise<{ data: any }> {
 
       const patient: any = patients[identifier]
 
+      console.log()
       return res({
-        data: patient
+        data: {
+          name: patient.first_name,
+          birthDays: generateBirthDates(patient.birth)
+        }
       })
     }, 2000)
   })
 }
 
 export function checkBirthDate(identifier: string, birthDate: string): Promise<{data: any}> {
+  
   return new Promise((res, rej) => {
     setTimeout(() => {
       const cpfs = Object.keys(patients)
@@ -399,7 +257,7 @@ export function checkBirthDate(identifier: string, birthDate: string): Promise<{
 
       const patient: any = patients[identifier]
 
-      if (patient.birth_date !== birthDate) return rej(`Data de nascimento inválida`)
+      if (patient.birth !== birthDate) return rej(`Data de nascimento inválida`)
 
       return res({
         data: patient

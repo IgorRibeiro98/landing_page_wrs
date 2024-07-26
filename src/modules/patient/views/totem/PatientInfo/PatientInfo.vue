@@ -20,30 +20,34 @@
 </template>
 <script lang="ts" setup>
 import FormBuilder from "@/components/FormBuilder/Form.vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 interface Props {
   data: Data;
 }
+
 interface Emit {
   (event: "to", payload: string): void;
+  (event: "update:data", value: any): void;
 }
+
 const emit = defineEmits<Emit>();
 const props = defineProps<Props>();
 const formElement = ref();
-const patient  = ref<any>({
-  id: props.data.patient?.id,
-  first_name: props.data.patient?.first_name + ' da Silva Santos',
-  sex: props.data.patient?.sex ?? 'Masculino',
-  civil_state: 'Solteiro',
-  nacionality: 'Brasileiro',
-  religion: 'Católico',
-  gender: 'Outro'
-});
+
+const patient = computed({
+  get() {
+    return props.data.patient;
+  },
+  set(value) {
+    emit("update:data", { patient: value });
+  }
+})
+
 const form = ref<FormItem[]>([
   {
     component: "VTextField",
-    value: "id",
+    value: "cpf",
     label: "CPF",
     required: true,
     cols: {
@@ -56,7 +60,7 @@ const form = ref<FormItem[]>([
   },
   {
     component: "VTextField",
-    value: "first_name",
+    value: "name",
     label: "Nome completo",
     required: true,
     cols: {
@@ -75,7 +79,7 @@ const form = ref<FormItem[]>([
   },
   {
     component: "VAutocomplete",
-    value: "sex",
+    value: "sex_cd",
     label: "Sexo",
     required: true,
     cols: {
@@ -86,24 +90,24 @@ const form = ref<FormItem[]>([
       items: ["Masculino", "Feminino"],
     },
   },
-  {
-    component: "VAutocomplete",
-    value: "gender",
-    label: "Gênero",
-    cols: {
-      cols: 12,
-      md: 4,
-    },
-    props: {
-      items: [
-        "Outro",
-        "Lésbica",
-        "Bissexual",
-        "Transexual",
-        "Travesti",
-      ],
-    },
-  },
+  // {
+  //   component: "VAutocomplete",
+  //   value: "gender",
+  //   label: "Gênero",
+  //   cols: {
+  //     cols: 12,
+  //     md: 4,
+  //   },
+  //   props: {
+  //     items: [
+  //       "Outro",
+  //       "Lésbica",
+  //       "Bissexual",
+  //       "Transexual",
+  //       "Travesti",
+  //     ],
+  //   },
+  // },
   {
     component: "VTextField",
     value: "rg",
@@ -116,7 +120,7 @@ const form = ref<FormItem[]>([
   },
   {
     component: "VAutocomplete",
-    value: "civil_state",
+    value: "merital_status_id",
     label: "Estado civil",
     required: true,
     cols: {
@@ -129,7 +133,7 @@ const form = ref<FormItem[]>([
   },
   {
     component: "VAutocomplete",
-    value: "nacionality",
+    value: "nacionality_id",
     label: "Nacionalidade",
     required: true,
     cols: {
@@ -152,7 +156,7 @@ const form = ref<FormItem[]>([
   },
   {
     component: "VAutocomplete",
-    value: "religion",
+    value: "religion_id",
     label: "Religião",
     required: true,
     cols: {

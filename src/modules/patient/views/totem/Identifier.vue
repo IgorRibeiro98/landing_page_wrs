@@ -42,7 +42,7 @@ import VirtualKeyboard from "@/components/VirtualKeyboard.vue";
 import { computed, ref } from "vue";
 
 import { cpf, required } from "@/rules";
-import { findByIdentifier } from "@patient/repositories/patient.repository";
+import { getChallengeByIdentifier } from "@patient/repositories/patient.repository";
 
 const identifier = ref("");
 const form = ref(false);
@@ -78,9 +78,10 @@ async function send() {
 
   isLoading.value = true;
 
-  findByIdentifier(getUnformattedIdentifier())
+  getChallengeByIdentifier(getUnformattedIdentifier())
     .then((res) => {
-      data.value.patient = res.data
+      data.value.challenge = res.data
+      
       data.value.internal.identifier = getUnformattedIdentifier()
       emit('next')
     })

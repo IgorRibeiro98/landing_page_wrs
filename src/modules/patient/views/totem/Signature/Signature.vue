@@ -20,6 +20,7 @@
 
           {{action.title}}
         </v-sheet>
+
       </v-col>
 
       <v-col cols="12" md="10">
@@ -88,22 +89,23 @@ function hasTrait(slug: string): boolean {
 }
 
 onBeforeMount(() => {
-  if (!props.data.patient?.has_face_recognition) {
-    return emit("alert", {
-      title: "Como gostaria de realizar o seu check-in?",
-      text: "",
-      action: {
-        type: "choise",
-        acceptLabel: "Agilizar com token",
-        rejectLabel: "Ir para recepção",
-        callback(choice: boolean) {
-          if (choice) return emit("to", "SendToken");
 
-          emit("to", "Queues");
-        },
-      },
-    });
-  }
+  // if (!props.data.patient?.has_face_recognition && ) {
+  //   return emit("alert", {
+  //     title: "Como gostaria de realizar o seu check-in?",
+  //     text: "",
+  //     action: {
+  //       type: "choise",
+  //       acceptLabel: "Agilizar com token",
+  //       rejectLabel: "Ir para recepção",
+  //       callback(choice: boolean) {
+  //         if (choice) return emit("to", "SendToken");
+
+  //         emit("to", "Queues");
+  //       },
+  //     },
+  //   });
+  // }
 
   isLoading.value = false;
 });

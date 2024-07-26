@@ -54,7 +54,7 @@
 </template>
 <script lang="ts" setup>
 import { processPatientSchedule } from '@/modules/patient/repositories/patient.repository';
-import { AlertProps, Data, Schedule } from "@patient/types";
+import { AlertProps, AppointmentSchedule, Data } from "@patient/types";
 import { ComputedRef, computed, onMounted, ref } from "vue";
 
 interface Emit {
@@ -68,7 +68,7 @@ interface Props {
   data: Data
 }
 
-interface HydratedSchedule extends Omit<Schedule, "date"> {
+interface HydratedSchedule extends Omit<AppointmentSchedule, "date"> {
   date: Date;
   time: string;
   formattedDateStr: string;
@@ -101,9 +101,12 @@ const delayInMinutes = 15;
 const loading = ref(false);
 const schedules = computed<HydratedSchedule[]>(() => {
   if(!props.data.patient) return [];
-  return props.data.patient.schedules.map((schedule) => {
-    const date = new Date(`${schedule.date}`);
+  return props.data.patient!.schedules!.appointment.map((schedule) => {
+
+    const date = new Date(schedule.schedule_date);
+
     const dateStr = date.toLocaleDateString("pt-BR");
+    
     const data = {
       ...schedule,
       date,
@@ -149,11 +152,11 @@ const scheduleMapping = ref<Mapping[]>([
   },
   {
     header: "Médico(a)",
-    value: (schedule: HydratedSchedule) => schedule.doctor.name,
+    value: (schedule: HydratedSchedule) => schedule.doctor_name,
   },
   {
     header: "Especialidade",
-    value: (schedule: HydratedSchedule) => schedule.specialty.name,
+    value: (schedule: HydratedSchedule) => schedule.specialty_description,
   },
 ]);
 

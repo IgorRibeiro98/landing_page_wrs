@@ -2,13 +2,13 @@
       <h1 class="mb-4 text-center">Verificação de Identidade</h1>
 
       <p class="mb-4">
-        <b>{{ data.patient!.first_name }}</b>
+        <b>{{ data.challenge?.name }}</b>
         Para a sua segurança, precisamos que você selecione a sua data de nascimento.
       </p>
 
       <div>
         <v-row>
-          <v-col v-for="(sugestion, index) of sugestions" :key="index" cols="12" md="3">
+          <v-col v-for="(sugestion, index) of data.challenge?.birthDays" :key="index" cols="12" md="3">
             <v-btn @click="send(sugestion)" stacked width="100%" :disabled="isLoading">
               <v-icon icon="mdi-calendar" size="35" color="primary"></v-icon>
               <span class="font-weight-regular">
@@ -21,14 +21,12 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 
-import { checkBirthDate, getBirthDateSugestion } from "@patient/repositories/patient.repository";
+import { checkBirthDate } from "@patient/repositories/patient.repository";
 
 const birthDate = ref("");
-const form = ref(false);
 const formElement = ref<HTMLFormElement>()!
-const sugestions = ref([])
 
 import { AlertProps, Data, LoadingProps } from "@patient/types";
 
@@ -93,11 +91,4 @@ function openAlert(text: string | Error) {
     }
   });
 }
-
-onMounted(() => {
-  getBirthDateSugestion(data.value.patient!.id)
-    .then(res => {
-      sugestions.value = res.data
-    })
-})
 </script>

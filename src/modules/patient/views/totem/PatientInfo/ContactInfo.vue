@@ -5,7 +5,8 @@
       Estas informações serão utilizadas caso seja necessário o hospital entrar
       em contato com você.
     </p>
-    <FormBuilder class="mt-5" :form="form" v-model="patient" />
+
+    <FormBuilder class="mt-5" :form="form" v-model="patient!.data" />
     <v-row justify="center">
       <v-col cols="12" md="5">
         <v-btn block rounded="lg" color="primary" @click="$emit('next')"
@@ -17,20 +18,54 @@
 </template>
 <script lang="ts" setup>
 import FormBuilder from "@/components/FormBuilder/Form.vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
+
+import { Data, Patient, PatientData } from "@patient/types";
 
 interface Props {
   data: Data;
 }
+interface Emit {
+  (event: "to", payload: string): void;
+  (event: "update:data", value: any): void;
+  (event: "next"): void;
+}
+
+interface LocalPatient extends Patient {
+  data: PatientData & {
+    telephone?: string
+    cellphone?: string
+  }
+}
 
 const props = defineProps<Props>();
+const emit = defineEmits<Emit>();
+
+const patient = computed<LocalPatient>({
+  get() {
+    const phone = (props.data.patient!.data.ddd_phone ?? '').concat(props.data.patient!.data.phone_number);
+
+    const cellphone = (props.data.patient!.data.ddd_cellphone ?? '').concat(props.data.patient!.data.cellphone_number);
+    
+    const data: LocalPatient  = props.data.patient!
+
+    data.data.telephone = phone;
+    data.data.cellphone = cellphone
+
+    return data;
+  },
+  set(value) {
+    emit("update:data", { patient: value });
+  }
+})
+
 
 const form = ref<FormItem[]>([
   {
     component: "VTextField",
-    value: "fix_phone",
+    value: "telephone",
     label: "DDD + Telefone fixo",
-    required: true,
+    required: false,
     cols: {
       cols: 12,
       md: 3,
@@ -58,7 +93,7 @@ const form = ref<FormItem[]>([
   },
   {
     component: "VAutocomplete",
-    value: "adress_type",
+    value: "address_type_id",
     label: "Tipo de endereço",
     required: true,
     cols: {
@@ -71,7 +106,7 @@ const form = ref<FormItem[]>([
   },
   {
     component: "VTextField",
-    value: "cep",
+    value: "zip_code",
     label: "CEP",
     required: true,
     cols: {
@@ -81,7 +116,7 @@ const form = ref<FormItem[]>([
   },
   {
     component: "VTextField",
-    value: "aditional_adress",
+    value: "street",
     label: "Logradouro",
     required: true,
     cols: {
@@ -111,7 +146,7 @@ const form = ref<FormItem[]>([
   },
   {
     component: "VAutocomplete",
-    value: "uf",
+    value: "state_cd",
     label: "UF",
     required: true,
     cols: {
@@ -136,16 +171,5 @@ const form = ref<FormItem[]>([
     }
   },
 ]);
-const patient = ref<any>({
-  fix_phone: "11 1234-5678",
-  cellphone: "11 98765-4321",
-  email: "paciente@test.com",
-  adress_type: "Residencial",
-  cep: "12345-678",
-  aditional_adress: "Rua XPTO",
-  number: "30",
-  complement: "Apto 123",
-  uf: "SP",
-  city: "São Paulo",
-});
+
 </script>
