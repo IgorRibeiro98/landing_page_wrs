@@ -180,6 +180,7 @@ declare global {
   interface PatientIdentifier {
     id: string;
     first_name: string;
+    sex: string;
   }
 
   interface Patient {

@@ -34,11 +34,11 @@ const formElement = ref();
 const patient  = ref<any>({
   id: props.data.patient?.id,
   first_name: props.data.patient?.first_name + ' da Silva Santos',
-  sex: 'Masculino',
+  sex: props.data.patient?.sex ?? 'Masculino',
   civil_state: 'Solteiro',
   nacionality: 'Brasileiro',
   religion: 'Católico',
-  gender: 'Masculino'
+  gender: 'Outro'
 });
 const form = ref<FormItem[]>([
   {
@@ -96,13 +96,11 @@ const form = ref<FormItem[]>([
     },
     props: {
       items: [
-        "Masculino",
-        "Feminino",
+        "Outro",
         "Lésbica",
         "Bissexual",
         "Transexual",
         "Travesti",
-        "Outro",
       ],
     },
   },
