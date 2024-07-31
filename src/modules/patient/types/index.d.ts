@@ -121,7 +121,10 @@ export interface Patient {
     foreigner_id?: string;
     data: PatientData;
     first_name: string;
-    current_schedule_count: number;
+    current_schedules_count: {
+      appointment: number,
+      exams: number
+    };
     schedules?: {
       appointment: AppointmentSchedule[]
     }

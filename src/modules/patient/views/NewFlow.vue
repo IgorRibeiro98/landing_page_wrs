@@ -20,6 +20,7 @@
       :totem="totem"
       :screen="currentFlowScreen"
       :traits="currentScreen?.traits ?? []"
+      :collections="collections"
     >
     </component>
 
@@ -72,7 +73,10 @@ const history = ref<string[]>([]);
 const last = ref<string>("");
 
 const data = ref<Data>({
-  internal: {},
+  internal: {
+    identifier: "12301018610",
+    birthDate: "09/07/1995"
+  },
 });
 
 const router = useRouter()
@@ -84,6 +88,15 @@ const id = computed(() => route.params.id as string);
 const totem = ref(structuredClone(defaultValues.totem));
 
 type Component = Record<string, VueComponent>;
+
+const collections = ref<{[key: string]: any[]}>({
+  sex_cd: [],
+  merital_status_id: [],
+  nacionality_id: [],
+  religion_id: [],
+  state_cd: [],
+  address_type_id: [],
+})
 
 const components = shallowRef<Component>({} as Component);
 const layout = ref({

@@ -37,7 +37,9 @@
               v-for="mapping in scheduleMapping[schedule.type]"
             >
               <p class="mb-2 text-gray">{{ mapping.header }}</p>
+              <v-icon v-if="mapping.icon">{{ mapping.icon }}</v-icon>
               <p
+                v-else
                 v-html="mapping.value(schedule)"
                 :class="{ 'font-weight-bold': mapping.bold ?? true }"
               ></p>
@@ -163,7 +165,7 @@ const scheduleMapping = ref(<
       header: "Exame",
       value: (schedule: HydratedSchedule) => schedule.raw.proc_description,
       cols: {
-        md: 12,
+        md: 6,
       }
     },
   ],
@@ -318,9 +320,10 @@ function processSchedules() {
     });
 }
 onMounted(() => {
-  if (props.data.patient!.current_schedule_count === 0) {
+  if (props.data.patient!.current_schedules_count.appointments === 0 || props.data.patient!.current_schedules_count.exams === 0) {
+    return emit("to", "Queues");
     // showEmptySchedulesAlert();
-    // return;
+    return;
   }
   loadSchedules();
 });
@@ -331,7 +334,7 @@ function loadSchedules() {
   const initialDate = date.format(now, "keyboardDate");
   const finalDate = date.format(now, "keyboardDate");
 
-  getSchedules(props.data.patient!.id, "28/08/2002", finalDate)
+  getSchedules(props.data.patient!.id, initialDate, finalDate)
     .then((resp) => {
       const { exams, appointments } = resp.data;
       schedules.value = hydratateSchedules(appointments, exams);

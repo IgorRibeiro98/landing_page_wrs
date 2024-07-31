@@ -1,7 +1,6 @@
-import axios from 'axios'
-import { AxiosError, AxiosInstance } from 'axios'
+import axios, { AxiosError, AxiosInstance } from 'axios';
 
-import { retriveToken, login } from '@/modules/auth/services/auth.service'
+import { login, retriveToken } from '@/modules/auth/services/auth.service';
 
 interface ErrorHandlers {
     [key: number]: (error: AxiosError) => Promise<any>;
@@ -22,7 +21,7 @@ const client: AxiosInstance = axios.create({
  * @todo trocar para o .env
  */
 export const agent: AxiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_APP_AGENT_URL,
+    baseURL: import.meta.env.VITE_APP_AGENT_URL ?? 'http://localhost:8080',
     headers: {
         Accept: "application/json",
     }

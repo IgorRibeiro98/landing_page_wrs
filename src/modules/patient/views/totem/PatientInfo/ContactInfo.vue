@@ -5,6 +5,7 @@
       Estas informações serão utilizadas caso seja necessário o hospital entrar
       em contato com você.
     </p>
+    
     <FormBuilder class="mt-5" :form="form" v-model="data.patient!.data" />
     <v-row justify="center">
       <v-col cols="12" md="5">
@@ -22,13 +23,20 @@
 </template>
 <script lang="ts" setup>
 import FormBuilder from "@/components/FormBuilder/Form.vue";
-import { ref } from "vue";
+import { ref, computed, onMounted } from "vue";
 
 import { updatePatientData } from "@/modules/patient/repositories/patient.repository";
 import { AlertProps, Data, Patient, PatientData } from "@patient/types";
 
+import { 
+  getTypeOfAddress,
+  getUf,
+  findAddressByCep
+} from '@/modules/patient/repositories/tasy.repository';
+
 interface Props {
   data: Data;
+  collections: { [key: string]: any[] };
 }
 interface Emit {
   (event: "to", payload: string): void;
@@ -47,6 +55,62 @@ interface LocalPatient extends Patient {
 const props = defineProps<Props>();
 const emit = defineEmits<Emit>();
 const loading = ref(false);
+
+const rootCollection = computed({
+  get() {
+    return props.collections;
+  },
+  set(value) {
+    emit("update:collections", { patient: value });
+  }
+})
+
+const fieldsWithZipCodeInteration = ref({
+  logradouro: {
+    component: "VTextField",
+    value: "street",
+    label: "Logradouro",
+    required: true,
+    cols: {
+      cols: 12,
+      md: 5,
+    },
+    props: {
+      loading: false
+    }
+  },
+  uf: {
+    component: "VAutocomplete",
+    value: "state_cd",
+    label: "UF",
+    required: true,
+    cols: {
+      cols: 12,
+      md: 3,
+    },
+    props: {
+      items: [],
+      'item-title': 'name',
+      'item-value': 'id',
+      request: getUf,
+      loading: false
+    }
+  },
+  localidade: {
+    component: "VTextField",
+    value: "city",
+    label: "Cidade",
+    required: true,
+    cols: {
+      cols: 12,
+      md: 6,
+    },
+    props: {
+      loading: false
+    }
+  }
+})
+
 const form = ref<FormItem[]>([
   {
     component: "VTextField",
@@ -94,7 +158,11 @@ const form = ref<FormItem[]>([
       md: 3,
     },
     props: {
-      items: ["Residencial", "Comercial", "Outro"],
+      items: [],
+      request: getTypeOfAddress,
+      'item-title': 'name',
+      'item-value': 'id',
+      loading: false
     },
   },
   {
@@ -106,17 +174,29 @@ const form = ref<FormItem[]>([
       cols: 12,
       md: 2,
     },
+    props: {
+      onBlur: () => {
+        if(props.data.patient!.data.zip_code.length < 8) return;
+
+        Object.keys(fieldsWithZipCodeInteration.value).forEach(key => {
+          fieldsWithZipCodeInteration.value[key].props.loading = true;
+        })
+
+        findAddressByCep(props.data.patient.data.zip_code)
+          .then(res => {
+            Object.entries(fieldsWithZipCodeInteration.value).forEach(([key, value]) => {
+              props.data.patient.data[value.value] = res.data[key];
+            })
+          })
+          .finally(() => {
+            Object.keys(fieldsWithZipCodeInteration.value).forEach(key => {
+              fieldsWithZipCodeInteration.value[key].props.loading = false;
+            })
+          })
+      },
+    }
   },
-  {
-    component: "VTextField",
-    value: "street",
-    label: "Logradouro",
-    required: true,
-    cols: {
-      cols: 12,
-      md: 5,
-    },
-  },
+  fieldsWithZipCodeInteration.value.logradouro,
   {
     component: "VTextField",
     value: "number",
@@ -137,38 +217,8 @@ const form = ref<FormItem[]>([
       md: 3,
     },
   },
-  {
-    component: "VAutocomplete",
-    value: "state_cd",
-    label: "UF",
-    required: true,
-    cols: {
-      cols: 12,
-      md: 3,
-    },
-    props: {
-      items: ["SP", "RJ", "MG", "PR", "RS"],
-    },
-  },
-  {
-    component: "VAutocomplete",
-    value: "city",
-    label: "Cidade",
-    required: true,
-    cols: {
-      cols: 12,
-      md: 6,
-    },
-    props: {
-      items: [
-        "São Paulo",
-        "Rio de Janeiro",
-        "Belo Horizonte",
-        "Curitiba",
-        "Porto Alegre",
-      ],
-    },
-  },
+  fieldsWithZipCodeInteration.value.uf,
+  fieldsWithZipCodeInteration.value.localidade,
 ]);
 
 function updateData() {
@@ -199,4 +249,25 @@ function openAlert(text: string | Error) {
     },
   });
 }
+
+onMounted(() => {
+  form.value.forEach((item, index) => {
+    if (!item?.props?.request) return
+
+    if (rootCollection.value[item.value]?.length) {
+      form.value[index].props.items = rootCollection.value[item.value];
+      return
+    }
+
+    form.value[index].props.loading = true
+
+    item.props.request()
+    .then((response) => {
+      form.value[index].props.items = response.data;
+      form.value[index].props.items = response.data;
+    }).finally(() => {
+      form.value[index].props.loading = false
+    });
+  })
+})
 </script>

@@ -20,10 +20,17 @@
 </template>
 <script lang="ts" setup>
 import FormBuilder from "@/components/FormBuilder/Form.vue";
-import { computed, ref } from "vue";
+import { computed, ref, onMounted } from "vue";
 
+import { 
+  getSex, 
+  getMeritalStatus,
+  getReligion,
+  getNationality
+} from '@/modules/patient/repositories/tasy.repository';
 interface Props {
   data: Data;
+  collections: { [key: string]: any[] };
 }
 
 interface Emit {
@@ -43,6 +50,87 @@ const patient = computed({
     emit("update:data", { patient: value });
   }
 })
+
+const rootCollection = computed({
+  get() {
+    return props.collections;
+  },
+  set(value) {
+    emit("update:collections", { patient: value });
+  }
+})
+
+
+const collections = ref([
+    {
+    component: "VAutocomplete",
+    value: "sex_cd",
+    label: "Sexo",
+    required: true,
+    cols: {
+      cols: 12,
+      md: 4,
+    },
+    props: {
+      items: [],
+      request: getSex,
+      'item-title': 'name',
+      'item-value': 'id',
+      loading: false
+    }
+  },
+  {
+    component: "VAutocomplete",
+    value: "merital_status_id",
+    label: "Estado civil",
+    required: true,
+    cols: {
+      cols: 12,
+      md: 4,
+    },
+    props: {
+      items: [],
+      request: getMeritalStatus,
+      'item-title': 'name',
+      'item-value': 'id',
+      loading: false
+    },
+  },
+  {
+    component: "VAutocomplete",
+    value: "nacionality_id",
+    label: "Nacionalidade",
+    required: true,
+    cols: {
+      cols: 12,
+      md: 4,
+    },
+    props: {
+      items: [],
+      request: getNationality,
+      'item-title': 'name',
+      'item-value': 'id',
+      loading: false
+    },
+  },
+  {
+    component: "VAutocomplete",
+    value: "religion_id",
+    label: "Religião",
+    required: true,
+    cols: {
+      cols: 12,
+      md: 4,
+    },
+    props: {
+      items: [],
+      request: getReligion,
+      'item-title': 'name',
+      'item-value': 'id',
+      loading: false
+    },
+  },
+])
 
 const form = ref<FormItem[]>([
   {
@@ -78,18 +166,16 @@ const form = ref<FormItem[]>([
     },
   },
   {
-    component: "VAutocomplete",
-    value: "sex_cd",
-    label: "Sexo",
+    component: "VTextField",
+    value: "rg",
+    label: "RG",
     required: true,
     cols: {
       cols: 12,
       md: 4,
     },
-    props: {
-      items: ["Masculino", "Feminino"],
-    },
   },
+  ...collections.value,
   // {
   //   component: "VAutocomplete",
   //   value: "gender",
@@ -108,72 +194,6 @@ const form = ref<FormItem[]>([
   //     ],
   //   },
   // },
-  {
-    component: "VTextField",
-    value: "rg",
-    label: "RG",
-    required: true,
-    cols: {
-      cols: 12,
-      md: 4,
-    },
-  },
-  {
-    component: "VAutocomplete",
-    value: "merital_status_id",
-    label: "Estado civil",
-    required: true,
-    cols: {
-      cols: 12,
-      md: 4,
-    },
-    props: {
-      items: ["Solteiro", "Casado", "Divorciado", "Viúvo"],
-    },
-  },
-  {
-    component: "VAutocomplete",
-    value: "nacionality_id",
-    label: "Nacionalidade",
-    required: true,
-    cols: {
-      cols: 12,
-      md: 4,
-    },
-    props: {
-      items: [
-        "Brasileiro",
-        "Americano",
-        "Alemão",
-        "Francês",
-        "Italiano",
-        "Japonês",
-        "Chinês",
-        "Coreano",
-        "Outro",
-      ],
-    },
-  },
-  {
-    component: "VAutocomplete",
-    value: "religion_id",
-    label: "Religião",
-    required: true,
-    cols: {
-      cols: 12,
-      md: 4,
-    },
-    props: {
-      items: [
-        "Católico",
-        "Evangélico",
-        "Espírita",
-        "Ateu",
-        "Agnóstico",
-        "Outro",
-      ],
-    },
-  },
 ]);
 
 function next() {
@@ -182,4 +202,24 @@ function next() {
 
   emit('to', 'ContactInfo')
 }
+
+onMounted(() => {
+  collections.value.forEach((item, index) => {
+    if (rootCollection.value[item.value]?.length) {
+      collections.value[index].props.items = rootCollection.value[item.value];
+      return
+    }
+
+    collections.value[index].props.loading = true
+
+    item.props.request()
+    .then(res => {
+      collections.value[index].props.items = res.data;
+      rootCollection.value[item.value] = res.data;
+    })
+    .finally(() => {
+      collections.value[index].props.loading = false
+    })
+  })
+})
 </script>
