@@ -25,35 +25,62 @@ export interface LoadingProps {
 }
 
 export interface AppointmentSchedule {
-  schedule_sequence: string;
-  procedure_type: string;
-  schedule_date: string;
-  establishment_code: string;
-  establishment_description: string;
-  patient_code: string;
-  agreement_code: string;
-  agreement_description: string;
-  category_code: string;
-  category_description: string;
-  plan_code: string;
-  plan_description: string;
-  product_code: string;
-  product_description: string;
-  card_number: string;
-  card_validity: string;
-  card_digit: string;
-  doctor_code: string;
-  doctor_name: string;
-  crm: string;
-  council_state: string;
-  specialty_code: string;
-  specialty_description: string;
-  procedure_code: string;
-  procedure_origin: string;
-  duration: string;
-  location_description: string;
-  requires_authorization: number;
-  schedule_sector_code: string;
+  schedule_id: string,
+  schedule_date: string,
+  establishment_id: string,
+  establishment_description: string,
+  patient_id: string,
+  agreement_id: string,
+  agreement_description: string,
+  category_id: string,
+  category_description: string,
+  plan_id: string,
+  plan_description: string,
+  product_id?: string,
+  product_description?: string,
+  card_number: string,
+  card_validity?: string,
+  card_digit: string,
+  doctor_id: string,
+  doctor_name: string,
+  crm: string,
+  council_state: string,
+  specialty_id: string,
+  specialty_description: string,
+  duration: string,
+  location_description: string,
+  requires_authorization: string,
+  schedule_sector_id: string,
+}
+
+export interface ExamsSchedule {
+  schedule_id: string,
+  schedule_date: string,
+  establishment_id: string,
+  establishment_name: string,
+  patient_id: string,
+  agreement_id: string,
+  agreement_description: string,
+  category_id: string,
+  category_description: string,
+  plan_id: string,
+  plan_description: string,
+  card_number: string,
+  doctor_id: string,
+  doctor_name: string,
+  crm: string,
+  council_state: string,
+  proc_id: string,
+  proc_description: string,
+  duration: string,
+  location_description: string,
+  requires_authorization: string,
+  product_description?:string,
+  card_validity?:string,
+  card_digit?: string,
+  side_code?: string,
+  product_id?: string,
+  schedule_sector_code?: string,
 }
 
 export interface PatientData {

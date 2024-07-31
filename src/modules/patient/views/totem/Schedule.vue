@@ -17,6 +17,9 @@
         >
       </v-row>
     </v-sheet>
+    <div class="text-center mt-4" v-if="loadingSchedules">
+      <v-progress-circular indeterminate></v-progress-circular>
+    </div>
     <div style="max-height: 38vh; overflow-y: auto">
       <div class="d-flex flex-column ga-4">
         <v-card
@@ -31,7 +34,7 @@
               cols="12"
               md="3"
               v-bind="{ ...(mapping.cols ?? {}), ...(mapping.props ?? {}) }"
-              v-for="mapping in scheduleMapping"
+              v-for="mapping in scheduleMapping[schedule.type]"
             >
               <p class="mb-2 text-gray">{{ mapping.header }}</p>
               <p
@@ -67,9 +70,14 @@ import {
   getSchedules,
   processPatientSchedule,
 } from "@/modules/patient/repositories/patient.repository";
-import { AlertProps, AppointmentSchedule, Data } from "@patient/types";
+import {
+  AlertProps,
+  AppointmentSchedule,
+  Data,
+  ExamsSchedule,
+} from "@patient/types";
 import { ComputedRef, computed, onMounted, ref } from "vue";
-import { useDate } from 'vuetify';
+import { useDate } from "vuetify";
 
 interface Emit {
   (event: "alert", options: AlertProps): void;
@@ -82,12 +90,14 @@ interface Props {
   data: Data;
 }
 
-interface HydratedSchedule extends Omit<AppointmentSchedule, "date"> {
+interface HydratedSchedule {
   date: Date;
   time: string;
   formattedDateStr: string;
   isDelayed: boolean;
   isToday: boolean;
+  raw: AppointmentSchedule | ExamsSchedule;
+  type: "appointment" | "exam";
 }
 
 interface Mapping {
@@ -112,36 +122,9 @@ const emit = defineEmits<Emit>();
 // alterar aqui quando for definido o tempo de tolerância
 const delayInMinutes = 15;
 const loading = ref(false);
+const loadingSchedules = ref(false);
 const schedules = ref<HydratedSchedule[]>([]);
 const date = useDate();
-
-const scheduless = computed<HydratedSchedule[]>(() => {
-  if (!props.data.patient) return [];
-
-  if (props.data.patient.current_schedule_count === 0) return [];
-
-  return props.data.patient!.schedules!.appointment.map((schedule) => {
-    const date = new Date(schedule.schedule_date);
-
-    const dateStr = date.toLocaleDateString("pt-BR");
-
-    const data = {
-      ...schedule,
-      date,
-      time: date.toLocaleTimeString("pt-BR", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      formattedDateStr: dateStr,
-      isToday: dateStr === todayStr,
-      isDelayed: false,
-    };
-
-    data.isDelayed = isDelayed(data);
-    return data;
-  });
-});
-
 const today = new Date();
 today.setHours(0, 0, 0, 0);
 const todayStr = today.toLocaleDateString("pt-BR");
@@ -150,35 +133,73 @@ const tomorrow = new Date(today);
 tomorrow.setDate(today.getDate() + 1);
 const tomorrowStr = tomorrow.toLocaleDateString("pt-BR");
 
-const scheduleMapping = ref<Mapping[]>([
+const scheduleMapping = ref(<
   {
-    header: "Data",
-    bold: false,
-    value: (schedule: HydratedSchedule) => {
-      const msg = `<b>${schedule.formattedDateStr}</b>`;
-      switch (schedule.formattedDateStr) {
-        case todayStr:
-          return `Hoje - ${msg}`;
-        case tomorrowStr:
-          return `Amanhã - ${msg}`;
-        default:
-          return `${getWeekPrefix(schedule)} - ${msg}`;
+    exam: Mapping[];
+    appointment: Mapping[];
+  }
+>{
+  exam: [
+    {
+      header: "Data",
+      bold: false,
+      value: (schedule: HydratedSchedule) => {
+        const msg = `<b>${schedule.formattedDateStr}</b>`;
+        switch (schedule.formattedDateStr) {
+          case todayStr:
+            return `Hoje - ${msg}`;
+          case tomorrowStr:
+            return `Amanhã - ${msg}`;
+          default:
+            return `${getWeekPrefix(schedule)} - ${msg}`;
+        }
+      },
+    },
+    {
+      header: "Horário",
+      value: (schedule: HydratedSchedule) => schedule.time,
+    },
+    {
+      header: "Exame",
+      value: (schedule: HydratedSchedule) => schedule.raw.proc_description,
+      cols: {
+        md: 12,
       }
     },
-  },
-  {
-    header: "Horário",
-    value: (schedule: HydratedSchedule) => schedule.time,
-  },
-  {
-    header: "Médico(a)",
-    value: (schedule: HydratedSchedule) => schedule.doctor_name,
-  },
-  {
-    header: "Especialidade",
-    value: (schedule: HydratedSchedule) => schedule.specialty_description,
-  },
-]);
+  ],
+  appointment: [
+    {
+      header: "Data",
+      bold: false,
+      value: (schedule: HydratedSchedule) => {
+        const msg = `<b>${schedule.formattedDateStr}</b>`;
+        switch (schedule.formattedDateStr) {
+          case todayStr:
+            return `Hoje - ${msg}`;
+          case tomorrowStr:
+            return `Amanhã - ${msg}`;
+          default:
+            return `${getWeekPrefix(schedule)} - ${msg}`;
+        }
+      },
+    },
+    {
+      header: "Horário",
+      value: (schedule: HydratedSchedule) => schedule.time,
+    },
+    {
+      header: "Médico(a)",
+      value: (schedule: HydratedSchedule) => schedule.raw.doctor_name,
+    },
+    /**
+     * @todo padronizar o nome da especialidade do doutor.
+     */
+    {
+      header: "Especialidade",
+      value: (schedule: HydratedSchedule) => schedule.raw.specialty_description,
+    },
+  ],
+});
 
 const currentCase = computed<any>(() => {
   let caseType = "noSchedules";
@@ -298,49 +319,80 @@ function processSchedules() {
 }
 onMounted(() => {
   if (props.data.patient!.current_schedule_count === 0) {
-    showEmptySchedulesAlert();
-    return;
+    // showEmptySchedulesAlert();
+    // return;
   }
   loadSchedules();
 });
 
 function loadSchedules() {
-  loading.value = true;
+  loadingSchedules.value = true;
   const now = new Date();
   const initialDate = date.format(now, "keyboardDate");
   const finalDate = date.format(now, "keyboardDate");
 
-  getSchedules(props.data.patient!.id, initialDate, finalDate)
+  getSchedules(props.data.patient!.id, "28/08/2002", finalDate)
     .then((resp) => {
-      return;
-      schedules.value = props.data.patient!.schedules!.appointment.map((schedule) => {
-        const date = new Date(schedule.schedule_date);
-
-        const dateStr = date.toLocaleDateString("pt-BR");
-
-        const data = {
-          ...schedule,
-          date,
-          time: date.toLocaleTimeString("pt-BR", {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-          formattedDateStr: dateStr,
-          isToday: dateStr === todayStr,
-          isDelayed: false,
-        };
-
-        data.isDelayed = isDelayed(data);
-        return data;
-      });
+      const { exams, appointments } = resp.data;
+      schedules.value = hydratateSchedules(appointments, exams);
     })
     .catch((err) => {
       openAlert(err);
     })
     .finally(() => {
-      loading.value = false;
+      loadingSchedules.value = false;
     });
 }
+
+function hydratateSchedules(
+  appointments: AppointmentSchedule[],
+  exams: ExamsSchedule[]
+): HydratedSchedule[] {
+  const hydratateAppointments = appointments.map((appointment) => {
+    const date = new Date(appointment.schedule_date);
+    const dateStr = date.toLocaleDateString("pt-BR");
+
+    const data: HydratedSchedule = {
+      date: date,
+      time: date.toLocaleTimeString("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      formattedDateStr: dateStr,
+      isToday: dateStr === todayStr,
+      isDelayed: false,
+      raw: appointment,
+      type: "appointment",
+    };
+    data.isDelayed = isDelayed(data);
+    return data;
+  });
+
+  const hydratateExams = exams.map((exam) => {
+    const date = new Date(exam.schedule_date);
+    const dateStr = date.toLocaleDateString("pt-BR");
+
+    const data: HydratedSchedule = {
+      date: date,
+      time: date.toLocaleTimeString("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      formattedDateStr: dateStr,
+      isToday: dateStr === todayStr,
+      isDelayed: false,
+      raw: exam,
+      type: "exam",
+    };
+    data.isDelayed = isDelayed(data);
+    return data;
+  });
+
+  return [...hydratateAppointments, ...hydratateExams].sort((a, b) =>
+    a.date.getTime() > b.date.getTime() ? 1 : -1
+  );
+}
+
 function showEmptySchedulesAlert() {
   emit("alert", {
     title: "Ops, você não possui consulta agendada hoje :(",

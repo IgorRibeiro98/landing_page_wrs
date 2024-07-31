@@ -234,6 +234,7 @@ function nextScreen() {
 
   if (screenIndex.value == totem.value.screens.length - 1) {
     screenIndex.value = 0;
+    history.value = [];
     return;
   }
   screenIndex.value++;

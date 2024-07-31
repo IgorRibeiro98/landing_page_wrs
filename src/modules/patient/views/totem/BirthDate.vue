@@ -15,17 +15,22 @@
         cols="12"
         md="3"
       >
-        <v-btn
+        <v-sheet
+        color="transparent"
+          variant="outlined"
+          border="sm"
           @click="send(sugestion)"
           stacked
           width="100%"
           :disabled="isLoading"
+          class="d-flex flex-column justify-space-evenly align-center cursor-pointer"
+          style="min-height: 150px"
         >
-          <v-icon icon="mdi-calendar" size="35" color="primary"></v-icon>
-          <span class="font-weight-regular">
+          <v-icon icon="mdi-calendar" size="45" color="primary"></v-icon>
+          <p class="font-weight-medium">
             {{ sugestion }}
-          </span>
-        </v-btn>
+          </p>
+        </v-sheet>
       </v-col>
     </v-row>
   </div>

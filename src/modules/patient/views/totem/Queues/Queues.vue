@@ -5,15 +5,15 @@
         <h1>O que você deseja fazer hoje?</h1>
       </v-col>
 
-          <v-row justify="center" no-gutters>
-            <v-col cols="12" md="auto" v-for="(queue, index) in totem.queues" :key="index" class="d-flex justify-center ma-1">
+          <v-row justify="center" no-gutters class="ga-5">
+            <v-col cols="12" md="3" v-for="(queue, index) in totem.queues" :key="index" class="d-flex justify-center" style="min-height: 180px">
               <v-sheet v-ripple color="transparent" @click="checkQueue(queue)"
-                style="cursor: pointer; white-space: normal" border="sm" rounded class="d-flex pa-6" link min-height="80"
-                max-width="342" min-width="300">
-                <div class="mr-2">
-                  <v-img :src="queue.data?.icon_src" width="32" height="32"> </v-img>
+                style="cursor: pointer; white-space: normal" border="sm" rounded class="pa-6 d-flex flex-column justify-space-evenly" link min-height="80"
+                width="100%">
+                <div class="d-flex justify-center">
+                  <v-img :src="queue.data?.icon_src" width="45" height="45"> </v-img>
                 </div>
-                <p class="font-weight-medium">
+                <p class="font-weight-medium text-center">
                   {{ queue.data?.name }}
                 </p>
               </v-sheet>
