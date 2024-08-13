@@ -9,10 +9,13 @@
 
 <script lang="ts" setup>
 import bootstrap from "@/bootstrap";
+import { useRoute } from "vue-router";
 
 import { onMounted } from "vue";
 
-onMounted(() =>  bootstrap());
+const route = useRoute()
+
+onMounted(() =>  bootstrap(route));
 
 </script>
 
