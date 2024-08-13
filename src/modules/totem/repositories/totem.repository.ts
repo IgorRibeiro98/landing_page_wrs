@@ -1,7 +1,9 @@
 import axios from '@/plugins/axios';
 
-export function getTotem() {
-  return axios.get(`/totem`);
+export function getTotem( params: TotemFilter) {
+  return axios.get(`/totem`, {
+    params
+  });
 }
 
 export function findTotem(id: number | string): any {

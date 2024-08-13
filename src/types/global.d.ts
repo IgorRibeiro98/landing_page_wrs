@@ -375,4 +375,7 @@ declare global {
     acl?: string
   }
 
+  interface TotemFilter {
+    site_id: string | number | null
+  }
 }

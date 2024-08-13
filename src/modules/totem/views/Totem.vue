@@ -10,6 +10,21 @@
 
       <v-col cols="12">
         <v-data-table :headers="headers" :items="items" :loading="loading" :items-per-page="-1">
+          <template #top>
+              <v-row>
+                  <v-col cols="12" md="4" class="d-flex align-center">
+                      <v-text-field density="compact" hide-details="auto" label="Estabelecimento"
+                          append-inner-icon="mdi-magnify" variant="outlined" v-model="filters.site_id" @keypress.enter="loadTotens"
+                          clearable @click:clear="loadTotens()"
+                      ></v-text-field>
+                  </v-col>
+                  <v-spacer></v-spacer>
+                  <v-col cols="12" md="2" class="d-flex align-center justify-end">
+
+                  </v-col>
+              </v-row>
+          </template>
+
           <template #[`item.name`]="{ item }">
             <RouterLink :to="{ name: 'totem.detail', params: { id: item.id } }">
               {{ item.name }}
@@ -102,11 +117,14 @@ const loading = ref<boolean>(true);
 const items = ref<TotemList>([]);
 const dialog = ref<boolean>(false);
 
+const filters = ref<TotemFilter>({
+  site_id: null
+})
 
 function loadTotens(mustLoading = true) {
   if (mustLoading) loading.value = true;
 
-  getTotem()
+  getTotem(filters.value)
     .then((resp) => {
       items.value = resp.data;
     })
