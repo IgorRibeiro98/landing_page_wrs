@@ -1,30 +1,11 @@
 <template>
-    <v-main class="layout-container">
-        <div class="top-container">
-            <router-view />
-        </div>
-    </v-main>
+  <v-main class="d-flex flex-column" style="height: 100vh; overflow: auto">
+    <v-container class="flex-grow-1 d-flex pa-0" fluid>
+      <RouterView />
+    </v-container>
+  </v-main>
 </template>
-
-<script lang="ts" setup>
+<script setup lang="ts">
+import { RouterView } from "vue-router";
 </script>
-
-<style scoped>
-.layout-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
-
-.top-container {
-    flex-grow: 1;
-    flex-shrink: 1;
-    overflow: auto;
-}
-
-.bottom-container {
-    flex-grow: 0;
-    flex-shrink: 0;
-    overflow: auto
-}
-</style>
+<style scoped lang="scss"></style>

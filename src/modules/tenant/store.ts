@@ -1,10 +1,9 @@
+import { getTenant } from "@/modules/tenant/repositories/tenant.repository";
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { getTenant } from "@/modules/tenant/repositories/tenant.repository";
-import { useTheme } from 'vuetify'
+import { useTheme } from 'vuetify';
 
 const useTenantStore = defineStore('tenant', () => {
-
 
     const tenant = ref<Tenant>(JSON.parse(localStorage.getItem('tenant')!) ?? {
         id: 0,
@@ -26,11 +25,12 @@ const useTenantStore = defineStore('tenant', () => {
                         ...resp.data,
                         theme: JSON.parse(resp.data.theme),
                     }
-                    const light = Object.assign({}, tenant.value.theme, theme.themes.value.light)
-                    Object.assign(theme.themes.value, { light })
+
+                    const colors = Object.assign({}, theme.current.value.colors, tenant.value.theme.colors)
+                    
+                    Object.assign(theme.themes.value.light, { colors })
                 })
-                .catch((error) => {
-                    console.error({ error })
+                .catch((_) => {
                 })
         } catch (error) {
             console.error('Error');

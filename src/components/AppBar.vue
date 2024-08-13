@@ -1,30 +1,43 @@
 <template>
-  <v-app-bar color="nav-color" class="position-fixed">
+  <v-app-bar color="nav-color" class="position-fixed" elevation="0">
     <template #prepend>
-      <v-img aspect-ratio="16/9" @click="$router.push({ path: '/' })" class="pointer mx-4" :src="logo" width="50"></v-img>
+      <v-img aspect-ratio="16/9" v-if="!$vuetify.display.mobile" @click="$router.push({ path: '/' })" class="pointer mx-4" :src="logo" width="50"></v-img>
       <v-slide-group show-arrows>
         <v-slide-group-item v-for="item in items" :value="item.route.name">
           <v-btn class="text-regular mx-1" @click="$router.push(item.route)"
             :active="$router.currentRoute.value.name == item.route.name">
             <v-icon class="mr-1">{{ item.icon }}</v-icon>
-            <span>{{ item.title }}</span>
+            <span v-if="!$vuetify.display.mobile">{{ item.title }}</span>
           </v-btn>
         </v-slide-group-item>
       </v-slide-group>
     </template>
     <template #append>
       <v-btn @click="toggleTheme" variant="text" :icon="themeIcon"></v-btn>
-      <v-btn :loading="loadingLogout" title="Sair" icon="mdi-exit-to-app"></v-btn>
+      <v-btn @click="logoutUser" :loading="loadingLogout" title="Sair" icon="mdi-exit-to-app"></v-btn>
     </template>
   </v-app-bar>
 </template>
 <script setup lang="ts">
-import logo from "@/assets/logo.png";
+import appLogo from "@/assets/logo.png";
+import { signout } from '@/modules/auth/services/auth.service';
+import { storeToRefs } from 'pinia';
 import { computed, ref } from "vue";
 import { useTheme } from "vuetify";
 
+import useTenantStore from '@/modules/tenant/store';
+import useUserStore from '@/stores/user';
+
+const {user} = storeToRefs(useUserStore())
+
+const tenantStore = useTenantStore()
+
 const theme = useTheme();
 const loadingLogout = ref(false);
+
+const logo = computed<any>(() => {
+  return tenantStore.tenant.logo ?? appLogo;
+})
 
 function toggleTheme() {
   theme.global.name.value = theme.global.current.value.dark ? "light" : "dark";
@@ -38,6 +51,15 @@ const themeIcon = computed<string>(() => {
   }
   return "mdi-weather-night";
 });
+
+function logoutUser() {
+  loadingLogout.value = true
+
+  signout()
+    .finally(() => {
+      loadingLogout.value = false
+    })
+}
 
 const items = [
   {

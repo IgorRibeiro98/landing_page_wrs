@@ -49,3 +49,35 @@ export function removePropertiesByPaths(data: any, paths: string[], callback?: C
   const result = JSON.parse(JSON.stringify(data));
   return removeProperties(result, tree, callback);
 }
+
+export function convertToFormData(data: any) {
+  const formData = new FormData();
+
+  const addProperties = (object: any, prefix = "") => {
+    for (const [key, value] of Object.entries(object)) {
+      const name = prefix ? `${prefix}[${key}]` : key;
+      if (value === undefined) continue;
+      if (value === null) continue;
+      if (value instanceof File) {
+        formData.append(name, value, value.name);
+      } else if (typeof value === "object" && value !== null) {
+        addProperties(value, name);
+      } else if (Array.isArray(value)) {
+        value.forEach((item, index) => addProperties(item, `${name}[${index}]`));
+      } else if (typeof value === 'boolean') {
+        formData.append(name, value ? '1' : '0');
+      }
+      else {
+        formData.append(name, value as any);
+      }
+    }
+  };
+
+  if (Array.isArray(data)) {
+    data.forEach((item, index) => addProperties(item, `[${index}]`));
+  } else {
+    addProperties(data);
+  }
+
+  return formData;
+};

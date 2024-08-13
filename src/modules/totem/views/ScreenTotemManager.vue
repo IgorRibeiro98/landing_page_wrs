@@ -95,6 +95,7 @@
               </template>
               <template #append>
                 <v-card
+                  v-if="false"
                   variant="outlined"
                   v-ripple.stop
                   class="scale-up"
@@ -251,11 +252,11 @@ const { openAlert } = useTotemStore();
 
 function loadTotem() {
   findTotem(Number(route.params.id))
-    .then((resp) => {
+    .then((resp: any) => {
       totem.value = resp.data;
       mergeTotemScreensWithBaseScreen();
     })
-    .catch((error) => {
+    .catch((error: any) => {
       openAlert("Erro", error);
     });
 }

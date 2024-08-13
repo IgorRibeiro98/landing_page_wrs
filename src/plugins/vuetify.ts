@@ -25,6 +25,9 @@ export default createVuetify({
     HexagonalBtn: components.VBtn,
   },
   defaults: {
+    VDialog: {
+      scrim: 'black'
+    },
     KeyboardBtn: { variant: 'outlined', style: 'font-size: 1.2rem; text-transform: unset !important' },
     HexagonalBtn: {
       color: 'primary',
@@ -45,7 +48,7 @@ export default createVuetify({
     }
   },
   display: {
-    mobileBreakpoint: 'md'
+    mobileBreakpoint: 'sm'
   },
   theme: {
     defaultTheme: 'light',
@@ -55,9 +58,10 @@ export default createVuetify({
         colors: {
           primary: '#f94c07',
           secondary: '#243859',
-          grey: '#abacac',
-          background: "#F3F3F3",
-          keyboard: '#f94c07'
+          keyboard: '#f94c07',
+          scrollbar: '#757575',
+          'nav-color': '#072b47',
+          'nav-color-accent': '#a4b1bb'
         }
       },
       dark: {
@@ -65,9 +69,24 @@ export default createVuetify({
         colors: {
           primary: '#f94c07',
           secondary: '#243859',
-          grey: '#abacac',
-          background: "#F3F3F3",
-          keyboard: '#f94c07'
+          success: '#23B86A',
+          error: '#FF453A',
+          info: '#32ADE6',
+          warning: "#FF9F0A",
+          background: "#2C2C2E",
+          surface: "#3A3A3C",
+          'surface-variant': '#3A3A3C',
+          'surface-lighten': '#444444',
+          'on-surface-lighten': '#EEEEE2',
+          'on-background': '#EEEEE2',
+          'on-surface': '#EEEEE2',
+          'on-surface-variant': '#EEEEE2',
+          'on-analytics-primary': '#EEEEE2',
+          'on-analytics-secondary': '#101010',
+          scrollbar: '#BDBDBD',
+          keyboard: '#f94c07',
+          'nav-color': '#072b47',
+          'nav-color-accent': '#a4b1bb'
         }
       }
     }

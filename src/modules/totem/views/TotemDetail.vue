@@ -1,10 +1,13 @@
 <template>
-  <View
-    :title="totem.name"
-    enable-action
-    :actions="actions"
-    :description="totem.description"
-  >
+  <View :title="totem.name" enable-action :actions="actions" :description="totem.description">
+    <template #action-prepend>
+        <v-btn color="primary" prepend-icon="mdi-play" @click="$router.push({
+           name: 'totem.run',
+          params: { id: totem.id }
+        })">
+          Executar
+        </v-btn>
+    </template>
     <v-row>
       <v-col cols="12">
         <div class="d-flex align-center">
@@ -60,12 +63,14 @@ const totem = ref<Totem>({
 const actions = reactive([
   {
     title: "Gerenciar Filas",
+    slug: 'totem.queue.view',
     to: {
       name: "queue.detail",
     },
   },
   {
     title: "Gerenciar telas",
+    slug: 'totem.screen.view',
     to: {
       name: "screen.totem.manager",
       params: {
@@ -97,10 +102,10 @@ function loadTotem() {
     },
   ]);
   findTotem(Number(route.params.id))
-    .then((response) => {
+    .then((response: any) => {
       totem.value = response.data;
     })
-    .catch((error) => {
+    .catch((error: any) => {
       openAlert("Erro", error);
     });
 }

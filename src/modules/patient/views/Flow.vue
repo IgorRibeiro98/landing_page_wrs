@@ -18,7 +18,6 @@
       </v-col>
     </v-row>
   </v-dialog>
-  <FlowLoading v-model="loadingFlowDialog" />
 </template>
 
 <script lang="ts" setup>
@@ -30,7 +29,6 @@ import useAlertStore from "@/stores/alert";
 
 import router from "@/router";
 
-import FlowLoading from "@patient/components/FlowLoading.vue";
 import defaultData from "@patient/views/default-data";
 
 import {

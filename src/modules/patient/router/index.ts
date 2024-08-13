@@ -8,8 +8,19 @@ const routes: RouteRecordRaw[] = [
         children: [
             {
                 path: '',
-                name: 'Home',
+                name: 'totem.run',
                 component: () => import('@patient/views/NewFlow.vue')
+            },
+        ],
+    },
+    {
+        path: '/senha',
+        component: () => layouts.queue(),
+        children: [
+            {
+                path: '',
+                name: 'Password',
+                component: () => import('@patient/views/Password.vue')
             },
         ],
     }

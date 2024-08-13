@@ -5,13 +5,13 @@
         <h1><v-icon icon="mdi-monitor-vertical"></v-icon> Totens</h1>
 
         <v-spacer></v-spacer>
-        <v-btn color="primary" flat @click="dialog = true"> Novo </v-btn>
+        <v-btn color="primary" flat @click="dialog = true" v-if="authorization.acl('totem.create')"> Novo </v-btn>
       </v-col>
 
       <v-col cols="12">
         <v-data-table :headers="headers" :items="items" :loading="loading" :items-per-page="-1">
           <template #[`item.name`]="{ item }">
-            <RouterLink :to="{ name: 'totem.detail', params: { id: item.id} }">
+            <RouterLink :to="{ name: 'totem.detail', params: { id: item.id } }">
               {{ item.name }}
             </RouterLink>
           </template>
@@ -36,11 +36,13 @@
                 </v-btn>
               </template>
               <v-list>
-                <v-list-item link @click="option.action(item)" v-for="(option, index) in options" :key="index">
-                  <v-list-item-title>
-                    {{ option.title }}
-                  </v-list-item-title>
-                </v-list-item>
+                <template v-for="(option, index) in options">
+                  <v-list-item link @click="option.action(item)" :key="index" v-if="authorization.acl(option.slug)">
+                    <v-list-item-title>
+                      {{ option.title }}
+                    </v-list-item-title>
+                  </v-list-item>
+                </template>
               </v-list>
             </v-menu>
           </template>
@@ -50,22 +52,24 @@
       </v-col>
     </v-row>
     <TotemDialog @close="clearTotem" @save="
-      loadTotens(false);
-    clearTotem();
-    " v-model:totem="totem" v-model="dialog"></TotemDialog>
+          loadTotens(false);
+        clearTotem();
+        " v-model:totem="totem" v-model="dialog"></TotemDialog>
   </v-sheet>
 </template>
 
 <script lang="ts" setup>
 import TotemDialog from "@/modules/totem/components/TotemDialog.vue";
 import {
-deleteTotem,
-getTotem,
+  deleteTotem,
+  getTotem,
 } from "@/modules/totem/repositories/totem.repository";
 import useAlertStore from "@/stores/alert";
 import useSystemStore from "@/stores/system";
 import { onMounted, ref, type Ref } from "vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
+
+import authorization from "@/plugins/authorization";
 
 const headers: any = [
   { title: "ID", value: "id", align: "start", width: "5%" },
@@ -83,7 +87,7 @@ const headers: any = [
 ];
 
 const { openAlert, closeAlert, openConfirmAlert } = useAlertStore();
-
+const router = useRouter();
 const totem = ref<TotemItem>({
   name: "",
   description: "",
@@ -118,6 +122,7 @@ function loadTotens(mustLoading = true) {
 const options = ref<any>([
   {
     title: "Editar",
+    slug: 'totem.update',
     action: (totemClicked: TotemItem) => {
       totem.value = { ...totemClicked }
       dialog.value = true;
@@ -125,6 +130,7 @@ const options = ref<any>([
   },
   {
     title: "Excluir",
+    slug: 'totem.delete',
     action: (totem: TotemItem) => {
       openConfirmAlert({
         title: 'Excluir Totem',
@@ -143,6 +149,16 @@ const options = ref<any>([
           .finally(() => {
             loading.value = false;
           });
+      })
+    }
+  },
+  {
+    title: "Executar",
+    slug: 'totem.view',
+    action(totem: TotemItem) {
+      router.push({
+        name: 'totem.run',
+        params: { id: totem.id }
       })
     }
   }

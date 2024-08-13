@@ -4,18 +4,19 @@
       v-if="showLoading && loading"
       variant="tonal"
       elevation="5"
-      class="pa-5"
+      class="pa-5 h-100"
     >
       <slot name="loading" :loading="loading">
         <v-card
           variant="outlined"
           rounded="0"
-          style="width: 800px; max-height: 1200px"
-          class="mx-auto pa-10"
+          class="mx-auto pa-10 h-100"
+          style="width: 70%"
+          
         >
-          <v-card variant="outlined" rounded="0">
+          <v-card variant="outlined" class="h-100" rounded="0">
             <v-skeleton-loader
-              v-for="n in 20"
+              v-for="n in 6"
               :type="n % 2 == 0 ? 'paragraph' : 'article'"
             ></v-skeleton-loader>
           </v-card>

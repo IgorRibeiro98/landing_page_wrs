@@ -10,26 +10,32 @@
             </slot>
           </h1>
           <slot name="title-append"></slot>
-          <slot name="action">
-            <v-menu v-if="enableAction">
-              <template #activator="{ props }">
-                <v-btn
-                  :icon="actionIcon"
-                  v-bind="props"
-                  class="ml-auto"
-                ></v-btn>
-              </template>
-              <v-list>
-                <v-list-item
-                  :to="action.to"
-                  v-for="action in actions"
-                  @click="action.click"
-                >
-                  <v-list-item-title>{{ action.title }}</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </slot>
+          <div class="ml-auto d-flex align-center ga-4">
+            <slot name="action">
+                <slot name="action-prepend"></slot>
+
+                  <v-menu v-if="enableAction">
+                    <template #activator="{ props }">
+                      <v-btn
+                        v-if="authorization.acl(slugs)"
+                        :icon="actionIcon"
+                        v-bind="props"
+                      ></v-btn>
+                    </template>
+                    <v-list>
+                    <template v-for="action in actions">
+                      <v-list-item
+                        :to="action.to"
+                        @click="action.click"
+                        v-if="authorization.acl(action.slug)"
+                      >
+                        <v-list-item-title>{{ action.title }}</v-list-item-title>
+                      </v-list-item>
+                    </template>
+                  </v-list>
+                </v-menu>
+              </slot>
+          </div>
         </div>
         <p>
           <slot name="description">
@@ -44,10 +50,14 @@
   </v-sheet>
 </template>
 <script lang="ts" setup>
+import authorization from '@/plugins/authorization';
+import { computed } from 'vue';
+
 interface Action {
   title: string;
   click?: () => void;
   to?: any;
+  slug: string;
 }
 
 interface Props {
@@ -63,4 +73,8 @@ const props = withDefaults(defineProps<Props>(), {
   actions: () => [],
   actionIcon: "mdi-cog",
 });
+
+const slugs = computed(() => {
+  return props.actions.map(action => action.slug).join('|')
+})
 </script>

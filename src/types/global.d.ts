@@ -1,8 +1,15 @@
 import { ComputedRef } from 'vue';
 import { type RouteLocationRaw } from 'vue-router';
+import type { ThemeDefinition } from 'vuetify/lib/framework.mjs';
 
 declare global {
   type ScreenComponent = 'Identifier' | 'Schedule' | 'Signature' | 'Queues' | 'Loading'
+
+  interface Window {
+    api: {
+      print({ value: string, site: string })
+    }
+  }
 
   interface ScreenField {
     id: number
@@ -22,8 +29,12 @@ declare global {
     description?: string
     fields: ScreenField[]
     traits: any[]
+    subscreens: SubScreen[]
   }
 
+  interface SubScreen extends Screens {
+    order: number
+  }
 
   type SendType = 'password' | 'print' | 'sms' | 'qrcode'
 
@@ -35,11 +46,17 @@ declare global {
       birth_date: string;
     },
     password_send_type: string;
-    patient?: Patient;
-    queue?: Queue;
     password: Password;
+
+    patient?: PatientIdentifier;
+    queue?: QueueTotem;
+    ticket?: Ticket
   }
 
+  interface Ticket {
+    value: string;
+    site: string;
+  }
   // interface Queue {
   //     id: number;
   //     name: string;
@@ -163,6 +180,7 @@ declare global {
   interface PatientIdentifier {
     id: string;
     first_name: string;
+    sex: string;
   }
 
   interface Patient {
@@ -231,11 +249,21 @@ declare global {
   interface Tenant {
     id: number;
     name: string;
-    logo: string;
-    theme: object;
+    provider_uri: string;
+    logo: string | File;
+    theme: ThemeDefinition;
     domain: string;
     updated_at: string;
     created_at: string;
+  }
+
+  interface Role {
+    id: number,
+    name: string,
+    is_default: boolean,
+    scopes: Scope[] | string[]
+    level: number,
+    users?: any[]
   }
 
   type FormComponent = 'VAutocomplete' | 'VTextField' | 'VTextarea' | 'VFileInput' | 'RichText' | 'VSwitch'
@@ -286,7 +314,7 @@ declare global {
     id?: number
     name: string
     icon: string
-    description: string | null
+    description?: string
     created_at?: string
     updated_at?: string
   }
@@ -312,4 +340,39 @@ declare global {
       value: boolean;
     };
   }
+
+  interface Scope {
+    id: string
+    name: string
+    slug: string
+  }
+
+  interface ScopeCategory {
+    id: string,
+    name: string,
+    scopes: Scope[] | string[]
+  }
+
+  interface User {
+    id: number
+    name: string
+    email: string
+    email_verified_at?: string | null
+    tenant_id: string
+    created_at: string
+    updated_at: string
+    scopes_count: number
+    slugs: string[],
+    role_id?: number | null,
+    role: Omit<Role, 'level' | 'is_default', 'users'>
+  }
+
+  interface DrawerItem {
+    icon: string
+    title: string
+    route: any,
+    items?: DrawerItem[]
+    acl?: string
+  }
+
 }
