@@ -23,15 +23,15 @@
 </template>
 <script lang="ts" setup>
 import FormBuilder from "@/components/FormBuilder/Form.vue";
-import { ref, computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 import { updatePatientData } from "@/modules/patient/repositories/patient.repository";
 import { AlertProps, Data, Patient, PatientData } from "@patient/types";
 
-import { 
+import {
+  findAddressByCep,
   getTypeOfAddress,
-  getUf,
-  findAddressByCep
+  getUf
 } from '@/modules/patient/repositories/tasy.repository';
 
 interface Props {
@@ -43,6 +43,7 @@ interface Emit {
   (event: "update:data", value: any): void;
   (event: "next"): void;
   (event: "alert", options: AlertProps): void;
+  (event: "update:collections", options: any): void;
 }
 
 interface LocalPatient extends Patient {
@@ -65,7 +66,7 @@ const rootCollection = computed({
   }
 })
 
-const fieldsWithZipCodeInteration = ref({
+const fieldsWithZipCodeInteration = ref<any>({
   logradouro: {
     component: "VTextField",
     value: "street",
@@ -182,10 +183,10 @@ const form = ref<FormItem[]>([
           fieldsWithZipCodeInteration.value[key].props.loading = true;
         })
 
-        findAddressByCep(props.data.patient.data.zip_code)
+        findAddressByCep(props.data.patient!.data.zip_code)
           .then(res => {
             Object.entries(fieldsWithZipCodeInteration.value).forEach(([key, value]) => {
-              props.data.patient.data[value.value] = res.data[key];
+              props.data!.patient!.data[value.value] = res.data[key];
             })
           })
           .finally(() => {
@@ -223,7 +224,7 @@ const form = ref<FormItem[]>([
 
 function updateData() {
   loading.value = true;
-  updatePatientData(props.data.patient!?.id, props.data.patient!?.data ?? {})
+  updatePatientData(props.data.patient!?.id, props.data.patient!?.data)
     .then(() => {
       emit("next");
     })
@@ -262,7 +263,7 @@ onMounted(() => {
     form.value[index].props.loading = true
 
     item.props.request()
-    .then((response) => {
+    .then((response: any) => {
       form.value[index].props.items = response.data;
       form.value[index].props.items = response.data;
     }).finally(() => {

@@ -20,14 +20,17 @@
 </template>
 <script lang="ts" setup>
 import FormBuilder from "@/components/FormBuilder/Form.vue";
-import { computed, ref, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 
-import { 
-  getSex, 
+import {
   getMeritalStatus,
+  getNationality,
   getReligion,
-  getNationality
+  getSex
 } from '@/modules/patient/repositories/tasy.repository';
+
+import { updatePatient } from '@/modules/patient/repositories/patient.repository';
+
 interface Props {
   data: Data;
   collections: { [key: string]: any[] };
@@ -199,8 +202,15 @@ const form = ref<FormItem[]>([
 function next() {
   if(!formElement.value.validate()) return;
 
+  console.log({
+    patient: props.data.patient
+  })
 
-  emit('to', 'ContactInfo')
+  updatePatient(props.data.patient!.id, props.data.patient!)
+    .finally(() => {
+      emit('to', 'ContactInfo')
+    })
+
 }
 
 onMounted(() => {

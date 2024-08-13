@@ -4,7 +4,7 @@
       class="text-center mb-4"
       v-html="currentCase.title.value ?? currentCase.title"
     ></h1>
-    <!-- {{$vuetify.display.name}} -->
+    
     <v-sheet color="#dfdfdf" rounded v-if="hasOtherSchedules">
       <v-row>
         <v-col cols="12" md="6">
@@ -105,6 +105,7 @@ interface HydratedSchedule {
 interface Mapping {
   header: string;
   value: (schedule: HydratedSchedule) => any;
+  icon?: string;
   cols?: {
     cols: number;
     md: number;
@@ -298,11 +299,13 @@ function processSchedules() {
 
   if (hasDelayedSchedule.value) return emit("to", "Queues");
 
-  processPatientSchedule()
-    .then(() => {
+  processPatientSchedule(props.data.patient!.id, schedules.value.map(s => s.raw.schedule_id))
+    .then((response: any) => {
+      if (!response.data.guides) return emit('to', 'Queues')
+
       emit("next");
     })
-    .catch((error) => {
+    .catch(() => {
       emit("alert", {
         title: "Ops, algo deu errado!",
         text: "Falha ao processar seus agendamentos, te encaminharemos para a recepção.",
@@ -320,10 +323,8 @@ function processSchedules() {
     });
 }
 onMounted(() => {
-  if (props.data.patient!.current_schedules_count.appointments === 0 || props.data.patient!.current_schedules_count.exams === 0) {
+  if (props.data.patient!.current_schedules_count.appointments === 0 && props.data.patient!.current_schedules_count.exams === 0) {
     return emit("to", "Queues");
-    // showEmptySchedulesAlert();
-    return;
   }
   loadSchedules();
 });

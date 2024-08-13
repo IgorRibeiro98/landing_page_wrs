@@ -38,6 +38,7 @@ export interface AppointmentSchedule {
   plan_description: string,
   product_id?: string,
   product_description?: string,
+  proc_description?: string,
   card_number: string,
   card_validity?: string,
   card_digit: string,
@@ -65,6 +66,7 @@ export interface ExamsSchedule {
   category_description: string,
   plan_id: string,
   plan_description: string,
+  specialty_description?: string,
   card_number: string,
   doctor_id: string,
   doctor_name: string,
@@ -122,7 +124,7 @@ export interface Patient {
     data: PatientData;
     first_name: string;
     current_schedules_count: {
-      appointment: number,
+      appointments: number,
       exams: number
     };
     schedules?: {

@@ -231,23 +231,23 @@ export function getChallengeByIdentifier(identifier: string): Promise<{ data: {
   birthDays: string[]
 } }> {
   return agent.get(`/patient/${identifier}/challenge`);
-  return new Promise((res, rej) => {
-    setTimeout(() => {
-      const cpfs = Object.keys(patients)
+  // return new Promise((res, rej) => {
+  //   setTimeout(() => {
+  //     const cpfs = Object.keys(patients)
 
-      if (!cpfs.includes(identifier)) return rej(`Não foi possível encontrar o seu cadastro`)
+  //     if (!cpfs.includes(identifier)) return rej(`Não foi possível encontrar o seu cadastro`)
 
-      const patient: any = patients[identifier]
+  //     const patient: any = patients[identifier]
 
-      console.log()
-      return res({
-        data: {
-          name: patient.first_name,
-          birthDays: generateBirthDates(patient.birth)
-        }
-      })
-    }, 2000)
-  })
+  //     console.log()
+  //     return res({
+  //       data: {
+  //         name: patient.first_name,
+  //         birthDays: generateBirthDates(patient.birth)
+  //       }
+  //     })
+  //   }, 2000)
+  // })
 }
 
 export function checkBirthDate(identifier: string, birth: string): Promise<{data: any}> {
@@ -257,21 +257,6 @@ export function checkBirthDate(identifier: string, birth: string): Promise<{data
       birth,
     }
   });
-  return new Promise((res, rej) => {
-    setTimeout(() => {
-      const cpfs = Object.keys(patients)
-
-      if (!cpfs.includes(identifier)) return rej(`Não foi possível encontrar o seu cadastro`)
-
-      const patient: any = patients[identifier]
-
-      if (patient.birth !== birthDate) return rej(`Data de nascimento inválida`)
-
-      return res({
-        data: patient
-      })
-    }, 2000)
-  })
 }
 
 export function getSchedules(identifier: string, initialdate: string, finaldate: string) {
@@ -284,26 +269,19 @@ export function getSchedules(identifier: string, initialdate: string, finaldate:
 }
 
 export function updatePatientData(identifier: string, data: any): Promise<{ data: any }> {
-  // return agent.put(`/patient/${identifier}`, data);
-  return new Promise((res, rej) => {
-    setTimeout(() => {
-      return res({
-        data: {}
-      })
-    }, 2000)
-  })
+  return agent.put(`/patient/${identifier}/data`, data);
+  // return new Promise((res, rej) => {
+  //   setTimeout(() => {
+  //     return res({
+  //       data: {}
+  //     })
+  //   }, 2000)
+  // })
 }
 
-export function processPatientSchedule(): Promise<{ data: any }> {
-  return new Promise((res, rej) => {
-    setTimeout(() => {
-      // const generateError = Math.random() > 0.5
-      // if (generateError) return rej(`Não foi possível processar o agendamento`)
-
-      return res({
-        data: {}
-      })
-    }, 2000)
+export function processPatientSchedule(patientId: string, ids: string[]): Promise<{ data: any }> {
+  return agent.post(`/patient/${patientId}/schedule/process`, {
+    ids
   })
 }
 
@@ -330,24 +308,26 @@ export function validPatientByBirth(identifier: string, birth: string): Promise<
   })
 }
 
-export function updatePatient(patient: any) {
-  return new Promise((res, rej) => {
-    setTimeout(() => {
+export function updatePatient(id: string, patient: PatientIdentifier) {
+  return agent.put(`/patient/${id}`, patient);
 
-      if (!patient) return rej({
-        response: {
-          data: {
-            message: `Não foi possível atualizar o paciente`
-          }
-        }
-      })
+  // return new Promise((res, rej) => {
+  //   setTimeout(() => {
+
+  //     if (!patient) return rej({
+  //       response: {
+  //         data: {
+  //           message: `Não foi possível atualizar o paciente`
+  //         }
+  //       }
+  //     })
 
 
-      return res({
-        data: patient
-      })
-    }, 1000)
-  })
+  //     return res({
+  //       data: patient
+  //     })
+  //   }, 1000)
+  // })
 }
 
 export function recognizePatient(photo: string, identifier: string) {
