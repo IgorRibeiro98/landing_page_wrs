@@ -15,6 +15,8 @@ import Dialog from "@/components/Dialog.vue";
 
 import { computed, ref } from "vue";
 
+import { getQueues } from '@/modules/patient/repositories/tasy.repository';
+
 const props = defineProps<{
   attendanceTypes: AttendanceType[];
   attendanceType: AttendanceType;
@@ -62,8 +64,16 @@ const formDialog = ref<FormDialog>({
         required: true,
         on: {},
         props: {
-          autofocus: true,
+          'item-value': 'id',
+          'item-title': 'name',
+          'filter-keys': ['id', 'name', 'title', 'value'],
+          'value-comparator': (a: any, b: any ) => {
+            return a == b
+          },
+          items: [],
+          clearable: true,
         },
+        request: getQueues
       },
     ],
   },

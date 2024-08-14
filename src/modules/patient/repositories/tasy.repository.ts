@@ -28,3 +28,17 @@ export function getTypeOfAddress() {
 export function findAddressByCep(cep: string) {
     return agent.get(`https://viacep.com.br/ws/${cep}/json/`)
 }
+
+export function getSites() {
+    return agent.get('tasy/site')
+}
+
+export function getDepartments(params = {}) {
+    return agent.get('tasy/department', {
+        params
+    })
+}
+
+export function getQueues() {
+    return agent.get('tasy/queue')
+}

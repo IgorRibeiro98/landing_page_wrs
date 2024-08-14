@@ -116,6 +116,8 @@ declare global {
     id: number;
     name: string;
     description: string | null;
+    site_id: string | number | null
+    department_id: string | number | null;
     screens_count: number;
     queues_count: number;
     updated_at: string;
@@ -276,6 +278,7 @@ declare global {
     required?: boolean
     component: FormComponent
     props?: any
+    request?: () => Promise<any>
     on?: {
       [key: string]: (data: any) => void
     }
@@ -288,6 +291,8 @@ declare global {
       lg?: number | string
     }
   }
+
+  // type FormItem = _FormItem | (() => _FormItem);
 
   interface FormDialog {
     title: any

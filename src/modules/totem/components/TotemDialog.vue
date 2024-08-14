@@ -8,6 +8,8 @@ import useAlertStore from "@/stores/alert";
 import { useRouter } from "vue-router";
 
 import { computed, ref } from "vue";
+
+import { getDepartments, getSites } from '@/modules/patient/repositories/tasy.repository';
 const props = defineProps<{
   modelValue: boolean;
   totem: TotemItem;
@@ -40,8 +42,18 @@ const dialog = computed({
 });
 const { openAlert } = useAlertStore();
 
-
 const loading = ref<boolean>(false);
+
+const _departments = ref([])
+
+const departments = computed({
+  get() {
+    return _departments.value
+  },
+  set(value) {
+    _departments.value = value
+  }
+})
 
 const formDialog = ref<FormDialog>({
   title,
@@ -55,12 +67,47 @@ const formDialog = ref<FormDialog>({
         required: true,
         on: {}
       },
+      (() => {
+        const input: FormItem =  {
+          component: "VTextField",
+          value: "site_id",
+          label: "Estabelecimento (ERP)",
+          required: true,
+          props: {
+            'item-value': 'id',
+            'item-title': 'name',
+            items: []
+          },
+          request: getSites,
+          on: {
+            'update:modelValue': function(value: string) {
+                getDepartments({site_id: value})
+                  .then(res => {
+                    _departments.value = res.data
+                    internalTotem.value.department_id = null
+                  })
+              },
+          },
+        }
+
+        return input
+      })(),
       {
         component: "VTextField",
         value: "department_id",
-        label: "Departamento (Integração)",
+        label: "Departamento (ERP)",
         required: true,
-        on: {}
+        on: {},
+        props: {
+          'item-value': 'id',
+          'item-title': 'name',
+          items: departments,
+        },
+        request: () => {
+          return getDepartments({
+            site_id: internalTotem.value.site_id
+          })
+        }
       },
       {
         component: "VTextarea",

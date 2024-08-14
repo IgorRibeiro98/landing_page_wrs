@@ -11,18 +11,11 @@
       <v-col cols="12">
         <v-data-table :headers="headers" :items="items" :loading="loading" :items-per-page="-1">
           <template #top>
-              <v-row>
-                  <v-col cols="12" md="4" class="d-flex align-center">
-                      <v-text-field density="compact" hide-details="auto" label="Estabelecimento"
-                          append-inner-icon="mdi-magnify" variant="outlined" v-model="filters.site_id" @keypress.enter="loadTotens"
-                          clearable @click:clear="loadTotens()"
-                      ></v-text-field>
-                  </v-col>
-                  <v-spacer></v-spacer>
-                  <v-col cols="12" md="2" class="d-flex align-center justify-end">
-
-                  </v-col>
-              </v-row>
+            <Form
+              v-model="form.value"
+              :form="form.inputs"
+            >
+            </Form>
           </template>
 
           <template #[`item.name`]="{ item }">
@@ -84,7 +77,13 @@ import useSystemStore from "@/stores/system";
 import { onMounted, ref, type Ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
+import { debounce } from '@/helpers/function';
+
 import authorization from "@/plugins/authorization";
+
+import { getSites } from '@/modules/patient/repositories/tasy.repository';
+
+import Form from "@/components/FormBuilder/Form.vue";
 
 const headers: any = [
   { title: "ID", value: "id", align: "start", width: "5%" },
@@ -107,6 +106,8 @@ const totem = ref<TotemItem>({
   name: "",
   description: "",
   id: 0,
+  department_id: null,
+  site_id: null,
   queues_count: 0,
   screens_count: 0,
   updated_at: "",
@@ -119,6 +120,48 @@ const dialog = ref<boolean>(false);
 
 const filters = ref<TotemFilter>({
   site_id: null
+})
+
+const debounceLoadTotens = debounce(() => {
+    loadTotens();
+  }, 300)
+
+const form = ref<{
+  value: Ref<TotemFilter>,
+  inputs: FormItem[]
+}>({
+    value: filters,
+    inputs: [
+      (() => {
+        const input: FormItem = {
+          component: "VTextField",
+          value: "site_id",
+          label: "Estabelecimento (ERP)",
+          props: {
+            'item-value': 'id',
+            'item-title': 'name',
+            items: [],
+            clearable: true,
+          },
+          cols: {
+            cols: 12,
+            md: 4
+          },
+          request: getSites,
+          on: {
+            'update:modelValue': function(_: any) {
+              if (!input.props?.items?.length) return
+
+              loadTotens()
+            },
+            'click:clear': () => loadTotens(),
+            keyup: (_: any) => debounceLoadTotens(),
+          }
+        };
+
+        return input;
+      })(),
+    ],
 })
 
 function loadTotens(mustLoading = true) {
@@ -187,6 +230,8 @@ function clearTotem() {
     name: "",
     description: "",
     id: 0,
+    department_id: null,
+    site_id: null,
     queues_count: 0,
     screens_count: 0,
     updated_at: "",

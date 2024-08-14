@@ -36,7 +36,7 @@
 <script lang="ts" setup>
 import components from '@/components/FormBuilder/components';
 import Validator from '@/helpers/validator';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 
 const validator = new Validator();
 
@@ -66,4 +66,19 @@ const getRulesFromFormItem = (formItem: FormItem) => {
     }
     return validator.rules(rules.join('|'));
 }
+
+onMounted(() => {
+    props.form.forEach((form) => {
+        if (!form?.request) return 
+
+        form.props.loading = true
+
+        form.request()
+            .then((response: any) => {
+                form.props.items = response.data;
+                form.component = 'VAutocomplete';
+            })
+            .finally(() => (form.props.loading = false));
+    })
+})
 </script>
