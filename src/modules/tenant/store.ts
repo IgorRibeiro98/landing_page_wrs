@@ -15,10 +15,10 @@ const useTenantStore = defineStore('tenant', () => {
         created_at: '',
     });
 
+    const theme = useTheme()
+
     const loadTenant = async () => {
         try {
-            const theme = useTheme();
-
             return getTenant()
                 .then((resp) => {
                     tenant.value = {
@@ -30,10 +30,8 @@ const useTenantStore = defineStore('tenant', () => {
                     
                     Object.assign(theme.themes.value.light, { colors })
                 })
-                .catch((_) => {
-                })
         } catch (error) {
-            console.error('Error');
+            console.error({error});
         }
     };
     return {
