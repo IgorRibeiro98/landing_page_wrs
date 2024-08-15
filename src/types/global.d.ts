@@ -363,13 +363,15 @@ declare global {
     name: string
     email: string
     email_verified_at?: string | null
-    tenant_id: string
+    tenant_id: string | null
     created_at: string
     updated_at: string
     scopes_count: number
     slugs: string[],
     role_id?: number | null,
     role: Omit<Role, 'level' | 'is_default', 'users'>
+    tenants?: Tenant[]
+    password?: string
   }
 
   interface DrawerItem {

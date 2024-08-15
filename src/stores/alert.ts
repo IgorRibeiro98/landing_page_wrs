@@ -65,7 +65,7 @@ export const alertStore = defineStore('alert', () => {
   }
 
   function openDeleteAlert(callback: (loading: Ref<boolean>) => void, options?: ConfirmAlertOptions) {
-    openConfirmAlert(Object.assign(options ?? {},{
+    openConfirmAlert(Object.assign(options ?? {}, {
       title: 'Deletar',
       text: 'Tem certeza que deseja excluir? está ação é irreversível.'
     }), callback)
@@ -77,7 +77,6 @@ export const alertStore = defineStore('alert', () => {
 
   return {
     alert,
-
     openAlert,
     closeAlert,
     openConfirmAlert,

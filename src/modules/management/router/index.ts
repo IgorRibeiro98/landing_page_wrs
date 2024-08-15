@@ -23,6 +23,11 @@ const routes: RouteRecordRaw[] = [
                 props: true,
 
             },
+            {
+                path: 'users',
+                name: 'management.users',
+                component: () => import('@/modules/management/views/user/Users.vue')
+            },
         ],
     }
 ]
