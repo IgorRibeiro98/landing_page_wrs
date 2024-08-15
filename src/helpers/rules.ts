@@ -79,6 +79,10 @@ function getCount(value: any, type: VarType | undefined) {
   return type === 'number' ? value : value.length;
 }
 
+function password(value: string) {
+  return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(value) || 'A senha deve ter no mínimo 8 caracteres, incluindo letras, números, uma letra maiúscula e um caractere especial';
+}
+
 export default {
   required,
   requiredArray,
@@ -88,5 +92,6 @@ export default {
   numeric,
   between,
   equals,
-  url
+  url,
+  password
 }
