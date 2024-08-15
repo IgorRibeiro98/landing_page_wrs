@@ -5,7 +5,7 @@ import { introspect } from '@/modules/auth/repositories/auth.repository';
 
 export const useAuthStore = defineStore('user', () => {
 
-    const emptyUser = {
+    const emptyUser: User = {
         id: 0,
         name: '',
         email: '',
@@ -15,6 +15,8 @@ export const useAuthStore = defineStore('user', () => {
         updated_at: '',
         scopes_count: 0,
         slugs: [],
+        role: {},
+        tenants: []
     }
 
     const authUser = ref(JSON.parse(localStorage.getItem('user') || JSON.stringify(emptyUser)) as User);

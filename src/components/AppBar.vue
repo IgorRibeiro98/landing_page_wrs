@@ -13,6 +13,20 @@
       </v-slide-group>
     </template>
     <template #append>
+      <v-select 
+        width="30"
+        hideDetails="auto"
+        density="compact"
+        variant="solo" 
+        filled
+        flat
+        return-object
+        item-title="name"
+        :items="user.tenants"
+        v-model="currentTenant"
+      >
+      </v-select>
+
       <v-btn @click="toggleTheme" variant="text" :icon="themeIcon"></v-btn>
       <v-btn @click="logoutUser" :loading="loadingLogout" title="Sair" icon="mdi-exit-to-app"></v-btn>
     </template>
@@ -29,6 +43,35 @@ import useTenantStore from '@/modules/tenant/store';
 import useUserStore from '@/stores/user';
 
 const {user} = storeToRefs(useUserStore())
+
+const currentTenant = computed({
+  get() {
+    const url = new URL(window.location.href)
+
+    const [ subdomain ] = url.hostname.split('.')
+
+    return user.value.tenants?.find(tenant => subdomain == tenant.domain)
+  },
+  set(value: any) {
+    const url = new URL(window.location.href)
+    
+    const [subdomain, domain] = url.hostname.split('.')
+
+    if (domain)
+      url.hostname = url.hostname.replace(subdomain, value.domain)
+    else 
+      url.hostname = `${value.domain}.${subdomain}`
+
+    if (url.hostname == `${value.domain}.${value.domain}`)
+      url.hostname = value.domain
+
+    url.searchParams.set('accessToken', localStorage.getItem('accessToken') as string)
+
+    const href = `${url.origin}/${url.hash}${url.search}`;
+
+    window.location.href = href
+  }
+})
 
 const tenantStore = useTenantStore()
 
