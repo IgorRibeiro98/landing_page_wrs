@@ -1,5 +1,5 @@
 <template>
-    <LayoutView icon="mdi-shield-key-outline" title="Usuários">
+    <LayoutView icon="mdi-account-multiple" title="Usuários">
         <template #action>
             <v-btn color="primary" @click="dialog = true">
                 Novo usuário
@@ -50,12 +50,12 @@
 </template>
 <script setup lang="ts">
 // import { errorMessage, successMessage } from '@/helpers/alert';
-import LayoutView from '@/components/LayoutView.vue'
-import UsersDialog from '@/modules/management/components/users/UsersDialog.vue'
-import { getAllUsersPaginate, deleteUser } from '@/modules/management/repositories/user.repository';
+import LayoutView from '@/components/LayoutView.vue';
+import UsersDialog from '@/modules/management/components/users/UsersDialog.vue';
+import { deleteUser, getAllUsersPaginate } from '@/modules/management/repositories/user.repository';
+import useAlertStore from "@/stores/alert";
 import { useSystemStore } from "@/stores/system";
 import { computed, onMounted, ref } from 'vue';
-import useAlertStore from "@/stores/alert";
 
 const dialog = ref<boolean>(false);
 const loading = ref<boolean>(false);

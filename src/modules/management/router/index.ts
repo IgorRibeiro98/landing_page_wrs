@@ -1,10 +1,15 @@
-import { type RouteRecordRaw } from 'vue-router'
-import { layouts } from '@/router'
+import { layouts } from '@/router';
+import { type RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
     {
         path: '/management',
         component: () => layouts.default(),
+        meta: {
+            guards: [
+                'auth',
+            ]
+        },
         children: [
             {
                 path: 'acl',
