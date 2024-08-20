@@ -1,7 +1,7 @@
 <template>
     <LayoutView icon="mdi-account-multiple" title="Usuários">
         <template #action>
-            <v-btn color="primary" @click="dialog = true">
+            <v-btn color="primary" @click="dialog = true" v-if="authorization.acl('user.create')">
                 Novo usuário
             </v-btn>
         </template>
@@ -29,14 +29,14 @@
                     </v-chip-group>
                 </template>
                 <template #item.actions="{ item }">
-                    <v-menu location="right">
+                    <v-menu location="right" v-if="authorization.acl('user.update') || authorization.acl('user.delete')">
                         <template v-slot:activator="{ props }">
                             <v-btn icon="mdi-dots-horizontal" variant="plain" v-bind="props"></v-btn>
                         </template>
                         <v-list>
                             <template v-for="(action) in tableActions">
                                 <v-list-item @click="action.action({ ...item })"
-                                    v-if="action.show ? action.show(item) : true">
+                                    v-if="action.show ? action.show() : true">
                                     <v-list-item-title>{{ action.title }}</v-list-item-title>
                                 </v-list-item>
                             </template>
@@ -56,6 +56,7 @@ import { deleteUser, getAllUsersPaginate } from '@/modules/management/repositori
 import useAlertStore from "@/stores/alert";
 import { useSystemStore } from "@/stores/system";
 import { computed, onMounted, ref } from 'vue';
+import authorization from '@/plugins/authorization';
 
 const dialog = ref<boolean>(false);
 const loading = ref<boolean>(false);
@@ -123,13 +124,12 @@ const tableActions = [
         action: (item: any) => {
             user.value = item;
             dialog.value = true;
-        }
+        },
+        show: () => authorization.acl('user.update')
     },
     {
         title: 'Excluir',
-        show: (item: User) => {
-            return true
-        },
+        show: () => authorization.acl('user.delete'),
         action: (item: User) => {
             openDeleteAlert(() => {
                 loading.value = true;

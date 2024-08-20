@@ -1,3 +1,4 @@
+import { Slugs } from './../../../router/index';
 import { layouts } from '@/router';
 import { type RouteRecordRaw } from 'vue-router';
 
@@ -31,7 +32,13 @@ const routes: RouteRecordRaw[] = [
             {
                 path: 'users',
                 name: 'management.users',
-                component: () => import('@/modules/management/views/user/Users.vue')
+                component: () => import('@/modules/management/views/user/Users.vue'),
+                meta: {
+                    guards: ['acl'],
+                    slugs: {
+                        acl: "user.view"
+                    },
+                }
             },
         ],
     }

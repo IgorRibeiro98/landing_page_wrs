@@ -369,7 +369,6 @@ declare global {
     updated_at: string
     scopes_count: number
     slugs: string[],
-    tenants: Tenant[]
     role_id?: number | null,
     role: Omit<Role, 'level' | 'is_default', 'users'>
     tenants?: Tenant[]
