@@ -82,7 +82,7 @@ const form = ref<FormItem[]>([
         value: "provider_uri",
         label: "Url da API ERP do parceiro",
         props: {
-            rules: ['url']
+            rules: 'url'
         },
         required: true,
         cols: {
