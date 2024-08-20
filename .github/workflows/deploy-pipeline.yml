@@ -1,0 +1,46 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+        tag:
+          description: 'Tag para deploy'
+          required: true
+jobs:
+  build:
+    name: Build ${{ github.event.inputs.tag }}
+    strategy:
+      matrix: 
+        node-version: [20.14.0]
+        
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{matrix.node-version}}
+
+      - name: Create .env file
+        run: |
+          echo "VITE_APP_CLIENT_ID=${{ secrets.VITE_APP_CLIENT_ID}}" > .env.production
+          echo "VITE_APP_API=${{ secrets.VITE_APP_API}}" >> .env.production
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy
+        run: |
+          git config --global user.email "tecnologia.saludti@outlook.com"
+          git config --global user.name "Deploy"
+          git checkout --orphan ${{ github.event.inputs.tag }}
+          git reset --hard
+          git add dist
+          git commit -m "deploy"
+          git push origin HEAD
