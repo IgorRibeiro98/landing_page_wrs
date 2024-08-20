@@ -43,4 +43,5 @@ jobs:
           git reset --hard
           git add dist
           git commit -m "deploy"
-          git push origin HEAD
+          git tag ${{ github.event.inputs.tag }}
+          git push origin ${{ github.event.inputs.tag }}
