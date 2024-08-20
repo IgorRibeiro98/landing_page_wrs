@@ -57,6 +57,9 @@ const form = computed({
 const getRulesFromFormItem = (formItem: FormItem) => {
     const rules = [];
 
+    if (typeof formItem?.props?.rules !== 'string') 
+            return formItem?.props?.rules ?? [];
+
     if (formItem.required) {
         rules.push('required');
     }

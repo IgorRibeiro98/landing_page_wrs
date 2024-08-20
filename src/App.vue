@@ -4,6 +4,7 @@
       <router-view />
     </v-layout>
     <Alert />
+    <FirstLogin />
   </v-app>
 </template>
 
@@ -13,6 +14,7 @@ import bootstrap from "@/bootstrap";
 import { onMounted } from "vue";
 
 import { useRouter } from "vue-router";
+import FirstLogin from '@/components/FirstLogin.vue'
 
 
 onMounted(async () =>  {

@@ -14,6 +14,7 @@ declare module 'vue' {
     Dialog: typeof import('./src/components/Dialog.vue')['default']
     Draggable: typeof import('./src/components/Draggable.vue')['default']
     DrawerItem: typeof import('./src/components/DrawerItem.vue')['default']
+    FirstLogin: typeof import('./src/components/FirstLogin.vue')['default']
     Form: typeof import('./src/components/FormBuilder/Form.vue')['default']
     IFrameVue: typeof import('./src/components/IFrameVue.vue')['default']
     LayoutView: typeof import('./src/components/LayoutView.vue')['default']

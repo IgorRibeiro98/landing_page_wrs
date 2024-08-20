@@ -1,5 +1,5 @@
 <template>
-  <v-dialog :width="$attrs.fullscreen !== undefined ? undefined:400" v-bind="$attrs" v-model="dialog">
+  <v-dialog :width="$attrs.fullscreen !== undefined ? undefined: 450" v-bind="$attrs" v-model="dialog">
     <v-form
       ref="formRef"
       @submit.prevent="handleSubmit"
@@ -39,11 +39,13 @@
               v-model="form.form.value"
               :form="form?.form.inputs ?? []"
             >
+             
               <template
                 v-for="(formItem, index) in form.form.inputs"
                 #[`item:${formItem.value}`]="data"
               >
-                <slot :name="`item:${formItem.value}`" v-bind="data"></slot>
+                <slot :name="`item:${formItem.value}`" v-bind="data">
+                </slot>
               </template>
             </Form>
           </slot>
@@ -51,8 +53,8 @@
         <v-card-actions class="px-4 pb-4" v-if="!hideActions">
           <slot name="actions">
             <v-spacer></v-spacer>
-            <v-btn variant="text" @click="handleClose">Cancelar</v-btn>
-            <v-btn color="primary" type="submit">
+            <v-btn variant="text" @click="handleClose" v-if="!hideCancel" :disabled="loading">Cancelar</v-btn>
+            <v-btn color="primary" type="submit" :disabled="loading" :loading="loading">
               {{ form?.submitText ?? "Salvar" }}</v-btn
             >
           </slot>
@@ -70,6 +72,7 @@ interface Props {
   form?: FormDialog;
   loading?: boolean;
   cancelReset?: boolean;
+  hideCancel?: boolean;
   hideActions?: boolean;
 }
 

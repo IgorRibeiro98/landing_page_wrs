@@ -363,6 +363,7 @@ declare global {
     name: string
     email: string
     email_verified_at?: string | null
+    first_login?: boolean
     tenant_id: string | null
     created_at: string
     updated_at: string

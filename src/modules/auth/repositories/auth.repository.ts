@@ -1,4 +1,4 @@
-import client from '@/plugins/axios'
+import client from '@/plugins/axios';
 
 export function loginPopUp(url: string): Window {
 
@@ -54,4 +54,11 @@ export function getToken(payload: AuthorizationPayload) {
 
 export function introspect() {
     return client.get('me')
+}
+
+export function update(body: {
+    name: string,
+    password: string
+}) {
+    return client.put('me', body)
 }
