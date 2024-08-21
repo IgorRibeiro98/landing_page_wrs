@@ -5,6 +5,12 @@ const routes: RouteRecordRaw[] = [
     {
         path: '/fila',
         component: () => layouts.default(),
+        meta: {
+            title: 'Filas',
+            guards: [
+                'auth',
+            ]
+        },
         children: [
             {
                 path: '',

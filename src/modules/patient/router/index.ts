@@ -5,6 +5,12 @@ const routes: RouteRecordRaw[] = [
     {
         path: '/totem/:id/fluxo-paciente',
         component: () => layouts.totem(),
+        meta: {
+            title: 'Fluxo de paciente',
+            guards: [
+                'auth',
+            ]
+        },
         children: [
             {
                 path: '',
@@ -16,6 +22,12 @@ const routes: RouteRecordRaw[] = [
     {
         path: '/senha',
         component: () => layouts.queue(),
+        meta: {
+            title: 'Senha',
+            guards: [
+                'auth',
+            ]
+        },
         children: [
             {
                 path: '',

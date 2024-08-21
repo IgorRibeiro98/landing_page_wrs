@@ -5,6 +5,12 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/tipo-atendimento',
     component: () => layouts.default(),
+    meta: {
+      title: 'Tipo de Atendimento',
+      guards: [
+        'auth',
+      ]
+    },
     children: [
       {
         path: '',

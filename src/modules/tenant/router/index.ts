@@ -5,6 +5,12 @@ const routes: RouteRecordRaw[] = [
     {
         path: '/tenant',
         component: () => layouts.default(),
+        meta: {
+            title: 'Tenant',
+            guards: [
+                'auth',
+            ]
+        },
         children: [
             {
                 path: 'create',
