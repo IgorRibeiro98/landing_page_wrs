@@ -15,19 +15,36 @@ const routes: RouteRecordRaw[] = [
             {
                 path: 'acl',
                 name: 'management.acl',
-                component: () => import('@/modules/management/views/acl/Roles.vue')
+                component: () => import('@/modules/management/views/acl/Roles.vue'),
+                meta: {
+                    guards: ['acl'],
+                    slugs: {
+                        acl: "acl.view"
+                    },
+                }
             },
             {
                 path: 'acl/create',
                 name: 'management.acl.create',
-                component: () => import('@/modules/management/views/acl/RoleCreate.vue')
+                component: () => import('@/modules/management/views/acl/RoleCreate.vue'),
+                meta: {
+                    guards: ['acl'],
+                    slugs: {
+                        acl: "acl.create"
+                    },
+                }
             },
             {
                 path: 'acl/edit/:id',
                 name: 'management.acl.edit',
                 component: () => import('@/modules/management/views/acl/RoleUpdate.vue'),
                 props: true,
-
+                meta: {
+                    guards: ['acl'],
+                    slugs: {
+                        acl: "acl.update"
+                    },
+                }
             },
             {
                 path: 'users',

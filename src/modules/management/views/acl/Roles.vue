@@ -1,7 +1,7 @@
 <template>
     <LayoutView icon="mdi-shield-key-outline" title="ACL">
         <template #action>
-            <v-btn color="primary" :to="{ name: 'management.acl.create' }">
+            <v-btn v-if="authorization.acl('acl.create')" color="primary" :to="{ name: 'management.acl.create' }">
                 Nova Role
             </v-btn>
         </template>
@@ -25,7 +25,7 @@
                     <span>{{ item.is_default ? 'Sim' : 'Não' }}</span>
                 </template>
                 <template #item.actions="{ item }">
-                    <v-menu location="right">
+                    <v-menu location="right" v-if="authorization.acl('acl.update|acl.delete')">
                         <template v-slot:activator="{ props }">
                             <v-btn icon="mdi-dots-horizontal" variant="plain" v-bind="props"></v-btn>
                         </template>
@@ -51,6 +51,7 @@ import { deleteRole, getAllRolesPaginate } from '@/modules/management/repositori
 import { useSystemStore } from "@/stores/system";
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import authorization from '@/plugins/authorization';
 
 const loading = ref<boolean>(false);
 const tableLoading = ref<boolean>(false);
@@ -96,16 +97,14 @@ const headers: any[] = [
 const tableActions = [
     {
         title: 'Visualizar',
-
+        show: () => authorization.acl('acl.update'),
         action: (item: Role) => {
             router.push({ name: 'management.acl.edit', params: { id: item.id } })
         }
     },
     {
         title: 'Excluir',
-        show: (item: Role) => {
-            return !item.is_default
-        },
+        show: () => authorization.acl('acl.delete'),
         action: (item: Role) => {
             tableLoading.value = true;
             deleteRole(item.id!)
@@ -139,6 +138,7 @@ const filteredRoles = computed<Role[]>(() => {
 })
 
 const goToRole = (event: MouseEvent, item: any) => {
+    if (!authorization.acl('acl.update')) return;
     const role: Role = item.item
     router.push({ name: 'management.acl.edit', params: { id: role.id } })
 }
