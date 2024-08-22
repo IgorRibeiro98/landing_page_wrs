@@ -29,7 +29,7 @@
                     </v-chip-group>
                 </template>
                 <template #item.actions="{ item }">
-                    <v-menu location="right" v-if="authorization.acl('user.update') || authorization.acl('user.delete')">
+                    <v-menu location="right" v-if="authorization.acl('user.update|user.delete')">
                         <template v-slot:activator="{ props }">
                             <v-btn icon="mdi-dots-horizontal" variant="plain" v-bind="props"></v-btn>
                         </template>
@@ -53,10 +53,10 @@
 import LayoutView from '@/components/LayoutView.vue';
 import UsersDialog from '@/modules/management/components/users/UsersDialog.vue';
 import { deleteUser, getAllUsersPaginate } from '@/modules/management/repositories/user.repository';
+import authorization from '@/plugins/authorization';
 import useAlertStore from "@/stores/alert";
 import { useSystemStore } from "@/stores/system";
 import { computed, onMounted, ref } from 'vue';
-import authorization from '@/plugins/authorization';
 
 const dialog = ref<boolean>(false);
 const loading = ref<boolean>(false);

@@ -1,7 +1,7 @@
 <template>
     <LayoutView icon="mdi-format-list-bulleted" title="Filas">
         <template #action>
-            <v-btn color="primary" flat @click="dialog = true">
+            <v-btn color="primary" flat @click="dialog = true" v-if="authorization.acl('queue.create')">
                 Novo
             </v-btn>
         </template>
@@ -24,18 +24,20 @@
                 <template #bottom> </template>
 
                 <template #[`item.actions`]="{ item }: { item: Queue }">
-                    <v-menu>
+                    <v-menu v-if="authorization.acl('queue.update|queue.create')">
                         <template #activator="{ props }">
                             <v-btn icon="mdi-dots-horizontal" variant="text" v-bind="props">
                             </v-btn>
                         </template>
 
                         <v-list>
-                            <v-list-item link @click="option.action(item)" v-for="option in options">
-                                <v-list-item-title>
-                                    {{ option.title }}
-                                </v-list-item-title>
-                            </v-list-item>
+                            <template v-for="option in options">
+                                <v-list-item link @click="option.action(item)" v-if="option.show()">
+                                    <v-list-item-title>
+                                        {{ option.title }}
+                                    </v-list-item-title>
+                                </v-list-item>
+                            </template>
                         </v-list>
                     </v-menu>
                 </template>
@@ -47,14 +49,15 @@
 </template>
 
 <script lang="ts" setup>
-import LayoutView from '@/components/LayoutView.vue'
+import LayoutView from '@/components/LayoutView.vue';
 import QueueDialog from "@/modules/queue/components/QueueDialog.vue";
-import { getQueues, deleteQueue } from "@/modules/queue/repositories/queue.repository";
+import { deleteQueue, getQueues } from "@/modules/queue/repositories/queue.repository";
+import authorization from '@/plugins/authorization';
 import useAlertStore from "@/stores/alert";
 import { useSystemStore } from "@/stores/system";
-import { Ref } from 'vue';
-import { onMounted, ref } from "vue";
+import { Ref, onMounted, ref } from 'vue';
 import { RouterLink } from "vue-router";
+
 
 const headers: any = [
     { title: "ID", value: "id", align: "start", width: "5%" },
@@ -105,7 +108,8 @@ const options = ref<any>([
         action: (queue: Queue) => {
             item.value = { ...queue }
             dialog.value = true;
-        }
+        },
+        show: () => authorization.acl('queue.update')
     },
     {
         title: 'Excluir',
@@ -123,7 +127,8 @@ const options = ref<any>([
                         loadQueues(false)
                     })
             })
-        }
+        },
+        show: () => authorization.acl('queue.delete')
     }
 ])
 
