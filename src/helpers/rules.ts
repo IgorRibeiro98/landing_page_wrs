@@ -80,7 +80,7 @@ function getCount(value: any, type: VarType | undefined) {
 }
 
 function password(value: string) {
-  return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(value) || 'A senha deve ter no mínimo 8 caracteres, incluindo letras, números, uma letra maiúscula e um caractere especial';
+  return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%¨&*'"()_=+\/|~?^ºª°:;,])[A-Za-z\d!@#$%¨&*'"()_=+\/|~?^ºª°:;,]{8,}$/.test(value) || 'A senha deve ter no mínimo 8 caracteres, incluindo letras, números, uma letra maiúscula e um caractere especial';
 }
 
 export default {
