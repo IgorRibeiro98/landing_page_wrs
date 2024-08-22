@@ -37,10 +37,11 @@ jobs:
 
       - name: Deploy
         run: |
-          git config --global user.email "tecnologia.saludti@outlook.com"
+          git config --global user.email "japostulo@gmail.com"
           git config --global user.name "Deploy"
-          git checkout --orphan ${{ github.event.inputs.tag }}
+          git checkout --orphan temp
           git reset --hard
+          mv electron/dist .
           git add dist
           git commit -m "deploy"
           git tag ${{ github.event.inputs.tag }}
