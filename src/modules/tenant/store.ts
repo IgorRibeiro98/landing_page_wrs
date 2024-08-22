@@ -10,7 +10,7 @@ const useTenantStore = defineStore('tenant', () => {
         name: '',
         logo: '',
         theme: {},
-        domain: '',
+        subdomain: '',
         updated_at: '',
         created_at: '',
     });
@@ -23,7 +23,7 @@ const useTenantStore = defineStore('tenant', () => {
         const item = JSON.parse(localStorage.getItem(key)!);
 
         if (!item) return null;
-        
+
         Object.entries(item ?? {}).forEach(([key, value]: any) => {
             try {
                 if (typeof value === 'string') {
@@ -57,7 +57,7 @@ const useTenantStore = defineStore('tenant', () => {
                     setColorTheme(tenant.value.theme.colors)
                 })
         } catch (error) {
-            console.error({error});
+            console.error({ error });
         }
     };
     return {

@@ -254,7 +254,7 @@ declare global {
     provider_uri: string;
     logo: string | File;
     theme: ThemeDefinition;
-    domain: string;
+    subdomain: string;
     updated_at: string;
     created_at: string;
   }

@@ -78,7 +78,7 @@ const tenant = ref<Tenant>({
             warning: '#FB8C00'
         }
     },
-    domain: '',
+    subdomain: '',
     updated_at: '',
     created_at: '',
 })
@@ -128,14 +128,14 @@ const create = () => {
                 const formData = new FormData()
                 formData.append('name', tenant.value.name)
                 formData.append('provider_uri', tenant.value.provider_uri)
-                formData.append('domain', tenant.value.domain)
+                formData.append('subdomain', tenant.value.subdomain)
                 formData.append('logo', tenant.value.logo)
                 formData.append('theme', JSON.stringify(tenant.value.theme))
                 createTenant(formData)
                     .then(() => {
                         const url = new URL(window.location.origin)
 
-                        url.host = `${tenant.value.domain}.${url.hostname}`
+                        url.host = `${tenant.value.subdomain}.${url.hostname}`
                         console.log(url.toString())
                         window.location.href = url.toString()
                     })

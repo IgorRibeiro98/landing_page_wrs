@@ -8,10 +8,10 @@ export function createTenant(tenant: FormData) {
     return axios.post(`/tenant`, tenant);
 }
 
-export function validateDomain(domain: string) {
-    return axios.get(`/tenant/validate-domain/`, {
+export function validateSubdomain(subdomain: string) {
+    return axios.get(`/tenant/validate-subdomain/`, {
         params: {
-            domain
+            subdomain
         }
     });
 }

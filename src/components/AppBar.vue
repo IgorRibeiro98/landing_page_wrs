@@ -1,7 +1,8 @@
 <template>
   <v-app-bar color="nav-color" class="position-fixed" elevation="0">
     <template #prepend>
-      <v-img aspect-ratio="16/9" v-if="!$vuetify.display.mobile" @click="$router.push({ path: '/' })" class="pointer mx-4" :src="logo" width="50"></v-img>
+      <v-img aspect-ratio="16/9" v-if="!$vuetify.display.mobile" @click="$router.push({ path: '/' })"
+        class="pointer mx-4" :src="logo" width="50"></v-img>
       <v-slide-group show-arrows>
         <v-slide-group-item v-for="item in items" :value="item.route.name">
           <v-btn class="text-regular mx-1" @click="$router.push(item.route)"
@@ -13,18 +14,8 @@
       </v-slide-group>
     </template>
     <template #append>
-      <v-select 
-        width="30"
-        hideDetails="auto"
-        density="compact"
-        variant="solo" 
-        filled
-        flat
-        return-object
-        item-title="name"
-        :items="user.tenants"
-        v-model="currentTenant"
-      >
+      <v-select width="30" hideDetails="auto" density="compact" variant="solo" filled flat return-object
+        item-title="name" :items="user.tenants" v-model="currentTenant">
       </v-select>
 
       <v-btn @click="toggleTheme" variant="text" :icon="themeIcon"></v-btn>
@@ -42,28 +33,28 @@ import { useTheme } from "vuetify";
 import useTenantStore from '@/modules/tenant/store';
 import useUserStore from '@/stores/user';
 
-const {user} = storeToRefs(useUserStore())
+const { user } = storeToRefs(useUserStore())
 
 const currentTenant = computed({
   get() {
     const url = new URL(window.location.href)
 
-    const [ subdomain ] = url.hostname.split('.')
+    const [subdomain] = url.hostname.split('.')
 
-    return user.value.tenants?.find(tenant => subdomain == tenant.domain)
+    return user.value.tenants?.find(tenant => subdomain == tenant.subdomain)
   },
   set(value: any) {
     const url = new URL(window.location.href)
-    
+
     const [subdomain, domain] = url.hostname.split('.')
 
     if (domain)
-      url.hostname = url.hostname.replace(subdomain, value.domain)
-    else 
-      url.hostname = `${value.domain}.${subdomain}`
+      url.hostname = url.hostname.replace(subdomain, value.subdomain)
+    else
+      url.hostname = `${value.subdomain}.${subdomain}`
 
-    if (url.hostname == `${value.domain}.${value.domain}`)
-      url.hostname = value.domain
+    if (url.hostname == `${value.subdomain}.${value.subdomain}`)
+      url.hostname = value.subdomain
 
     url.searchParams.set('accessToken', localStorage.getItem('accessToken') as string)
 
@@ -120,11 +111,11 @@ const items = [
     },
   },
   {
-      icon: 'mdi-sitemap-outline',
-      title: 'Tipos de Atendimento',
-      route: {
-          name: 'attendance-type.view',
-      }
+    icon: 'mdi-sitemap-outline',
+    title: 'Tipos de Atendimento',
+    route: {
+      name: 'attendance-type.view',
+    }
   },
 ];
 </script>

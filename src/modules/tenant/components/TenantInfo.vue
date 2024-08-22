@@ -9,9 +9,9 @@
             </v-col>
             <v-col cols="12" md="4">
                 <FormBuilder v-model="tenant" :form="form">
-                    <template #item:domain="{ props }">
-                        <v-text-field v-model="tenant.domain" v-bind="props"
-                            :rules="[...props.rules, validateDomainExists]">
+                    <template #item:subdomain="{ props }">
+                        <v-text-field v-model="tenant.subdomain" v-bind="props"
+                            :rules="[...props.rules, validateSubdomainExists]">
                             <template #append-inner>
                                 <span class="text-caption font-italic">.{{ domain }}</span>
                             </template>
@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import logo from '@/assets/logo.png';
 import FormBuilder from '@/components/FormBuilder/Form.vue';
-import { validateDomain } from '@/modules/tenant/repositories/tenant.repository';
+import { validateSubdomain } from '@/modules/tenant/repositories/tenant.repository';
 import { computed, ref } from 'vue';
 
 interface Props {
@@ -51,8 +51,8 @@ const tenant = computed<Tenant>({
     }
 })
 
-async function validateDomainExists() {
-    const response = await validateDomain(tenant.value.domain)
+async function validateSubdomainExists() {
+    const response = await validateSubdomain(tenant.value.subdomain)
     return !response.data ? true : 'Subdomínio já existe'
 }
 
@@ -69,7 +69,7 @@ const form = ref<FormItem[]>([
     },
     {
         component: "VTextField",
-        value: "domain",
+        value: "subdomain",
         label: "Sub-domínio",
         required: true,
         cols: {
