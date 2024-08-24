@@ -23,7 +23,6 @@
       :collections="collections"
     >
     </component>
-
     <ConfirmAlert v-model="alert" v-bind="alertProps" />
     <Loading v-model="loading" v-bind="loadingProps"/>
   </Layout>
@@ -200,8 +199,6 @@ onBeforeUnmount(() => {
 });
 
 function openLoading(lProps: LoadingProps) {
-  console.log('open loading')
-  console.log(lProps)
   loading.value = true;
   loadingProps.value = lProps
   lProps.callback(loading)

@@ -44,7 +44,7 @@ import { checkBirthDate } from "@patient/repositories/patient.repository";
 const birthDate = ref("");
 const formElement = ref<HTMLFormElement>()!;
 
-import { AlertProps, Data, LoadingProps, Patient } from "@patient/types";
+import { AlertProps, Data, FlowProps, LoadingProps, Patient } from "@patient/types";
 
 interface Emit {
   (event: "alert", options: AlertProps): void;
@@ -52,14 +52,13 @@ interface Emit {
   (event: "next"): void;
   (event: "to", value: string): void;
   (event: "update:data", value: any): void;
+  (event: "cancel"): void;
 }
 
 const isLoading = ref(false);
 const emit = defineEmits<Emit>();
 
-const props = defineProps<{
-  data: Data;
-}>();
+const props = defineProps<FlowProps> ();
 
 const data = computed({
   get: () => props.data,

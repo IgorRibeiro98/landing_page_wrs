@@ -132,6 +132,15 @@ export interface Patient {
     }
 }
 
+export interface FlowProps {
+  layoutRef: any
+  totem: Totem
+  screen: any
+  traits: any
+  collections: {[key: string]: any[]}
+  data: Data
+}
+
 export interface Data {
     internal: {
       identifier?: string;
