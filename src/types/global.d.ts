@@ -11,6 +11,93 @@ declare global {
     }
   }
 
+  interface Totem {
+    id: number;
+    name: string;
+    description: string | null;
+    department_id: string | number;
+    site_id: string | number;
+    screens: ScreenTotem[];
+    queues: QueueTotem[];
+    created_at: string | null;
+    updated_at: string | null;
+  }
+
+  interface ScreenTotem {
+    id: number
+    data: Screens
+    order: number
+    screen_id: number
+    totem_id: number
+    fields: ScreenTotemField[]
+    traits: ScreenTotemTrait[]
+  }
+
+  interface QueueTotem {
+    id: number;
+    off_hours_message: string;
+    queue_id: number;
+    totem_id: number;
+    data?: Queue;
+
+    attendance_types: AttendanceType[];
+    attendance_hours: AttendanceHour[];
+    form: {
+      value: boolean;
+    };
+  }
+
+  interface Queue {
+    id: number,
+    name: string
+    status: string | null,
+    description: string | null,
+    icon_src: string,
+    created_at: string,
+    updated_at: string
+  }
+
+  interface AttendanceType {
+    data: AttendanceTypeData | null
+    attendance_type_id: number
+    integration_id: string
+    queue_totem_id: number
+  }
+
+  interface AttendanceTypeData {
+    id?: number
+    name: string
+    icon: string
+    description?: string
+    created_at?: string
+    updated_at?: string
+  }
+
+  interface AttendanceHour {
+    end_time: string
+    start_time: string
+    weekday_iso: number
+    queue_totem_id: number
+  }
+
+  interface TicketPayload {
+    patient_id: string | number | null,
+    queue_id: number | string,
+    preferential: boolean,
+    establishment_id: string | number
+  }
+  interface Ticket extends Partial<TicketPayload> {
+      establishment: {
+          id: number,
+          name: string
+          acronym: string
+      },
+      password: number,
+      password_id: number,
+      prefix: string
+  }
+  //--------------------------------------------------------------------------------
+
   interface ScreenField {
     id: number
     slug: string
@@ -53,10 +140,6 @@ declare global {
     ticket?: Ticket
   }
 
-  interface Ticket {
-    value: string;
-    site: string;
-  }
   // interface Queue {
   //     id: number;
   //     name: string;
@@ -68,15 +151,7 @@ declare global {
   //     nr_seq_fila_preferencial_80: string;
   //     [key: string]: any;
   // }
-  interface ScreenTotem {
-    data: Screens
-    fields: ScreenTotemField[]
-    traits: ScreenTotemTrait[]
-    id: number
-    order: number
-    screen_id: number
-    totem_id: number
-  }
+ 
   interface ScreenTotemField {
     editable: number,
     field_id: number,
@@ -103,15 +178,6 @@ declare global {
     question_id?: number
   }
 
-  interface Totem {
-    id: number;
-    name: string;
-    description: string | null;
-    screens: ScreenTotem[];
-    queues: QueueTotem[];
-    site: Site
-  }
-
   interface TotemItem {
     id: number;
     name: string;
@@ -124,16 +190,6 @@ declare global {
   }
 
   type TotemList = TotemItem[]
-
-  interface Queue {
-    id: number,
-    name: string
-    description: string | null,
-    icon_src: string,
-    status: string | null,
-    created_at: string,
-    updated_at: string
-  }
 
   type QueueList = Queue[]
 
@@ -313,37 +369,6 @@ declare global {
     active?: boolean
     name?: string | ComputedRef,
     to: RouteLocationRaw
-  }
-
-  interface AttendanceTypeData {
-    id?: number
-    name: string
-    icon: string
-    description?: string
-    created_at?: string
-    updated_at?: string
-  }
-
-  interface AttendanceType {
-    data: AttendanceTypeData | null
-    attendance_type_id: number
-    integration_id: string
-  }
-
-  interface AttendanceHour {
-    end_time: string
-    start_time: string
-    weekday_iso: number
-  }
-
-  interface QueueTotem {
-    attendance_types: AttendanceType[];
-    attendance_hours: AttendanceHour[];
-    off_hours_message: string;
-    data?: Queue;
-    form: {
-      value: boolean;
-    };
   }
 
   interface Scope {

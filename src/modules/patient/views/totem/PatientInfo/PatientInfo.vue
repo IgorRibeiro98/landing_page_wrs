@@ -30,6 +30,7 @@ import {
 } from '@/modules/patient/repositories/tasy.repository';
 
 import { updatePatient } from '@/modules/patient/repositories/patient.repository';
+import { AxiosResponse } from "axios";
 
 interface Props {
   data: Data;
@@ -39,6 +40,7 @@ interface Props {
 interface Emit {
   (event: "to", payload: string): void;
   (event: "update:data", value: any): void;
+  (event: "update:collections", value: any): void;
 }
 
 const emit = defineEmits<Emit>();
@@ -59,12 +61,23 @@ const rootCollection = computed({
     return props.collections;
   },
   set(value) {
-    emit("update:collections", { patient: value });
+    emit("update:collections", value);
   }
 })
 
+interface Collection {
+  component: FormComponent
+  value: string
+  label: string
+  required?: boolean
+  cols: any
+  props: {
+    [key: string]: any
+    request: () => Promise<AxiosResponse>
+  }
+}
 
-const collections = ref([
+const collections = ref<Collection[]>([
     {
     component: "VAutocomplete",
     value: "sex_cd",
@@ -179,32 +192,10 @@ const form = ref<FormItem[]>([
     },
   },
   ...collections.value,
-  // {
-  //   component: "VAutocomplete",
-  //   value: "gender",
-  //   label: "Gênero",
-  //   cols: {
-  //     cols: 12,
-  //     md: 4,
-  //   },
-  //   props: {
-  //     items: [
-  //       "Outro",
-  //       "Lésbica",
-  //       "Bissexual",
-  //       "Transexual",
-  //       "Travesti",
-  //     ],
-  //   },
-  // },
 ]);
 
 function next() {
   if(!formElement.value.validate()) return;
-
-  console.log({
-    patient: props.data.patient
-  })
 
   updatePatient(props.data.patient!.id, props.data.patient!)
     .finally(() => {

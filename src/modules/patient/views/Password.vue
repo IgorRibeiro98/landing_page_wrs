@@ -5,11 +5,11 @@
             </v-img>
     
             <p class="text-center mt-4">
-                {{ $route.query.site }}
+                {{ $route.query.establishment_name }}
             </p>
     
             <h1 class="text-center">
-                {{ $route.query.value }}
+                {{ $route.query.ticket }}
             </h1>
     
             <p class="text-caption text-center font-weight-bold">
@@ -23,15 +23,15 @@
 </template>
 
 <script lang="ts" setup>
-import {computed} from 'vue'
 import appLogo from "@/assets/logo.png";
-import useTenantStore from "@/modules/tenant/store";
 import { capitalizeFirstLetter } from "@/helpers/string";
+import useTenantStore from "@/modules/tenant/store";
+import { computed } from 'vue';
 
 const tenantStore = useTenantStore();
 
 const logo = computed(() => {
-  return tenantStore.tenant.logo || appLogo;
+  return tenantStore.tenant.logo as string | null || appLogo;
 });
 
 const hour = computed(() => new Date().toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' }))

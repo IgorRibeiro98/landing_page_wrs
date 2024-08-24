@@ -27,7 +27,10 @@ const props = defineProps<{
 }>();
 
 const url = computed(() => {
-    const params = new URLSearchParams(props.data.ticket! as any);
+    const params = new URLSearchParams({
+        ticket: ticket.value,
+        establishment_name: props.data.ticket?.establishment.name ?? ''
+    });
 
     return window.location.origin + `#/senha?${params.toString()}`;
 });
@@ -42,7 +45,7 @@ const emit = defineEmits<{
 const timer = ref<InstanceType<typeof Timer> | null>(null);
 const isLoading = ref(false)
 
-const app = computed(() => "api" in window ?? false);
+const app = computed(() => (("api" in window) ? true: false));
 
 function print() {
     emit("loading", {
@@ -58,7 +61,7 @@ function print() {
                 .catch((error: any) => {
                     emit("alert", {
                         title: "Ops, Não foi possível imprimir a senha! :(",
-                        text: `Por favor, anote o número abaixo <br/> <h1> ${props.data.ticket?.value} </h1> Já acionamos a equipe responsavel para cuidar disso`,
+                        text: `Por favor, anote o número abaixo <br/> <h1> ${ticket.value} </h1> Já acionamos a equipe responsavel para cuidar disso`,
                         action: {
                             type: "confirm",
                             label: "Já anotei a minha senha",
@@ -73,6 +76,10 @@ function print() {
         },
     });
 }
+
+const ticket = computed(() => {
+    return `${props.data.ticket?.prefix}${props.data.ticket?.password}`;
+})
 
 onBeforeMount(() => {
     if (app.value) return print();

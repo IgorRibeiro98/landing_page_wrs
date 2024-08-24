@@ -1,10 +1,7 @@
 export const totem = {
     id: 0,
     name: '',
-    site: {
-        cd_estabelecimento: 0,
-        ds_estabelecimento: '',
-    },
+    site_id: 0,
     description: null,
     screens: [],
     queues: []

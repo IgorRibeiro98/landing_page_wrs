@@ -64,7 +64,9 @@ const data = computed({
 async function print(type: AttendanceTypeInternalItem) {
   const payload = {
     queue_id: type.integration_id,
-    patient_id: data.value.patient?.id as string
+    patient_id: data.value.patient?.id ?? null,
+    establishment_id: props.totem.site_id,
+    preferential: false
   }
 
   emit('loading', {
@@ -72,8 +74,9 @@ async function print(type: AttendanceTypeInternalItem) {
     async callback(loading) {
 
       createTicket(payload)
-        .then((res: any) => {
-          data.value.ticket = res.data
+        .then(({data: ticket}) => { 
+          data.value.ticket = ticket
+
           loading.value = false
           emit('next')
         })
