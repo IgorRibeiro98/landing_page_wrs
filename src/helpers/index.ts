@@ -13,7 +13,7 @@ export function changeTenant(newSubdomain: string): void {
 
   url.searchParams.set('accessToken', localStorage.getItem('accessToken') as string)
 
-  const href = `${url.origin}/${url.hash}${url.search}`;
+  const href = `${url.origin}/${url.hash}/tenant/change${url.search}`;
 
   window.location.href = href
 }

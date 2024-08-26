@@ -4,22 +4,40 @@ import { type RouteRecordRaw } from 'vue-router';
 const routes: RouteRecordRaw[] = [
     {
         path: '/tenant',
-        component: () => layouts.default(),
         meta: {
             title: 'Tenant',
-            slugs: {
-                acl: "tenant.create"
-            },
-            guards: [
-                'auth',
-                'acl',
-            ]
         },
+        component: layouts.default(),
         children: [
             {
                 path: 'create',
                 name: 'tenant.create',
-                component: () => import('@/modules/tenant/views/CreateTenant.vue')
+                component: () => import('@/modules/tenant/views/CreateTenant.vue'),
+                meta: {
+                    layout: layouts.default(),
+                    slugs: {
+                        acl: "tenant.create"
+                    },
+                    guards: [
+                        'auth',
+                        'acl',
+                    ]
+                }
+            },
+            
+        ],
+    },
+    {
+        path: '/tenant',
+        meta: {
+            title: 'Tenant',
+        },
+        component: () => layouts.blank(),
+        children: [
+            {
+                path: 'change',
+                name: 'tenant.change',
+                component: () => import('@/modules/tenant/views/ChangeTenant.vue'),
             },
         ],
     },

@@ -1,15 +1,15 @@
 import useTenantStore from "@/modules/tenant/store";
 import useAuthStore from "@/stores/user";
 
-import { Meta, useRouter } from "./router";
 import { toggleQueryString } from "./helpers/page";
+import { Meta, useRouter } from "./router";
 
 export default function install() {
   instropectUserAndTenant();
 }
 
 async function instropectUserAndTenant () {
-  await checkIfExistAccessTokenAndSave()
+  // await checkIfExistAccessTokenAndSave()
 
   const router = useRouter();
   await router.isReady()
