@@ -405,7 +405,7 @@ declare global {
     title: string
     route: any,
     items?: DrawerItem[]
-    acl?: string
+    acl: string
   }
 
   interface TotemFilter {

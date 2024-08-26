@@ -7,8 +7,12 @@ const routes: RouteRecordRaw[] = [
         component: () => layouts.default(),
         meta: {
             title: 'Tenant',
+            slugs: {
+                acl: "tenant.create"
+            },
             guards: [
                 'auth',
+                'acl',
             ]
         },
         children: [

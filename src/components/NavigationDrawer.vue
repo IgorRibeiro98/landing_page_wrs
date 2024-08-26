@@ -6,9 +6,9 @@
                     <Avatar :user="authUser" color="nav-color-accent" size="24" :show-tooltip="rail" />
                 </template>
                 <template #title>
-                    <span class="pl-4 font-weight-semi-bold">{{
-        authUser.name
-    }}</span>
+                    <span class="pl-4 font-weight-semi-bold">
+                        {{ authUser.name }}
+                    </span>
                 </template>
             </v-list-item>
         </v-list>
@@ -17,7 +17,7 @@
             :icon="rail ? 'mdi-chevron-right' : 'mdi-chevron-left'" @click.stop="toggleRail"></v-btn>
         <v-list class="mt-3" nav>
             <template v-for="(drawerItem, index) in items" :key="index">
-                <DrawerItem :item="drawerItem" :rail="rail" />
+                <DrawerItem :item="drawerItem" :rail="rail" v-if="authorization.acl(drawerItem.acl)"/>
             </template>
         </v-list>
 
@@ -25,10 +25,11 @@
 </template>
 <script setup lang="ts">
 import Avatar from "@/components/Avatar.vue";
+import authorization from "@/plugins/authorization";
 import useAuthStore from "@/stores/user";
-import { computed, ref, onBeforeMount } from "vue";
-import DrawerItem from "./DrawerItem.vue";
+import { computed, onBeforeMount, ref } from "vue";
 import { useRoute } from "vue-router";
+import DrawerItem from "./DrawerItem.vue";
 
 interface Props {
     items: DrawerItem[];
