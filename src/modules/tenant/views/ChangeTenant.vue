@@ -2,7 +2,7 @@
     <div class="w-100 h-100 d-flex align-center justify-center">
         <v-sheet class="pa-4 text-center" rounded width="400">
             <div v-if="!error">
-                Aguarde que estamos te autenticando...
+                Aguarde que estamos configurando a aplicação...
 
                 <v-progress-linear indeterminate color="primary" class="mt-4">
                 </v-progress-linear>
@@ -23,40 +23,34 @@
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { login, retriveToken } from '@/modules/auth/services/auth.service';
+import { toggleQueryString } from '@/helpers/page';
+import { login } from '@/modules/auth/services/auth.service';
+import alertStore from '@/stores/alert';
 
 const route = useRoute()
 const router = useRouter()
 
 const isLoading = ref(false)
 const error = ref(false)
+const alert = alertStore();
 
+/**
+ * @todo deixar o dialog sem a opção de fechar
+*/
 onMounted(() => {
-  if(localStorage.accessToken) {
-    router.push({
-      name: 'totem.view'
-    })
-    return
+  if (!route.query.accessToken) {
+    alert.openAlert('erro', 'Não foi possivel se autenticar, por favor tente novamente mais tarde. (query incorreta.)')
+    return;
   }
-    isLoading.value = true
 
-    retriveToken({
-        grant_type: 'authorization_code',
-        code: route.query.code as string,
-        redirect_uri: window.location.origin + '/#/auth/callback',
-        client_id: import.meta.env.VITE_APP_CLIENT_ID,
-        code_verifier: sessionStorage.getItem('code_verifier')!
-    })
-    .then(() => {
-        router.push({
-            name: 'totem.view'
-        })
-    })
-    .catch(() => {
-        error.value = true
-    })
-    .finally(() => {
-        isLoading.value = false
-    })
+  isLoading.value = true
+
+  localStorage.accessToken = route.query.accessToken;
+
+  toggleQueryString({accessToken: null});
+
+  router.push({
+    name: 'totem.view'
+  })
 })
 </script>

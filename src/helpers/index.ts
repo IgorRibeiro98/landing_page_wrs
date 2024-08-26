@@ -1,5 +1,7 @@
 export function changeTenant(newSubdomain: string): void {
   const url = new URL(window.location.href)
+  const containHash = window.location.href.includes('#/');
+
 
   const [subdomain, domain] = url.hostname.split('.')
 
@@ -13,7 +15,12 @@ export function changeTenant(newSubdomain: string): void {
 
   url.searchParams.set('accessToken', localStorage.getItem('accessToken') as string)
 
-  const href = `${url.origin}/${url.hash}/tenant/change${url.search}`;
+  if (containHash) {
+    url.hash = `#/tenant/change`;
+    url.pathname = '';
+  }
+
+  const href = `${url.origin}/${url.hash}${url.search}`;
 
   window.location.href = href
 }
