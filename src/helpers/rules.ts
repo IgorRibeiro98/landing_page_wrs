@@ -41,7 +41,7 @@ export const email = (value: string): boolean | string =>
   /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) || 'O campo deve ser um e-mail válido';
 
 export const url = (value: string): boolean | string =>
-  /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/i.test(value) || 'O campo deve ser uma URL válida';
+  /^(https?:\/\/)([a-zA-Z0-9.-]+)(:[0-9]{1,5})?(\/.*)?$/i.test(value) || 'O campo deve ser uma URL válida';
 
 export const numeric = (value: string): boolean | string =>
   /^[0-9]+$/.test(value) || 'O campo deve ser numérico';

@@ -1,4 +1,4 @@
-import { setPageTitle } from '@/helpers/page';
+import { setPageTitle, toggleQueryString } from '@/helpers/page';
 import guards from '@/router/guards';
 import { useSystemStore } from '@/stores/system';
 import { RouteMeta, RouteRecordRaw as RouteRecord, createRouter, createWebHashHistory } from 'vue-router';
@@ -32,7 +32,6 @@ export const layouts = {
   queue: () => import('@/layouts/Queue.vue'),
 }
 
-
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -50,12 +49,6 @@ const routes: RouteRecordRaw[] = [
   }
 ]
 
-const routeModules: ModuleMap = import.meta.glob('@/modules/*/router/*.ts', { eager: true });
-
-for (const path in routeModules) {
-  routes.push(...routeModules[path].default)
-}
-
 const router = createRouter({
   history: createWebHashHistory(),
   routes
@@ -69,7 +62,7 @@ router.beforeEach((to, from) => {
   if (meta.title) {
     setPageTitle(meta.title);
   }
-  
+
   if (meta.guards?.length) {
     for (const guard of meta.guards) {
       const result = guards[guard](to, from);
@@ -83,6 +76,8 @@ router.beforeEach((to, from) => {
 
 })
 
-
+export function useRouter() {
+  return router;
+}
 
 export default router

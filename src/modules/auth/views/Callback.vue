@@ -3,7 +3,7 @@
         <v-sheet class="pa-4 text-center" rounded width="400">
             <div v-if="!error">
                 Aguarde que estamos te autenticando...
-    
+
                 <v-progress-linear indeterminate color="primary" class="mt-4">
                 </v-progress-linear>
             </div>
@@ -32,7 +32,13 @@ const isLoading = ref(false)
 const error = ref(false)
 
 onMounted(() => {
-    isLoading.value = true 
+  if(localStorage.accessToken) {
+    router.push({
+      name: 'totem.view'
+    })
+    return
+  }
+    isLoading.value = true
 
     retriveToken({
         grant_type: 'authorization_code',
@@ -52,5 +58,5 @@ onMounted(() => {
     .finally(() => {
         isLoading.value = false
     })
-})  
+})
 </script>

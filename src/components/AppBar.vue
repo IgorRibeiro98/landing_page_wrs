@@ -30,6 +30,7 @@ import { storeToRefs } from 'pinia';
 import { computed, ref } from "vue";
 import { useTheme } from "vuetify";
 
+import { changeTenant } from "@/helpers";
 import useTenantStore from '@/modules/tenant/store';
 import authorization from "@/plugins/authorization";
 import useUserStore from '@/stores/user';
@@ -45,23 +46,7 @@ const currentTenant = computed({
     return user.value.tenants?.find(tenant => subdomain == tenant.subdomain)
   },
   set(value: any) {
-    const url = new URL(window.location.href)
-
-    const [subdomain, domain] = url.hostname.split('.')
-
-    if (domain)
-      url.hostname = url.hostname.replace(subdomain, value.subdomain)
-    else
-      url.hostname = `${value.subdomain}.${subdomain}`
-
-    if (url.hostname == `${value.subdomain}.${value.subdomain}`)
-      url.hostname = value.subdomain
-
-    url.searchParams.set('accessToken', localStorage.getItem('accessToken') as string)
-
-    const href = `${url.origin}/${url.hash}${url.search}`;
-
-    window.location.href = href
+    changeTenant(value.subdomain);
   }
 })
 

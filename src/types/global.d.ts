@@ -325,7 +325,14 @@ declare global {
   }
 
   type FormComponent = 'VAutocomplete' | 'VTextField' | 'VTextarea' | 'VFileInput' | 'RichText' | 'VSwitch'
+  type FnRule = (value: any) => string | boolean
+  type PromiseRule = (value: any) => Promise<string | boolean | undefined>
+  type Rules = string | string[] | FnRule[] | PromiseRule[]
 
+  interface Props {
+    [key: string]: any; // Permite qualquer chave
+    rules?: Rules
+  }
   interface FormItem {
     title?: string
     label: string
@@ -333,7 +340,7 @@ declare global {
     description?: string
     required?: boolean
     component: FormComponent
-    props?: any
+    props?: Props
     request?: () => Promise<any>
     on?: {
       [key: string]: (data: any) => void

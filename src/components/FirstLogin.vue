@@ -4,12 +4,12 @@
 </template>
 
 <script lang="ts" setup>
-import DialogForm from '@/components/Dialog.vue'
-import {ref, computed} from 'vue'
+import DialogForm from '@/components/Dialog.vue';
+import { computed, ref } from 'vue';
 
-import useUserStore from '@/stores/user'
+import useUserStore from '@/stores/user';
 
-import { update } from '@/modules/auth/repositories/auth.repository'
+import { update } from '@/modules/auth/repositories/auth.repository';
 
 const store = useUserStore()
 
@@ -20,6 +20,9 @@ const loading = ref(false)
 const user = ref({
     name: ''
 })
+
+const showPassword = ref(false)
+const showConfirmPassword = ref(false)
 
 const formDialog = computed<FormDialog>(() => {
     return {
@@ -49,8 +52,14 @@ const formDialog = computed<FormDialog>(() => {
                     label: "Senha",
                     required: true,
                     props: {
-                        type: 'password',
-                        rules: 'password'
+                        type: showPassword.value ? 'text' : 'password',
+                        rules: 'password',
+                        'append-inner-icon': showPassword.value ? 'mdi-eye-off' : 'mdi-eye'
+                    },
+                    on: {
+                        'click:appendInner': () => {
+                            showPassword.value = !showPassword.value
+                        }
                     }
                 },
                 {
@@ -59,12 +68,18 @@ const formDialog = computed<FormDialog>(() => {
                     label: "Confirmação da senha",
                     required: true,
                     props: {
-                        type: 'password',
+                        type: showConfirmPassword ? 'text' : 'password',
                         rules: [
                             (v: string) => {
                                 return v === store.authUser.password || 'As senhas não conferem'
                             }
-                        ]
+                        ],
+                        'append-inner-icon': showConfirmPassword.value ? 'mdi-eye-off' : 'mdi-eye'
+                    },
+                    on: {
+                        'click:appendInner': () => {
+                            showConfirmPassword.value = !showConfirmPassword.value
+                        }
                     }
                 },
             ],

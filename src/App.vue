@@ -9,20 +9,16 @@
 </template>
 
 <script lang="ts" setup>
-import bootstrap from "@/bootstrap";
 
 import { onMounted } from "vue";
 
-import { useRouter } from "vue-router";
-import FirstLogin from '@/components/FirstLogin.vue'
+import FirstLogin from '@/components/FirstLogin.vue';
 
 
 onMounted(async () =>  {
-  const route = useRouter()
+  // const route = useRouter()
 
-  await route.isReady()
-
-  bootstrap(route)
+  // bootstrap(route)
 });
 
 </script>

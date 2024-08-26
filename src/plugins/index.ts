@@ -6,8 +6,9 @@
 
 // Plugins
 import vuetify from './vuetify'
-import router from '../router'
 import pinia from './pinia'
+import router from '@/router/plugin'
+import bootstrap from '@/bootstrap'
 
 // Types
 import type { App } from 'vue'
@@ -15,8 +16,9 @@ import mask from './mask'
 
 export function registerPlugins(app: App) {
   app
+  .use(router)
     .use(pinia)
     .use(vuetify)
-    .use(router)
     .use(mask)
+    .use(bootstrap)
 }

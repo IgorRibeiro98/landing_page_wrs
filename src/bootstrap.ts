@@ -1,40 +1,41 @@
 import useTenantStore from "@/modules/tenant/store";
 import useAuthStore from "@/stores/user";
 
-export default function (route: any) {
-  getAndRemoveTenantSwithUrlParams(route.currentRoute.value.query)
+import { Meta, useRouter } from "./router";
+import { toggleQueryString } from "./helpers/page";
 
-  let routeGuard = route.currentRoute.value.meta.guards?.find((guard: string) => guard == 'auth')
+export default function install() {
+  instropectUserAndTenant();
+}
 
-  if (!routeGuard?.length) return
+async function instropectUserAndTenant () {
+  await checkIfExistAccessTokenAndSave()
+
+  const router = useRouter();
+  await router.isReady()
+
+  const meta = router.currentRoute.value.meta as Meta
+
+  let isAuthRoute = meta.guards?.some((guard: string) => guard == 'auth')
+  if (!isAuthRoute) return
 
   const tenantStore = useTenantStore()
   const userStore = useAuthStore()
 
-  userStore.loadUser()
-  tenantStore.loadTenant()
+  await Promise.allSettled([userStore.loadUser(), tenantStore.loadTenant()]);
 }
 
-function getAndRemoveTenantSwithUrlParams(query: {[key: string]: string}) {
-  if (!query) return;
+/**
+ *
+ * @todo verificar porque tem que dar reload, se não der reload não funciona, o accessToken permanece na queryString e ao trocar de tenant, o mesmo não carrega.
+ */
+async function checkIfExistAccessTokenAndSave() {
+  const url = new URL(window.location.href.replace('#', ''));
+  const token = url.searchParams.get('accessToken');
+  if (!token) return;
 
-  const paramsToRemoveFromURL = ['accessToken']
+  localStorage.setItem('accessToken', token);
 
-  const url = new URL(window.location.href)
-
-  paramsToRemoveFromURL.forEach((param) => {
-    if (!query[param]) return
-
-    localStorage.setItem(param, query[param])
-
-    const queryRegex = new RegExp(`(&?\\b${param}=[^&]*)`, 'g')
-
-    url.hash = url.hash.replace(queryRegex, '')
-
-    url.searchParams.delete(param)
-  })
-
-  url.hash = url.hash.replace(/\?$/, '');
-
-  window.history.replaceState({}, document.title, url)
+  toggleQueryString({ accessToken: null });
+  window.location.reload();
 }
