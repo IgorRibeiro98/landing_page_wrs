@@ -1,7 +1,7 @@
 <template>
   <LayoutView title="Tipo de Atendimento" icon="mdi-sitemap">
     <template #action>
-      <v-btn color="primary" flat @click="dialog = true"> Novo </v-btn>
+      <v-btn color="primary" flat @click="dialog = true" v-if="authorization.acl('attendance_type.view')"> Novo </v-btn>
     </template>
 
     <template #content>
@@ -23,20 +23,22 @@
         <template #[`item.actions`]="{ item }">
           <v-menu>
             <template #activator="{ props }">
-              <v-btn icon="mdi-dots-horizontal" variant="text" v-bind="props">
+              <v-btn icon="mdi-dots-horizontal" variant="text" v-bind="props" v-if="authorization.acl('attendance_type.update|attendance_type.delete')">
               </v-btn>
             </template>
 
             <v-list>
-              <v-list-item
-                link
-                @click="option.action(item)"
-                v-for="option in options"
-              >
-                <v-list-item-title>
-                  {{ option.title }}
-                </v-list-item-title>
-              </v-list-item>
+              <template v-for="option in options">
+                <v-list-item
+                  v-if="authorization.acl(option.acl)"
+                  link
+                  @click="option.action(item)"
+                >
+                  <v-list-item-title>
+                    {{ option.title }}
+                  </v-list-item-title>
+                </v-list-item>
+              </template>
             </v-list>
           </v-menu>
         </template>
@@ -57,6 +59,8 @@ import useAlertStore from "@/stores/alert";
 import useSystemStore from "@/stores/system";
 import { onMounted, ref, type Ref } from "vue";
 
+import authorization from "@/plugins/authorization";
+
 import AttendanceTypeDialog from "@/modules/totem/components/dialog/AttendanceTypeDialog.vue";
 
 const dialog = ref(false);
@@ -65,8 +69,8 @@ const { closeAlert, openConfirmAlert } = useAlertStore();
 const { setBreadcrumbs } = useSystemStore();
 
 import {
-deleteAttendanceType,
-getAttendanceTypes,
+  deleteAttendanceType,
+  getAttendanceTypes,
 } from "@/modules/totem/repositories/attendance-type.repository";
 
 import defaultData from "@/modules/totem/default-values";
@@ -94,6 +98,7 @@ const headers: any = ref([
 const options = ref<any>([
   {
     title: "Editar",
+    acl: 'attendance_type.update',
     action: (item: AttendanceTypeData) => {
       data.value = { ...item };
       dialog.value = true;
@@ -101,6 +106,7 @@ const options = ref<any>([
   },
   {
     title: "Excluir",
+    acl: 'attendance_type.delete',
     action: (item: AttendanceTypeData) => {
       openConfirmAlert(
         {

@@ -6,7 +6,7 @@
       <v-slide-group show-arrows>
         <v-slide-group-item v-for="item in items" :value="item.route.name">
           <v-btn class="text-regular mx-1" @click="$router.push(item.route)"
-            :active="$router.currentRoute.value.name == item.route.name">
+            :active="$router.currentRoute.value.name == item.route.name" v-if="authorization.acl(item.acl)">
             <v-icon class="mr-1">{{ item.icon }}</v-icon>
             <span v-if="!$vuetify.display.mobile">{{ item.title }}</span>
           </v-btn>
@@ -31,6 +31,7 @@ import { computed, ref } from "vue";
 import { useTheme } from "vuetify";
 
 import useTenantStore from '@/modules/tenant/store';
+import authorization from "@/plugins/authorization";
 import useUserStore from '@/stores/user';
 
 const { user } = storeToRefs(useUserStore())
@@ -99,6 +100,7 @@ const items = [
   {
     title: "Totens",
     icon: "mdi-monitor-vertical",
+    acl: 'totem.view',
     route: {
       name: "totem.view",
     },
@@ -106,6 +108,7 @@ const items = [
   {
     title: "Filas",
     icon: "mdi-format-list-bulleted",
+    acl: 'queue.view',
     route: {
       name: "queue.view",
     },
@@ -113,6 +116,7 @@ const items = [
   {
     icon: 'mdi-sitemap-outline',
     title: 'Tipos de Atendimento',
+    acl: 'attendance_type.view',
     route: {
       name: 'attendance-type.view',
     }
