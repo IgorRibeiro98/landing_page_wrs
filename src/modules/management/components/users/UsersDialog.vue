@@ -6,6 +6,7 @@ import { ref, computed, onMounted } from 'vue'
 import useAuthStore from '@/stores/user';
 import Dialog from "@/components/Dialog.vue";
 import { storeToRefs } from 'pinia';
+import useAlertStore from "@/stores/alert";
 import { getAllRolesPaginate } from '@/modules/management/repositories/acl.repository';
 import { createUser, updateUser } from '@/modules/management/repositories/user.repository';
 
@@ -23,6 +24,9 @@ const dialog = defineModel<boolean>({
 const user = defineModel<User>('user', {
     required: true
 })
+
+const { openAlert } = useAlertStore();
+
 const loading = ref<boolean>(false);
 const roles = ref<Role[]>([]);
 const authStore = useAuthStore();
@@ -125,6 +129,9 @@ function save() {
             .then(() => {
                 close();
             }).catch((err) => {
+                if (err.response.status === 403) {
+                    openAlert("Erro ao editar usuário", err.response.data.message);
+                }
                 console.error(err);
             }).finally(() => {
                 loading.value = false;
@@ -135,6 +142,9 @@ function save() {
         .then(() => {
             close();
         }).catch((err) => {
+            if (err.response.status === 403) {
+                openAlert("Erro ao editar usuário", err.response.data.message);
+            }
             console.error(err);
         }).finally(() => {
             loading.value = false;
