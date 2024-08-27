@@ -28,6 +28,7 @@ jobs:
         run: |
           echo "VITE_APP_CLIENT_ID=${{ secrets.VITE_APP_CLIENT_ID}}" > .env.production
           echo "VITE_APP_API=${{ secrets.VITE_APP_API}}" >> .env.production
+          echo "VITE_APP_HOST=${{ secrets.VITE_APP_HOST}}" >> .env.production
 
       - name: Install dependencies
         run: npm install
