@@ -71,7 +71,7 @@ router.beforeEach((to, from) => {
       const result = guards[guard](to, from);
       if (result === true) continue;
 
-      if (result === false) return { name: from.name || 'not-found' };
+      if (result === false) return { name: from.name || 'not-found', query: { guardError: guard} };
       return result;
     }
   }

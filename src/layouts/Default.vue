@@ -44,9 +44,9 @@ const drawerItems = ref<DrawerItem[]>([
   {
     icon: 'mdi-city-variant-outline',
     title: 'Tenant',
-    acl: 'tenant.create',
+    acl: 'tenant.view',
     route: {
-      name: 'tenant.create',
+      name: 'tenant.view',
     }
   },
   {
@@ -60,6 +60,7 @@ const drawerItems = ref<DrawerItem[]>([
   {
     icon: 'mdi-account-supervisor',
     title: 'Usuários',
+    acl: 'user.view',
     route: {
       name: 'management.users',
     }

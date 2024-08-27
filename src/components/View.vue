@@ -4,13 +4,16 @@
       <v-col cols="12">
         <div class="d-flex">
           <slot name="title-prepend"></slot>
-          <h1>
+          <h1 class="d-flex justify-center">
+            <v-icon v-if="icon" :icon="props.icon" class="mr-2">
+            </v-icon>
             <slot name="title">
               {{ title }}
             </slot>
           </h1>
           <slot name="title-append"></slot>
           <div class="ml-auto d-flex align-center ga-4">
+            <v-btn v-if="btnActionText && (btnActionAcl ? authorization.acl(btnActionAcl): true)" :text="btnActionText" @click="emit('click:btnAction')" color="primary"></v-btn>
             <slot name="action">
                 <slot name="action-prepend"></slot>
 
@@ -18,7 +21,7 @@
                     <template #activator="{ props }">
                       <v-btn
                         v-if="authorization.acl(slugs)"
-                        :icon="actionIcon"
+                        :icon="actionsIcon"
                         v-bind="props"
                       ></v-btn>
                     </template>
@@ -43,7 +46,7 @@
           </slot>
         </p>
       </v-col>
-      <v-col cols="12">
+      <v-col cols="12" class="mt-4">
         <slot></slot>
       </v-col>
     </v-row>
@@ -52,6 +55,10 @@
 <script lang="ts" setup>
 import authorization from '@/plugins/authorization';
 import { computed } from 'vue';
+
+interface Emit {
+  (event: 'click:btnAction'): void;
+}
 
 interface Action {
   title: string;
@@ -62,18 +69,24 @@ interface Action {
 
 interface Props {
   title: string;
+  icon?: string;
   description?: string | null;
+  btnActionText?: string;
+  btnActionAcl?: string;
   enableAction?: boolean;
-  actionIcon?: string;
+  actionsIcon?: string;
   actions?: Action[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
   enableAction: false,
   actions: () => [],
-  actionIcon: "mdi-cog",
+  btnActionText: '',
+  btnActionAcl: '',
+  actionsIcon: "mdi-cog",
 });
 
+const emit = defineEmits<Emit>();
 const slugs = computed(() => {
   return props.actions.map(action => action.slug).join('|')
 })

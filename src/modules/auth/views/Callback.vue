@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import SimpleError from "@/components/SimpleError.vue";
 import { login, retriveToken } from "@/modules/auth/services/auth.service";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
@@ -67,5 +67,11 @@ onMounted(() => {
     .finally(() => {
       isLoading.value = false;
     });
+});
+
+watch(route, () => {
+  if (route.query.guardError) {
+    error.value.message = "Você não tem permissão para acessar essa página.";
+  }
 });
 </script>

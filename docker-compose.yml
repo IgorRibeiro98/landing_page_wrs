@@ -5,7 +5,7 @@ services:
       - .:/app
     command: npm run dev
     ports:
-      - ${APP_PORT-3000}:3000
+      - ${VITE_APP_PORT-3000}:3000
     networks:
       - app
 

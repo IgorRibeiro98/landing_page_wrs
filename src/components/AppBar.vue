@@ -1,12 +1,22 @@
 <template>
   <v-app-bar color="nav-color" class="position-fixed" elevation="0">
     <template #prepend>
-      <v-img aspect-ratio="16/9" v-if="!$vuetify.display.mobile" @click="$router.push({ path: '/' })"
-        class="pointer mx-4" :src="logo" width="50"></v-img>
+      <v-img
+        aspect-ratio="16/9"
+        v-if="!$vuetify.display.mobile"
+        @click="$router.push({ path: '/' })"
+        class="pointer mx-4"
+        :src="logo"
+        width="50"
+      ></v-img>
       <v-slide-group show-arrows>
         <v-slide-group-item v-for="item in items" :value="item.route.name">
-          <v-btn class="text-regular mx-1" @click="$router.push(item.route)"
-            :active="$router.currentRoute.value.name == item.route.name" v-if="authorization.acl(item.acl)">
+          <v-btn
+            class="text-regular mx-1"
+            @click="$router.push(item.route)"
+            :active="$router.currentRoute.value.name == item.route.name"
+            v-if="authorization.acl(item.acl)"
+          >
             <v-icon class="mr-1">{{ item.icon }}</v-icon>
             <span v-if="!$vuetify.display.mobile">{{ item.title }}</span>
           </v-btn>
@@ -15,51 +25,85 @@
     </template>
     <template #append>
       <div class="d-flex align-center ga-4">
-        <v-select width="150" hideDetails="auto" density="compact" variant="solo" filled flat return-object
-          item-title="name" :items="user.tenants" v-model="currentTenant">
+        <v-select
+          style="min-width: 200px"
+          hideDetails="auto"
+          density="compact"
+          variant="solo"
+          filled
+          flat
+          return-object
+          item-title="name"
+          :items="user.tenants"
+          v-model="currentTenant"
+        >
+          <template #item="{ item, props }">
+            <v-list-item v-bind="props">
+              <template #prepend>
+                <v-img
+                  max-width="25"
+                  width="25"
+                  max-height="25"
+                  height="25"
+                  class="rounded-lg mr-4 border"
+                  :src="(item.raw.logo as string)"
+                ></v-img>
+              </template>
+            </v-list-item>
+          </template>
         </v-select>
 
-        <v-btn @click="toggleTheme" variant="text" :icon="themeIcon" density="comfortable"></v-btn>
-        <v-btn @click="logoutUser" :loading="loadingLogout" title="Sair" icon="mdi-exit-to-app"></v-btn>
+        <v-btn
+          @click="toggleTheme"
+          variant="text"
+          :icon="themeIcon"
+          density="comfortable"
+        ></v-btn>
+        <v-btn
+          @click="logoutUser"
+          :loading="loadingLogout"
+          title="Sair"
+          icon="mdi-exit-to-app"
+        ></v-btn>
       </div>
     </template>
   </v-app-bar>
 </template>
 <script setup lang="ts">
 import appLogo from "@/assets/logo.png";
-import { signout } from '@/modules/auth/services/auth.service';
-import { storeToRefs } from 'pinia';
+import { signout } from "@/modules/auth/services/auth.service";
+import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 import { useTheme } from "vuetify";
 
 import { changeTenant } from "@/helpers";
-import useTenantStore from '@/modules/tenant/store';
+import useTenantStore from "@/modules/tenant/store";
 import authorization from "@/plugins/authorization";
-import useUserStore from '@/stores/user';
+import useUserStore from "@/stores/user";
 
-const { user } = storeToRefs(useUserStore())
+const { user } = storeToRefs(useUserStore());
 
 const currentTenant = computed({
   get() {
-    const url = new URL(window.location.href)
+    const url = new URL(window.location.href);
 
-    const [subdomain] = url.hostname.split('.')
+    const [subdomain] = url.hostname.split(".");
 
-    return user.value.tenants?.find(tenant => subdomain == tenant.subdomain)
+    return user.value.tenants?.find((tenant) => subdomain == tenant.subdomain);
   },
   set(value: any) {
     changeTenant(value.subdomain);
-  }
-})
+  },
+});
 
-const tenantStore = useTenantStore()
+const tenantStore = useTenantStore();
 
 const theme = useTheme();
 const loadingLogout = ref(false);
 
 const logo = computed<any>(() => {
   return tenantStore.tenant.logo ?? appLogo;
-})
+});
 
 function toggleTheme() {
   theme.global.name.value = theme.global.current.value.dark ? "light" : "dark";
@@ -75,19 +119,18 @@ const themeIcon = computed<string>(() => {
 });
 
 function logoutUser() {
-  loadingLogout.value = true
+  loadingLogout.value = true;
 
-  signout()
-    .finally(() => {
-      loadingLogout.value = false
-    })
+  signout().finally(() => {
+    loadingLogout.value = false;
+  });
 }
 
 const items = [
   {
     title: "Totens",
     icon: "mdi-monitor-vertical",
-    acl: 'totem.view',
+    acl: "totem.view",
     route: {
       name: "totem.view",
     },
@@ -95,18 +138,18 @@ const items = [
   {
     title: "Filas",
     icon: "mdi-format-list-bulleted",
-    acl: 'queue.view',
+    acl: "queue.view",
     route: {
       name: "queue.view",
     },
   },
   {
-    icon: 'mdi-sitemap-outline',
-    title: 'Tipos de Atendimento',
-    acl: 'attendance_type.view',
+    icon: "mdi-sitemap-outline",
+    title: "Tipos de Atendimento",
+    acl: "attendance_type.view",
     route: {
-      name: 'attendance-type.view',
-    }
+      name: "attendance-type.view",
+    },
   },
 ];
 </script>

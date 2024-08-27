@@ -10,6 +10,20 @@ const routes: RouteRecordRaw[] = [
         component: layouts.default(),
         children: [
             {
+              path: '',
+              name: 'tenant.view',
+              component: () => import('@/modules/tenant/views/Tenants.vue'),
+              meta: {
+                slugs: {
+                    acl: "tenant.view"
+                },
+                guards: [
+                    'auth',
+                    'acl',
+                ]
+              }
+            },
+            {
                 path: 'create',
                 name: 'tenant.create',
                 component: () => import('@/modules/tenant/views/CreateTenant.vue'),
@@ -24,7 +38,7 @@ const routes: RouteRecordRaw[] = [
                     ]
                 }
             },
-            
+
         ],
     },
     {
