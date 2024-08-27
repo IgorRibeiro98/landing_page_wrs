@@ -10,7 +10,7 @@ const routes: RouteRecordRaw[] = [
         component: layouts.default(),
         children: [
             {
-              path: '',
+              path: 'list',
               name: 'tenant.view',
               component: () => import('@/modules/tenant/views/Tenants.vue'),
               meta: {
