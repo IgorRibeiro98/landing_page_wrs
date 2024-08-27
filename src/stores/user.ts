@@ -34,7 +34,7 @@ export const useAuthStore = defineStore('user', () => {
     function loadUser() {
         if (!localStorage.getItem('accessToken')) return
 
-        introspect()
+        return introspect()
             .then(res => {
                 setAuthUser(res.data)
             })

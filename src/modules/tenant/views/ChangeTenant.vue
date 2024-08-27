@@ -23,12 +23,13 @@
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { toggleQueryString } from '@/helpers/page';
 import { login } from '@/modules/auth/services/auth.service';
 import alertStore from '@/stores/alert';
+import useAuthStore from '@/stores/user';
+import useTenantStore from '../store';
 
 const route = useRoute()
-const router = useRouter()
+const router = useRouter();
 
 const isLoading = ref(false)
 const error = ref(false)
@@ -37,9 +38,9 @@ const alert = alertStore();
 /**
  * @todo deixar o dialog sem a opção de fechar
 */
-onMounted(() => {
+onMounted(async () => {
   if (!route.query.accessToken) {
-    alert.openAlert('erro', 'Não foi possivel se autenticar, por favor tente novamente mais tarde. (query incorreta.)')
+    error.value = true;
     return;
   }
 
@@ -47,10 +48,17 @@ onMounted(() => {
 
   localStorage.accessToken = route.query.accessToken;
 
-  toggleQueryString({accessToken: null});
-
-  router.push({
-    name: 'totem.view'
-  })
+  const tenantStore = useTenantStore()
+  const userStore = useAuthStore()
+  Promise.allSettled([userStore.loadUser(), tenantStore.loadTenant()])
+    .then(() => {
+      isLoading.value = false
+      console.log(userStore.user)
+      router.push({ name: 'totem.view' })
+    })
+    .catch(() => {
+      isLoading.value = false
+      error.value = true
+    });
 })
 </script>

@@ -1,6 +1,9 @@
-import { setPageTitle, toggleQueryString } from '@/helpers/page';
+import { setPageTitle } from '@/helpers/page';
+import { introspect } from '@/modules/auth/repositories/auth.repository';
+import useTenantStore from '@/modules/tenant/store';
 import guards from '@/router/guards';
 import { useSystemStore } from '@/stores/system';
+import useAuthStore from '@/stores/user';
 import { RouteMeta, RouteRecordRaw as RouteRecord, createRouter, createWebHashHistory } from 'vue-router';
 
 export type AuthorizaGuard = 'acl';

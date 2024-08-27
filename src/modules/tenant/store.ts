@@ -44,21 +44,17 @@ const useTenantStore = defineStore('tenant', () => {
     }
 
     const loadTenant = async () => {
-        try {
-            return getTenant()
-                .then((resp) => {
-                    localStorage.setItem('tenant', JSON.stringify(resp.data));
+      return getTenant()
+          .then((resp) => {
+              localStorage.setItem('tenant', JSON.stringify(resp.data));
 
-                    tenant.value = {
-                        ...resp.data,
-                        theme: JSON.parse(resp.data.theme),
-                    }
+              tenant.value = {
+                  ...resp.data,
+                  theme: JSON.parse(resp.data.theme),
+              }
 
-                    setColorTheme(tenant.value.theme.colors)
-                })
-        } catch (error) {
-            console.error({ error });
-        }
+              setColorTheme(tenant.value.theme.colors)
+          })
     };
     return {
         tenant,
