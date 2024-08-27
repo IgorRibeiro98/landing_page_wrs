@@ -3,11 +3,11 @@
     <Role v-if="!loading" v-model="role" @save="save" />
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router'
+import Role from '@/modules/management/components/acl/Role.vue';
 import { getRole, updateRole } from '@/modules/management/repositories/acl.repository';
-import Role from '@/modules/management/components/acl/Role.vue'
 import Loading from '@/modules/patient/components/Loading.vue';
+import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 
 interface Props {
@@ -45,6 +45,7 @@ const loadRole = () => {
 };
 
 const save = () => {
+  loading.value = true;
     updateRole(role.value)
         .then(() => {
             // successMessage('Grupo de permissões atualizado com sucesso')
@@ -52,6 +53,9 @@ const save = () => {
         }).catch((err: any) => {
             console.error(err)
             // errorMessage('Falha ao salvar grupo de permissões')
+        })
+        .finally(() => {
+            loading.value = false;
         })
 }
 

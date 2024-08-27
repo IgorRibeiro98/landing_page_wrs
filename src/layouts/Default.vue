@@ -40,13 +40,7 @@ const drawerItems = ref<DrawerItem[]>([
   //     name: 'attendance-type.view',
   //   }
   // },
-  // {
-  //   icon: 'mdi-account-supervisor',
-  //   title: 'Usuário',
-  //   route: {
-  //     name: 'user.view',
-  //   }
-  // },
+
   {
     icon: 'mdi-city-variant-outline',
     title: 'Tenant',
@@ -61,6 +55,13 @@ const drawerItems = ref<DrawerItem[]>([
     acl: 'acl.view',
     route: {
       name: 'management.acl',
+    }
+  },
+  {
+    icon: 'mdi-account-supervisor',
+    title: 'Usuários',
+    route: {
+      name: 'management.users',
     }
   },
   // {

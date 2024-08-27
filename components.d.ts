@@ -25,6 +25,7 @@ declare module 'vue' {
     RichText: typeof import('./src/components/RichText.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SimpleError: typeof import('./src/components/SimpleError.vue')['default']
     View: typeof import('./src/components/View.vue')['default']
     VirtualKeyboard: typeof import('./src/components/VirtualKeyboard.vue')['default']
   }

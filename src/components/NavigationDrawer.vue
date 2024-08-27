@@ -17,7 +17,7 @@
             :icon="rail ? 'mdi-chevron-right' : 'mdi-chevron-left'" @click.stop="toggleRail"></v-btn>
         <v-list class="mt-3" nav>
             <template v-for="(drawerItem, index) in items" :key="index">
-                <DrawerItem :item="drawerItem" :rail="rail" v-if="authorization.acl(drawerItem.acl)"/>
+                <DrawerItem :item="drawerItem" :rail="rail" v-if="drawerItem.acl ? authorization.acl(drawerItem.acl) : true"/>
             </template>
         </v-list>
 

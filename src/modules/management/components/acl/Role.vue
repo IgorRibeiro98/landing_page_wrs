@@ -38,15 +38,14 @@
     </LayoutView>
 </template>
 <script setup lang="ts">
-import Validator from '@/helpers/validator'
-import Permissions from '@/modules/management/components/acl/Permissions.vue'
-import RoleUsers from '@/modules/management/components/acl/RoleUsers.vue'
+import Validator from '@/helpers/validator';
+import Permissions from '@/modules/management/components/acl/Permissions.vue';
 import useAlertStore from "@/stores/alert";
 import { useSystemStore } from "@/stores/system";
 
 
 // import { getAllUsersByRoleId } from '@/modules/user/repositories/userRepository'
-import { computed, onMounted, ref, shallowRef } from 'vue'
+import { computed, onMounted, ref, shallowRef } from 'vue';
 
 interface Props {
     modelValue: Role

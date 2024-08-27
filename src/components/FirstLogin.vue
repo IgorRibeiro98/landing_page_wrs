@@ -68,7 +68,7 @@ const formDialog = computed<FormDialog>(() => {
                     label: "Confirmação da senha",
                     required: true,
                     props: {
-                        type: showConfirmPassword ? 'text' : 'password',
+                        type: showConfirmPassword.value ? 'text' : 'password',
                         rules: [
                             (v: string) => {
                                 return v === store.authUser.password || 'As senhas não conferem'

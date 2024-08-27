@@ -2,16 +2,16 @@
     <Dialog @close="close" :loading="loading" v-model="dialog" width="400" v-model:form="formDialog" />
 </template>
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import useAuthStore from '@/stores/user';
 import Dialog from "@/components/Dialog.vue";
-import { storeToRefs } from 'pinia';
-import useAlertStore from "@/stores/alert";
 import { getAllRolesPaginate } from '@/modules/management/repositories/acl.repository';
 import { createUser, updateUser } from '@/modules/management/repositories/user.repository';
+import useAlertStore from "@/stores/alert";
+import useAuthStore from '@/stores/user';
+import { storeToRefs } from 'pinia';
+import { computed, onMounted, ref } from 'vue';
 
 interface Emits {
-    (e: 'close'): void;
+    (e: 'close', value: boolean): void;
 }
 
 const emit = defineEmits<Emits>();
@@ -34,7 +34,7 @@ const authStore = useAuthStore();
 const {
     user: authUser
 } = storeToRefs(authStore);
-
+const showPassword  = ref(false);
 const isEditing = computed(() => {
     if (user.value.id) {
         return true;
@@ -71,7 +71,14 @@ const formDialog = computed<FormDialog>(() => {
                     required: !isEditing.value,
                     hide: !isEditing.value,
                     props: {
+                        type: showPassword.value ? 'text' : 'password',
+                        'append-inner-icon': showPassword.value ? 'mdi-eye-off' : 'mdi-eye',
                         rules: !isEditing.value ? "password" : "",
+                    },
+                    on: {
+                        'click:appendInner': () => {
+                            showPassword.value = !showPassword.value
+                        }
                     }
                 },
                 {
@@ -117,8 +124,8 @@ function getRoles() {
 }
 
 
-function close() {
-    emit('close');
+function close(mustReload = false) {
+    emit('close', mustReload);
     dialog.value = false;
 }
 
@@ -127,7 +134,7 @@ function save() {
     if (isEditing.value) {
         updateUser(user.value)
             .then(() => {
-                close();
+                close(true);
             }).catch((err) => {
                 if (err.response.status === 403) {
                     openAlert("Erro ao editar usuário", err.response.data.message);
@@ -140,7 +147,7 @@ function save() {
     }
     createUser(user.value)
         .then(() => {
-            close();
+            close(true);
         }).catch((err) => {
             if (err.response.status === 403) {
                 openAlert("Erro ao editar usuário", err.response.data.message);

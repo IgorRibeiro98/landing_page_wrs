@@ -22,7 +22,7 @@
                     </v-row>
                 </template>
                 <template #item.tenants="{ item }">
-                    <v-chip-group>
+                    <v-chip-group class="group">
                         <v-chip v-for="(tenant) in item.tenants" size="small" class="stop-pointer-events">
                             {{ tenant.name }}
                         </v-chip>
@@ -31,7 +31,7 @@
                 <template #item.actions="{ item }">
                     <v-menu location="right" v-if="authorization.acl('user.update|user.delete')">
                         <template v-slot:activator="{ props }">
-                            <v-btn icon="mdi-dots-horizontal" variant="plain" v-bind="props"></v-btn>
+                            <v-btn density="comfortable" icon="mdi-dots-horizontal" variant="plain" v-bind="props"></v-btn>
                         </template>
                         <v-list>
                             <template v-for="(action) in tableActions">
@@ -166,7 +166,7 @@ const filteredUsers = computed<User[]>(() => {
     return users.value
 })
 
-function close() {
+function close(mustReload: boolean = false) {
     user.value = {
         id: 0,
         name: "",
@@ -184,7 +184,8 @@ function close() {
         slugs: [],
     }
     dialog.value = false;
-    loadUsers();
+    if(mustReload)
+      loadUsers();
 }
 
 function loadUsers() {
@@ -211,4 +212,12 @@ onMounted(() => {
 });
 
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+:deep(.group) {
+  padding: 0;
+
+  .v-slide-group__container {
+    padding: 0;
+  }
+}
+</style>

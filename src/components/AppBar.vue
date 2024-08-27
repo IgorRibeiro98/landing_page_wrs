@@ -14,12 +14,14 @@
       </v-slide-group>
     </template>
     <template #append>
-      <v-select width="30" hideDetails="auto" density="compact" variant="solo" filled flat return-object
-        item-title="name" :items="user.tenants" v-model="currentTenant">
-      </v-select>
+      <div class="d-flex align-center ga-4">
+        <v-select width="150" hideDetails="auto" density="compact" variant="solo" filled flat return-object
+          item-title="name" :items="user.tenants" v-model="currentTenant">
+        </v-select>
 
-      <v-btn @click="toggleTheme" variant="text" :icon="themeIcon"></v-btn>
-      <v-btn @click="logoutUser" :loading="loadingLogout" title="Sair" icon="mdi-exit-to-app"></v-btn>
+        <v-btn @click="toggleTheme" variant="text" :icon="themeIcon" density="comfortable"></v-btn>
+        <v-btn @click="logoutUser" :loading="loadingLogout" title="Sair" icon="mdi-exit-to-app"></v-btn>
+      </div>
     </template>
   </v-app-bar>
 </template>

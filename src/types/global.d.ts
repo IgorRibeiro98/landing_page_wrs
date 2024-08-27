@@ -151,7 +151,7 @@ declare global {
   //     nr_seq_fila_preferencial_80: string;
   //     [key: string]: any;
   // }
- 
+
   interface ScreenTotemField {
     editable: number,
     field_id: number,
@@ -412,7 +412,7 @@ declare global {
     title: string
     route: any,
     items?: DrawerItem[]
-    acl: string
+    acl?: string
   }
 
   interface TotemFilter {
