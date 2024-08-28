@@ -16,7 +16,7 @@ export function changeTenant(newSubdomain: string): void {
   url.searchParams.set('accessToken', localStorage.getItem('accessToken') as string)
 
   if (containHash) {
-    url.hash = `#/tenant/change`;
+    url.hash = `#/change/tenant`;
     url.pathname = '';
   }
 
