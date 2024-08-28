@@ -7,7 +7,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
             title: 'Tenant',
         },
-        component: layouts.default(),
+        component: () => layouts.default(),
         children: [
             {
               path: '',
@@ -41,14 +41,14 @@ const routes: RouteRecordRaw[] = [
         ],
     },
     {
-        path: '/change',
+        path: '/tenant',
         meta: {
             title: 'Tenant',
         },
         component: () => layouts.blank(),
         children: [
             {
-                path: 'tenant',
+                path: 'change',
                 name: 'tenant.change',
                 component: () => import('@/modules/tenant/views/ChangeTenant.vue'),
             },

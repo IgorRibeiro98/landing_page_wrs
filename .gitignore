@@ -23,4 +23,5 @@ pnpm-debug.log*
 *.sw?
 
 .env
+.env.production
 electron/setting.json
