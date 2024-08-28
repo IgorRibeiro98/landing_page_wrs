@@ -27,6 +27,7 @@
               append-inner-icon="mdi-magnify"
               variant="outlined"
               v-model="search"
+              @input="searchDebounce"
             ></v-text-field>
           </v-col>
           <v-spacer></v-spacer>
@@ -87,14 +88,16 @@
 
 <script setup lang="ts">
 /**
- * @todo Implementar a pesquisa e update de tenants, validar paginação
- * ao excluir um tenant, o dialog de confirmacao não está desaparecendo e ao exluir um tenant, atualizar no estado a listagem. fazer validação no bootstrap se o tenant existir, se não existir, exibir uma
+ * @todo Implementar a pesquisa e update de tenants
+ * fazer validação no bootstrap se o tenant existir, se não existir, exibir uma
  * mensagem correta e mostrar o botão para ser encaminhado para o login
  */
 
 import View from "@/components/View.vue";
+import { debounce } from '@/helpers/function';
 import authorization from "@/plugins/authorization";
 import useAlertStore from "@/stores/alert";
+import useAuthStore from "@/stores/user";
 import { onMounted, Ref, ref } from "vue";
 import { useRouter } from "vue-router";
 import {
@@ -117,13 +120,15 @@ const paginate = ref({
   current_page: 1,
   per_page: 10,
   total: 0,
-  to: 2,
 });
+
 const router = useRouter();
 const tenants = ref<Tenant[]>([]);
-const { openConfirmAlert, openAlert } = useAlertStore();
+const { openConfirmAlert, openAlert, closeAlert } = useAlertStore();
 
 const search = ref("");
+const authStore = useAuthStore();
+
 const tableActions = ref([
   {
     title: "Editar",
@@ -186,6 +191,14 @@ function removeTenant(tenant: Tenant) {
       loading.value = true;
       deleteTenant(tenant)
         .then(() => {
+          const index = authStore.authUser.tenants?.findIndex(
+            (t) => t.id === tenant.id
+          );
+          if (index) {
+            authStore.authUser.tenants?.splice(index, 1);
+          }
+
+          closeAlert();
           loadTenants();
         })
         .catch((error) => {
@@ -197,6 +210,10 @@ function removeTenant(tenant: Tenant) {
     }
   );
 }
+
+const searchDebounce = debounce(() => {
+    loadTenants();
+  }, 300)
 
 onMounted(() => {
   loadTenants();
