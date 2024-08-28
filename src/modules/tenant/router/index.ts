@@ -24,6 +24,20 @@ const routes: RouteRecordRaw[] = [
               }
             },
             {
+              path: ':id',
+              name: 'tenant.show',
+              component: () => import('@/modules/tenant/views/TenantView.vue'),
+              meta: {
+                slugs: {
+                    acl: "tenant.view"
+                },
+                guards: [
+                    'auth',
+                    'acl',
+                ]
+              }
+            },
+            {
                 path: 'create',
                 name: 'tenant.create',
                 component: () => import('@/modules/tenant/views/CreateTenant.vue'),

@@ -39,6 +39,9 @@
             </v-col>
           </v-row>
         </template>
+        <template #item.first_login="{ item }">
+          <v-chip :color="item.first_login ? 'secondary': 'primary'">{{ item.first_login ? "Não" : "Sim" }}</v-chip>
+        </template>
         <template #item.tenants="{ item }">
           <v-chip-group class="group">
             <v-chip
@@ -119,6 +122,10 @@ const headers: any[] = [
   {
     title: "Email",
     value: "email",
+  },
+  {
+    title: "Concluiu cadastro",
+    value: "first_login",
   },
   {
     title: "Função",

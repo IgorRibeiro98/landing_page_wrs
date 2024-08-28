@@ -5,7 +5,7 @@
         <h1><v-icon icon="mdi-monitor-vertical"></v-icon> Totens</h1>
 
         <v-spacer></v-spacer>
-        <v-btn color="primary" flat @click="dialog = true" v-if="authorization.acl('totem.create')"> Novo </v-btn>
+        <v-btn color="primary" flat @click="dialog = true" v-if="authorization.acl('totem.create')"> Novo Totem</v-btn>
       </v-col>
 
       <v-col cols="12">

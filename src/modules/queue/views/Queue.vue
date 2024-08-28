@@ -2,7 +2,7 @@
     <LayoutView icon="mdi-format-list-bulleted" title="Filas">
         <template #action>
             <v-btn color="primary" flat @click="dialog = true" v-if="authorization.acl('queue.create')">
-                Novo
+                Nova Fila
             </v-btn>
         </template>
         <template #content>

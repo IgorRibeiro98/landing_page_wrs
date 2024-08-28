@@ -1,7 +1,7 @@
 <template>
   <LayoutView title="Tipo de Atendimento" icon="mdi-sitemap">
     <template #action>
-      <v-btn color="primary" flat @click="dialog = true" v-if="authorization.acl('attendance_type.view')"> Novo </v-btn>
+      <v-btn color="primary" flat @click="dialog = true" v-if="authorization.acl('attendance_type.view')"> Novo tipo de atendimento </v-btn>
     </template>
 
     <template #content>

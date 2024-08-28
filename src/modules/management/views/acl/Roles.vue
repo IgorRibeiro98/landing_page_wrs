@@ -6,7 +6,7 @@
         color="primary"
         :to="{ name: 'management.acl.create' }"
       >
-        Nova Role
+        Nova Permissão
       </v-btn>
     </template>
     <template #content>

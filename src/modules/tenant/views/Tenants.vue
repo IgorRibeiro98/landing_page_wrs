@@ -45,7 +45,7 @@
             class="rounded-lg mr-4 border"
             :src="(item.logo as string)"
           ></v-img>
-          <RouterLink :to="{ name: 'totem.detail', params: { id: item.id } }">
+          <RouterLink :to="{ name: 'tenant.show', params: { id: item.id } }">
             {{ item.name }}
           </RouterLink>
         </div>
