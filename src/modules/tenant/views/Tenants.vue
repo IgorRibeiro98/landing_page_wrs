@@ -166,7 +166,9 @@ function getTenantLink(subdomain: string) {
     const rawDomain = import.meta.env.VITE_APP_HOST;
     const domain = rawDomain.concat(port ? `:${port}` : "");
 
-    subdomain = subdomain === rawDomain ? "" : subdomain.concat(".");
+    const subdomainOfMainDomain = rawDomain.split(".")[0];
+
+    subdomain = subdomain === subdomainOfMainDomain ? "" : subdomain.concat(".");
     const protocol = import.meta.env.DEV ? "http" : "https";
     return `${protocol}://${subdomain}${domain}`;
   } catch (e) {

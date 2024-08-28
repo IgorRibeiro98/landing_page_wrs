@@ -41,10 +41,10 @@
             <v-list-item v-bind="props">
               <template #prepend>
                 <v-img
-                  max-width="25"
-                  width="25"
-                  max-height="25"
-                  height="25"
+                  max-width="40"
+                  width="40"
+                  max-height="40"
+                  height="40"
                   class="rounded-lg mr-4 border"
                   :src="(item.raw.logo as string)"
                 ></v-img>
