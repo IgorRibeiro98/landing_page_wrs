@@ -161,13 +161,17 @@ function loadTenants() {
 }
 
 function getTenantLink(subdomain: string) {
-  const port = import.meta.env.VITE_APP_PORT;
-  const rawDomain = import.meta.env.VITE_APP_HOST;
-  const domain = rawDomain.concat(port ? `:${port}` : "");
+  try {
+    const port = import.meta.env.VITE_APP_PORT;
+    const rawDomain = import.meta.env.VITE_APP_HOST;
+    const domain = rawDomain.concat(port ? `:${port}` : "");
 
-  subdomain = subdomain === rawDomain ? "" : subdomain.concat(".");
-  const protocol = import.meta.env.DEV ? "http" : "https";
-  return `${protocol}://${subdomain}${domain}`;
+    subdomain = subdomain === rawDomain ? "" : subdomain.concat(".");
+    const protocol = import.meta.env.DEV ? "http" : "https";
+    return `${protocol}://${subdomain}${domain}`;
+  } catch (e) {
+    return "error";
+  }
 }
 
 function removeTenant(tenant: Tenant) {

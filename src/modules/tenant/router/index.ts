@@ -28,7 +28,6 @@ const routes: RouteRecordRaw[] = [
                 name: 'tenant.create',
                 component: () => import('@/modules/tenant/views/CreateTenant.vue'),
                 meta: {
-                    layout: layouts.default(),
                     slugs: {
                         acl: "tenant.create"
                     },
