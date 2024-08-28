@@ -172,7 +172,6 @@ function loadTotens(mustLoading = true) {
       items.value = resp.data;
     })
     .catch((error) => {
-      console.log({ error });
       openAlert("Erro ao carregar totens", error);
     })
     .finally(() => {

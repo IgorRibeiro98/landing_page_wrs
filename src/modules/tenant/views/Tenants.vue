@@ -158,7 +158,9 @@ function loadTenants() {
     .then((response) => {
       tenants.value = response.data.data;
       paginate.value.total = response.data.meta.total;
-      loading.value = false;
+    })
+    .catch((error) => {
+      openAlert("Erro ao carregar os tenants", error);
     })
     .finally(() => {
       loading.value = false;

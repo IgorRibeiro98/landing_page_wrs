@@ -316,7 +316,7 @@ declare global {
   }
 
   interface Role {
-    id: number,
+    id: string,
     name: string,
     is_default: boolean,
     scopes: Scope[] | string[]
