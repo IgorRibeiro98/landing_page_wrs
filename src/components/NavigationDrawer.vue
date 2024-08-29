@@ -4,11 +4,11 @@
         <v-list density="compact" nav v-if="!mobile">
             <v-list-item @click="$router.push({ name: 'user.self' })">
                 <template #prepend>
-                    <Avatar :user="authUser" color="nav-color-accent" size="24" :show-tooltip="rail" />
+                    <Avatar :user="user" color="nav-color-accent" size="24" :show-tooltip="rail" />
                 </template>
                 <template #title>
                     <span class="pl-4 font-weight-semi-bold">
-                        {{ authUser.name }}
+                        {{ user.name }}
                     </span>
                 </template>
             </v-list-item>
@@ -62,7 +62,7 @@ const route = useRoute();
 const userStore = useAuthStore();
 const { drawer } = storeToRefs(useSystemStore());
 
-const authUser = userStore.user;
+const { user } = storeToRefs(userStore);
 const { mobile } = useDisplay();
 
 function toggleRail() {
