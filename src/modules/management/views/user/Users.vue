@@ -79,6 +79,7 @@
           </v-menu>
         </template>
       </v-data-table-server>
+      <ResetPasswordDialog v-model="resetPasswordDialog" :user="user" @resetPassword="loadUsers"/>
       <UsersDialog v-model="dialog" v-model:user="user" @close="close" />
     </template>
   </LayoutView>
@@ -96,8 +97,10 @@ import authorization from "@/plugins/authorization";
 import useAlertStore from "@/stores/alert";
 import { useSystemStore } from "@/stores/system";
 import { onMounted, ref } from "vue";
+import ResetPasswordDialog from "../../components/users/ResetPasswordDialog.vue";
 
 const dialog = ref<boolean>(false);
+const resetPasswordDialog = ref(false);
 const loading = ref<boolean>(false);
 const tableLoading = ref<boolean>(false);
 const search = ref<string>("");
@@ -118,22 +121,27 @@ const headers: any[] = [
   {
     title: "Nome",
     value: "name",
+    width: "28%",
   },
   {
     title: "Email",
     value: "email",
+    width: "20%",
   },
   {
     title: "Concluiu cadastro",
     value: "first_login",
+    width: "10%",
   },
   {
     title: "Função",
     value: "role.name",
+    width: "10%",
   },
   {
     title: "Tenants",
     value: "tenants",
+    width: "20%",
   },
   {
     value: "actions",
@@ -142,7 +150,7 @@ const headers: any[] = [
   },
 ];
 
-const user = ref({
+const user = ref<User>({
   id: 0,
   name: "",
   email: "",
@@ -188,6 +196,14 @@ const tableActions = [
       });
     },
   },
+  {
+    title: 'Resetar senha',
+    show: () => authorization.acl('user.reset_password'),
+    action(item: User) {
+      user.value = item;
+      resetPasswordDialog.value = true;
+    }
+  }
 ];
 
 function close(mustReload: boolean = false) {

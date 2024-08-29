@@ -26,7 +26,7 @@
             class="text-subtitle-1"
             v-if="$slots.description || form?.description"
           >
-            <v-col>
+            <v-col class="py-0">
               <slot name="description">
                 <p v-if="form?.description" v-html="form.description"></p>
               </slot>
@@ -39,7 +39,7 @@
               v-model="form.form.value"
               :form="form?.form.inputs ?? []"
             >
-             
+
               <template
                 v-for="(formItem, index) in form.form.inputs"
                 #[`item:${formItem.value}`]="data"

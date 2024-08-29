@@ -26,9 +26,16 @@ export function deleteUser(id: number): Promise<AxiosResponse> {
     return axios.delete(`${prefix}/${id}`)
 }
 
+export function resetUserPassword(user: User, newPassword: string): Promise<AxiosResponse> {
+    return axios.put(`${prefix}/${user.id}/reset-password`, {
+      password: newPassword
+    })
+}
+
 export default {
     getAllUsersPaginate,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    resetUserPassword,
 }

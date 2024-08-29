@@ -14,7 +14,6 @@
         :headers="headers"
         :items="roles"
         hover
-        @click:row="goToRole"
         :loading="tableLoading"
         :items-length="paginate.total"
         v-model:items-per-page="paginate.per_page"
@@ -39,6 +38,11 @@
             </v-col>
           </v-row>
         </template>
+        <template #item.name="{ item }">
+          <RouterLink :to="{ name: 'management.acl.edit', params: { id: item.id } }">
+            {{ item.name }}
+          </RouterLink>
+        </template>
         <template #item.is_default="{ item }">
           <span>{{ item.is_default ? "Sim" : "Não" }}</span>
         </template>
@@ -58,7 +62,7 @@
               <template v-for="action in tableActions">
                 <v-list-item
                   @click="action.action({ ...item })"
-                  v-if="action.show ? action.show() : true"
+                  v-if="action.show ? action.show(item) : true"
                 >
                   <v-list-item-title>{{ action.title }}</v-list-item-title>
                 </v-list-item>
@@ -103,18 +107,22 @@ const headers: any[] = [
   {
     title: "Nome",
     value: "name",
+    width: '28%'
   },
   {
     title: "Nível",
     value: "level",
+    width: '20%'
   },
   {
-    title: "Permissões",
+    title: "Qtd. Permissões",
     value: "scopes_count",
+    width: '20%'
   },
   {
     title: "Padrão",
     value: "is_default",
+    width: '20%'
   },
   {
     value: "actions",
@@ -133,7 +141,7 @@ const tableActions = [
   },
   {
     title: "Excluir",
-    show: () => authorization.acl("acl.delete"),
+    show: (role: Role) => authorization.acl("acl.delete") && !role.is_default,
     action: (item: Role) => {
       tableLoading.value = true;
       deleteRole(item.id!)
