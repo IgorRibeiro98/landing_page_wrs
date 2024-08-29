@@ -63,7 +63,7 @@ export const between = (min: number, max: number) => (value: number): boolean | 
   return count >= min && count <= max || msg;
 }
 
-export const equals = (value: string | number) => (value2: string | number) => {
+export const equals = (value: string | number | boolean) => (value2: string | number | boolean) => {
   return value === value2 || 'Os campos devem ser iguais';
 }
 

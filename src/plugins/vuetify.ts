@@ -61,7 +61,7 @@ export default createVuetify({
           keyboard: '#f94c07',
           scrollbar: '#757575',
           'nav-color': '#072b47',
-          'nav-color-accent': '#a4b1bb'
+          'nav-color-accent': '#a4b1bb',
         }
       },
       dark: {

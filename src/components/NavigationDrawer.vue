@@ -1,7 +1,8 @@
 <template>
-    <v-navigation-drawer v-model="drawer" :rail="rail" :permanent="!mobile" :temporary="mobile"  color="nav-color" class="position-fixed">
+    <v-navigation-drawer v-model="drawer" :rail="rail" :permanent="!mobile" :temporary="mobile" color="nav-color"
+        class="position-fixed">
         <v-list density="compact" nav v-if="!mobile">
-            <v-list-item>
+            <v-list-item @click="$router.push({ name: 'user.self' })">
                 <template #prepend>
                     <Avatar :user="authUser" color="nav-color-accent" size="24" :show-tooltip="rail" />
                 </template>
@@ -17,7 +18,7 @@
             :icon="rail ? 'mdi-chevron-right' : 'mdi-chevron-left'" @click.stop="toggleRail"></v-btn>
         <v-list class="mt-3" nav>
             <template v-for="(drawerItem, index) in items" :key="index">
-                <DrawerItem :item="drawerItem" :rail="rail" v-if="mustRender(drawerItem)"/>
+                <DrawerItem :item="drawerItem" :rail="rail" v-if="mustRender(drawerItem)" />
             </template>
         </v-list>
 
@@ -86,7 +87,7 @@ watch(mobile, () => {
 }, { immediate: true });
 
 onBeforeMount(() => {
-    if(mobile.value) return;
+    if (mobile.value) return;
 
     const railValue = localStorage.getItem("rail");
     if (railValue) {

@@ -15,13 +15,19 @@ const routes: RouteRecordRaw[] = [
                 'acl',
             ]
         },
-        // children: [
-        //     {
-        //         path: '',
-        //         name: 'user.view',
-        //         component: () => import('@/modules/user/views/User.vue')
-        //     },
-        // ]
+        children: [
+            {
+                path: 'my',
+                name: 'user.self',
+                component: () => import('@/modules/user/views/Profile.vue'),
+                meta: {
+                    title: 'Perfil',
+                    guards: [
+                        'auth',
+                    ]
+                },
+            },
+        ]
     }
 ]
 
