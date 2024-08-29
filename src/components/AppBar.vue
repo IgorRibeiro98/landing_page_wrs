@@ -1,16 +1,24 @@
 <template>
   <v-app-bar color="nav-color" class="position-fixed" elevation="0">
     <template #prepend>
+      <v-btn
+        icon="mdi-menu"
+        density="comfortable"
+        v-if="$vuetify.display.mobile"
+        @click="drawer = true"
+      ></v-btn>
       <v-img
         aspect-ratio="16/9"
-        v-if="!$vuetify.display.mobile"
         @click="$router.push({ path: '/' })"
         class="pointer mx-4"
         :src="logo"
-        width="50"
+        width="30"
       ></v-img>
-      <v-slide-group show-arrows>
-        <v-slide-group-item v-for="item in items" :value="item.route.name">
+      <v-slide-group show-arrows v-if="!$vuetify.display.mobile">
+        <v-slide-group-item
+          v-for="item in appBarItems"
+          :value="item.route.name"
+        >
           <v-btn
             class="text-regular mx-1"
             @click="$router.push(item.route)"
@@ -34,7 +42,7 @@
           flat
           return-object
           item-title="name"
-          :items="user.tenants"
+          :items="authUser.tenants"
           v-model="currentTenant"
         >
           <template #item="{ item, props }">
@@ -52,36 +60,52 @@
             </v-list-item>
           </template>
         </v-select>
-
-        <v-btn
-          @click="toggleTheme"
-          variant="text"
-          :icon="themeIcon"
-          density="comfortable"
-        ></v-btn>
-        <v-btn
-          @click="logoutUser"
-          :loading="loadingLogout"
-          title="Sair"
-          icon="mdi-exit-to-app"
-        ></v-btn>
+        <div class="d-flex align-center ga-4" v-if="!$vuetify.display.mobile">
+          <v-btn
+            v-for="action in appBarActions"
+            @click="action.action"
+            variant="text"
+            :icon="action.icon"
+            density="comfortable"
+          ></v-btn>
+        </div>
+        <v-menu v-else>
+          <template #activator="{ props }">
+            <v-btn icon v-bind="props" density="comfortable">
+              <Avatar :user="authUser" density="comfortable"></Avatar>
+            </v-btn>
+          </template>
+          <v-list density="compact">
+            <v-list-item
+              v-for="action in appBarActions"
+              @click="action.action"
+              :key="action.title"
+            >
+              <v-list-item-title> <v-icon class="mr-2">{{ action.icon }}</v-icon> {{ action.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </div>
     </template>
   </v-app-bar>
 </template>
 <script setup lang="ts">
 import appLogo from "@/assets/logo.png";
+import { changeTenant } from "@/helpers";
+import { appBarItems } from "@/layouts/AppMenuItems";
 import { signout } from "@/modules/auth/services/auth.service";
+import useTenantStore from "@/modules/tenant/store";
+import authorization from "@/plugins/authorization";
+import useSystemStore from "@/stores/system";
+import { useAuthStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 import { useTheme } from "vuetify";
+import Avatar from "./Avatar.vue";
 
-import { changeTenant } from "@/helpers";
-import useTenantStore from "@/modules/tenant/store";
-import authorization from "@/plugins/authorization";
-import useUserStore from "@/stores/user";
+const { authUser } = storeToRefs(useAuthStore());
 
-const { user } = storeToRefs(useUserStore());
+const { drawer } = storeToRefs(useSystemStore());
 
 const currentTenant = computed({
   get() {
@@ -89,7 +113,7 @@ const currentTenant = computed({
 
     const [subdomain] = url.hostname.split(".");
 
-    return user.value.tenants?.find((tenant) => subdomain == tenant.subdomain);
+    return authUser.value.tenants?.find((tenant) => subdomain == tenant.subdomain);
   },
   set(value: any) {
     changeTenant(value.subdomain);
@@ -118,6 +142,19 @@ const themeIcon = computed<string>(() => {
   return "mdi-weather-night";
 });
 
+const appBarActions = computed(() => [
+  {
+    icon: themeIcon.value,
+    title: "Alterar tema",
+    action: toggleTheme,
+  },
+  {
+    icon: "mdi-exit-to-app",
+    title: "Sair",
+    action: logoutUser,
+  }
+]);
+
 function logoutUser() {
   loadingLogout.value = true;
 
@@ -125,32 +162,5 @@ function logoutUser() {
     loadingLogout.value = false;
   });
 }
-
-const items = [
-  {
-    title: "Totens",
-    icon: "mdi-monitor-vertical",
-    acl: "totem.view",
-    route: {
-      name: "totem.view",
-    },
-  },
-  {
-    title: "Filas",
-    icon: "mdi-format-list-bulleted",
-    acl: "queue.view",
-    route: {
-      name: "queue.view",
-    },
-  },
-  {
-    icon: "mdi-sitemap-outline",
-    title: "Tipos de Atendimento",
-    acl: "attendance_type.view",
-    route: {
-      name: "attendance-type.view",
-    },
-  },
-];
 </script>
 <style scoped lang="scss"></style>

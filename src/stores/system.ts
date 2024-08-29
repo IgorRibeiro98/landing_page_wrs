@@ -7,6 +7,7 @@ export const useSystemStore = defineStore('system', () => {
     const state = ref({
         logo,
     })
+    const drawer = ref<boolean>(false);
 
     const breadcrumbs = ref<Breadcrumb[]>([])
 
@@ -15,6 +16,7 @@ export const useSystemStore = defineStore('system', () => {
     }
     return {
         state,
+        drawer,
         breadcrumbs,
         setBreadcrumbs
     }

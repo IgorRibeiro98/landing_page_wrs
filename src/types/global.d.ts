@@ -412,7 +412,8 @@ declare global {
     title: string
     route: any,
     items?: DrawerItem[]
-    acl?: string
+    acl?: string,
+    onlyMobile?: boolean
   }
 
   interface TotemFilter {

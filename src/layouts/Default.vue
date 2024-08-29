@@ -15,75 +15,13 @@
 import AppBar from "@/components/AppBar.vue";
 import Breadcrumb from "@/components/BreadCrumb.vue";
 import NavigationDrawer from "@/components/NavigationDrawer.vue";
-import { ref } from 'vue';
+import { appBarItems, navigationDrawerItems } from '@/layouts/AppMenuItems';
 import { RouterView } from "vue-router";
 
-const drawerItems = ref<DrawerItem[]>([
-  // {
-  //   icon: 'mdi-monitor-vertical',
-  //   title: 'Totens',
-  //   route: {
-  //     name: 'totem.view',
-  //   }
-  // },
-  // {
-  //   icon: 'mdi-account-group',
-  //   title: 'Filas',
-  //   route: {
-  //     name: 'queue.view',
-  //   }
-  // },
-  // {
-  //   icon: 'mdi-sitemap-outline',
-  //   title: 'Tipo de Atendimento',
-  //   route: {
-  //     name: 'attendance-type.view',
-  //   }
-  // },
-
-  {
-    icon: 'mdi-city-variant-outline',
-    title: 'Tenant',
-    acl: 'tenant.view',
-    route: {
-      name: 'tenant.view',
-    }
-  },
-  {
-    icon: 'mdi-shield-key-outline',
-    title: 'ACL',
-    acl: 'acl.view',
-    route: {
-      name: 'management.acl',
-    }
-  },
-  {
-    icon: 'mdi-account-supervisor',
-    title: 'Usuários',
-    acl: 'user.view',
-    route: {
-      name: 'management.users',
-    }
-  },
-  // {
-  //   icon: 'mdi-cog',
-  //   title: 'Gerenciamento',
-  //   route: {
-  //     name: '#',
-  //   },
-  //   items: [
-  //     {
-  //       icon: 'mdi-shield-key-outline',
-  //       title: 'ACL',
-  //       route: {
-  //         name: 'management.acl',
-  //       }
-  //     },
-  //   ]
-  // },
-])
-
-
-
+const drawerItems = [
+  ...appBarItems.map((item: DrawerItem) => {item.onlyMobile = true; return item}),
+  ...navigationDrawerItems
+];
+console.log(drawerItems);
 </script>
 <style scoped lang="scss"></style>
