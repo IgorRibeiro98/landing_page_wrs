@@ -63,6 +63,7 @@
         <div class="d-flex align-center ga-4" v-if="!$vuetify.display.mobile">
           <v-btn
             v-for="action in appBarActions"
+            v-show="action.onlyMobile ? !action.onlyMobile : true"
             @click="action.action"
             variant="text"
             :icon="action.icon"
@@ -100,12 +101,14 @@ import useSystemStore from "@/stores/system";
 import { useAuthStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
 import { useTheme } from "vuetify";
 import Avatar from "./Avatar.vue";
 
 const { authUser } = storeToRefs(useAuthStore());
 
 const { drawer } = storeToRefs(useSystemStore());
+const router = useRouter();
 
 const currentTenant = computed({
   get() {
@@ -142,11 +145,24 @@ const themeIcon = computed<string>(() => {
   return "mdi-weather-night";
 });
 
-const appBarActions = computed(() => [
+interface AppBarActions {
+  icon: string
+  title: string
+  action: () => void
+  onlyMobile?: boolean
+}
+
+const appBarActions = computed<AppBarActions[]>(() => [
   {
     icon: themeIcon.value,
     title: "Alterar tema",
     action: toggleTheme,
+  },
+  {
+    icon: 'mdi-account',
+    title: 'Perfil',
+    action: () => router.push({ name: 'user.self' }),
+    onlyMobile: true,
   },
   {
     icon: "mdi-exit-to-app",

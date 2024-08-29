@@ -1,36 +1,36 @@
 <template>
-	<v-sheet width="100%" height="100%">
-		<v-row>
-			<v-col cols="12" class="d-flex  align-center">
-				<Avatar :user="user" size="80" initialsClass="text-h3" @mouseover="overlay = true"
-					@mouseleave="overlay = false">
-				</Avatar>
-				<span class="text-h4 font-weight-semi-bold ml-4">{{ user.name }}</span>
-			</v-col>
-			<v-col cols="12">
-				<div class="mb-6">
-					<span class="font-weight-bold text-h6">
-						Informações pessoais
-					</span>
-				</div>
-				<v-form @submit.prevent="update" v-model="validate" lazy-validation ref="formElement">
-					<Form v-model="selfUpdateUser" :form="form"></Form>
-					<div class="mt-6">
-						<v-btn color="primary" type="submit" :loading="loading">Salvar Alterações</v-btn>
-					</div>
-				</v-form>
-
-			</v-col>
-		</v-row>
-	</v-sheet>
+  <View title="Atualização de perfil" icon="mdi-account">
+    <v-row>
+      <v-col cols="12" class="d-flex  align-center">
+        <Avatar :user="user" size="80" initialsClass="text-h3" @mouseover="overlay = true"
+          @mouseleave="overlay = false">
+        </Avatar>
+        <span class="text-h4 font-weight-semi-bold ml-4">{{ user.name }}</span>
+      </v-col>
+      <v-col cols="12">
+        <div class="mb-6">
+          <span class="font-weight-bold text-h6">
+            Informações pessoais
+          </span>
+        </div>
+        <v-form @submit.prevent="update" v-model="validate" lazy-validation ref="formElement">
+          <Form v-model="selfUpdateUser" :form="form"></Form>
+          <div class="mt-6">
+            <v-btn color="primary" type="submit" :loading="loading">Salvar Alterações</v-btn>
+          </div>
+        </v-form>
+      </v-col>
+    </v-row>
+  </View>
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { storeToRefs } from 'pinia'
-import { updateSelf, confirmUserPassword } from '@/modules/management/repositories/user.repository'
+import Avatar from '@/components/Avatar.vue';
+import Form from '@/components/FormBuilder/Form.vue';
+import View from '@/components/View.vue';
+import { confirmUserPassword, updateSelf } from '@/modules/management/repositories/user.repository';
 import useUserStore from "@/stores/user";
-import Avatar from '@/components/Avatar.vue'
-import Form from '@/components/FormBuilder/Form.vue'
+import { storeToRefs } from 'pinia';
+import { computed, ref } from 'vue';
 
 interface SelfUpdateUser extends User {
 	newPassword: string
