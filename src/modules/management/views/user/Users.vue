@@ -1,5 +1,5 @@
 <template>
-  <LayoutView icon="mdi-account-multiple" title="Usuários">
+  <View icon="mdi-account-multiple" title="Usuários">
     <template #action>
       <v-btn
         color="primary"
@@ -9,84 +9,88 @@
         Novo usuário
       </v-btn>
     </template>
-    <template #content>
-      <v-data-table-server
-        :headers="headers"
-        :items="users"
-        hover
-        :loading="tableLoading"
-        :items-length="paginate.total"
-        v-model:items-per-page="paginate.per_page"
-        v-model:page="paginate.current_page"
-        @update:itemsPerPage="loadUsers"
-        @update:page="loadUsers"
-      >
-        <template #top>
-          <v-row>
-            <v-col cols="12" md="4" class="d-flex align-center">
-              <v-text-field
-                density="compact"
-                hide-details="auto"
-                placeholder="Pesquisar por nome..."
-                append-inner-icon="mdi-magnify"
-                variant="outlined"
-                v-model="search"
-                @input="searchDebounce"
-              ></v-text-field>
-            </v-col>
-            <v-spacer></v-spacer>
-            <v-col cols="12" md="2" class="d-flex align-center justify-end">
-            </v-col>
-          </v-row>
-        </template>
-        <template #item.first_login="{ item }">
-          <v-chip :color="item.first_login ? 'secondary': 'primary'">{{ item.first_login ? "Não" : "Sim" }}</v-chip>
-        </template>
-        <template #item.tenants="{ item }">
-          <v-chip-group class="group">
-            <v-chip
-              v-for="tenant in item.tenants"
-              size="small"
-              class="stop-pointer-events"
-            >
-              {{ tenant.name }}
-            </v-chip>
-          </v-chip-group>
-        </template>
-        <template #item.actions="{ item }">
-          <v-menu
-            location="right"
-            v-if="authorization.acl('user.update|user.delete')"
+    <v-data-table-server
+      :headers="headers"
+      :items="users"
+      hover
+      :loading="tableLoading"
+      :items-length="paginate.total"
+      v-model:items-per-page="paginate.per_page"
+      v-model:page="paginate.current_page"
+      @update:itemsPerPage="loadUsers"
+      @update:page="loadUsers"
+    >
+      <template #top>
+        <v-row>
+          <v-col cols="12" md="4" class="d-flex align-center">
+            <v-text-field
+              density="compact"
+              hide-details="auto"
+              placeholder="Pesquisar por nome..."
+              append-inner-icon="mdi-magnify"
+              variant="outlined"
+              v-model="search"
+              @input="searchDebounce"
+            ></v-text-field>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="12" md="2" class="d-flex align-center justify-end">
+          </v-col>
+        </v-row>
+      </template>
+      <template #item.first_login="{ item }">
+        <v-chip :color="item.first_login ? 'secondary' : 'primary'">{{
+          item.first_login ? "Não" : "Sim"
+        }}</v-chip>
+      </template>
+      <template #item.tenants="{ item }">
+        <v-chip-group class="group">
+          <v-chip
+            v-for="tenant in item.tenants"
+            size="small"
+            class="stop-pointer-events"
           >
-            <template v-slot:activator="{ props }">
-              <v-btn
-                density="comfortable"
-                icon="mdi-dots-horizontal"
-                variant="plain"
-                v-bind="props"
-              ></v-btn>
+            {{ tenant.name }}
+          </v-chip>
+        </v-chip-group>
+      </template>
+      <template #item.actions="{ item }">
+        <v-menu
+          location="right"
+          v-if="authorization.acl('user.update|user.delete')"
+        >
+          <template v-slot:activator="{ props }">
+            <v-btn
+              density="comfortable"
+              icon="mdi-dots-horizontal"
+              variant="plain"
+              v-bind="props"
+            ></v-btn>
+          </template>
+          <v-list>
+            <template v-for="action in tableActions">
+              <v-list-item
+                @click="action.action({ ...item })"
+                v-if="action.show ? action.show() : true"
+              >
+                <v-list-item-title>{{ action.title }}</v-list-item-title>
+              </v-list-item>
             </template>
-            <v-list>
-              <template v-for="action in tableActions">
-                <v-list-item
-                  @click="action.action({ ...item })"
-                  v-if="action.show ? action.show() : true"
-                >
-                  <v-list-item-title>{{ action.title }}</v-list-item-title>
-                </v-list-item>
-              </template>
-            </v-list>
-          </v-menu>
-        </template>
-      </v-data-table-server>
-      <ResetPasswordDialog v-model="resetPasswordDialog" :user="user" @resetPassword="loadUsers"/>
-      <UsersDialog v-model="dialog" v-model:user="user" @close="close" />
-    </template>
-  </LayoutView>
+          </v-list>
+        </v-menu>
+      </template>
+    </v-data-table-server>
+    <ResetPasswordDialog
+      v-model="resetPasswordDialog"
+      :user="user"
+      @resetPassword="loadUsers"
+    />
+    <UsersDialog v-model="dialog" v-model:user="user" @close="close" />
+  </View>
 </template>
 <script setup lang="ts">
 // import { errorMessage, successMessage } from '@/helpers/alert';
-import LayoutView from "@/components/LayoutView.vue";
+import View from "@/components/View.vue";
 import { debounce } from "@/helpers/function";
 import UsersDialog from "@/modules/management/components/users/UsersDialog.vue";
 import {
@@ -188,7 +192,7 @@ const tableActions = [
             closeAlert();
           })
           .catch((err) => {
-            openAlert('Erro ao excluir usuário', err);
+            openAlert("Erro ao excluir usuário", err);
           })
           .finally(() => {
             loading.value = false;
@@ -197,13 +201,13 @@ const tableActions = [
     },
   },
   {
-    title: 'Resetar senha',
-    show: () => authorization.acl('user.reset_password'),
+    title: "Resetar senha",
+    show: () => authorization.acl("user.reset_password"),
     action(item: User) {
       user.value = item;
       resetPasswordDialog.value = true;
-    }
-  }
+    },
+  },
 ];
 
 function close(mustReload: boolean = false) {
@@ -230,7 +234,11 @@ function close(mustReload: boolean = false) {
 function loadUsers() {
   loading.value = true;
   tableLoading.value = true;
-  getAllUsersPaginate({ ...paginate.value, includes: ["role", "tenants"], search: search.value })
+  getAllUsersPaginate({
+    ...paginate.value,
+    includes: ["role", "tenants"],
+    search: search.value,
+  })
     .then((response: any) => {
       users.value = response.data.data;
       paginate.value = {

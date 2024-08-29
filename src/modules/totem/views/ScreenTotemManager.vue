@@ -15,7 +15,9 @@
         >
         </FormBuilder>
         <!-- <Draggable draggable=".card-title"  show-arrows> -->
-
+          <div class="d-flex justify-center" v-if="loading">
+            <v-progress-circular indeterminate></v-progress-circular>
+          </div>
         <v-slide-group show-arrows ref="slideGroup">
           <v-slide-group-item
             v-for="(filteredScreen, index) in filteredScreens"
@@ -50,7 +52,7 @@
           </v-slide-group-item>
         </v-slide-group>
         <!-- </Draggable> -->
-        <p class="text-center" v-if="!filteredScreens.length">
+        <p class="text-center" v-if="!loading && !filteredScreens.length">
           {{
             search.screen
               ? "Nenhuma tela encontrada"
@@ -126,7 +128,7 @@
           </transition-group>
           <!-- </Draggable> -->
         </v-list>
-        <p class="text-center" v-if="!totem.screens.length">
+        <p class="text-center" v-if="!loading && !totem.screens.length">
           Não há telas no totem {{ totem.name }}
         </p>
       </v-col>
@@ -160,8 +162,8 @@ import { data } from "@/modules/patient/views/default-data";
 import ScreenPreviewDialog from "@/modules/totem/components/ScreenPreviewDialog.vue";
 import { getScreens } from "@/modules/totem/repositories/screen.repository";
 import {
-attachScreens,
-findTotem,
+  attachScreens,
+  findTotem,
 } from "@/modules/totem/repositories/totem.repository";
 import useTotemStore from "@/stores/alert";
 import { computed, onBeforeMount, onMounted, reactive, ref } from "vue";
@@ -174,6 +176,7 @@ const { setBreadcrumbs } = useSystemStore()
 const route = useRoute();
 const router = useRouter();
 const screens = ref<Screens[]>([]);
+const loading = ref(false);
 const screenTotem = ref<ScreenTotem>({
   id: 0,
   order: 0,
@@ -251,6 +254,7 @@ const totemScreensLength = computed(() => {
 const { openAlert } = useTotemStore();
 
 function loadTotem() {
+  loading.value = true;
   findTotem(Number(route.params.id))
     .then((resp: any) => {
       totem.value = resp.data;
@@ -258,6 +262,9 @@ function loadTotem() {
     })
     .catch((error: any) => {
       openAlert("Erro", error);
+    })
+    .finally(() => {
+      loading.value = false;
     });
 }
 function mergeTotemScreensWithBaseScreen() {
@@ -273,12 +280,16 @@ function mergeTotemScreensWithBaseScreen() {
   });
 }
 async function loadScreens() {
+  loading.value = true;
   return getScreens()
     .then((resp) => {
       screens.value = resp.data;
     })
     .catch((error) => {
       openAlert("Erro", error);
+    })
+    .finally(() => {
+      loading.value = false;
     });
 }
 

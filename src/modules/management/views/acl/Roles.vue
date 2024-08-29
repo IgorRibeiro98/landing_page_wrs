@@ -1,5 +1,5 @@
 <template>
-  <LayoutView icon="mdi-shield-key-outline" title="ACL">
+  <View icon="mdi-shield-key-outline" title="ACL">
     <template #action>
       <v-btn
         v-if="authorization.acl('acl.create')"
@@ -9,74 +9,74 @@
         Nova Permissão
       </v-btn>
     </template>
-    <template #content>
-      <v-data-table-server
-        :headers="headers"
-        :items="roles"
-        hover
-        :loading="tableLoading"
-        :items-length="paginate.total"
-        v-model:items-per-page="paginate.per_page"
-        @update:itemsPerPage="loadRoles"
-        @update:page="loadRoles"
-      >
-        <template #top>
-          <v-row>
-            <v-col cols="12" md="4" class="d-flex align-center">
-              <v-text-field
-                density="compact"
-                hide-details="auto"
-                placeholder="Pesquisar por nome..."
-                append-inner-icon="mdi-magnify"
-                variant="outlined"
-                v-model="search"
-                @input="searchDebounce"
-              ></v-text-field>
-            </v-col>
-            <v-spacer></v-spacer>
-            <v-col cols="12" md="2" class="d-flex align-center justify-end">
-            </v-col>
-          </v-row>
-        </template>
-        <template #item.name="{ item }">
-          <RouterLink :to="{ name: 'management.acl.edit', params: { id: item.id } }">
-            {{ item.name }}
-          </RouterLink>
-        </template>
-        <template #item.is_default="{ item }">
-          <span>{{ item.is_default ? "Sim" : "Não" }}</span>
-        </template>
-        <template #item.actions="{ item }">
-          <v-menu
-            location="right"
-            v-if="authorization.acl('acl.update|acl.delete')"
-          >
-            <template v-slot:activator="{ props }">
-              <v-btn
-                icon="mdi-dots-horizontal"
-                variant="plain"
-                v-bind="props"
-              ></v-btn>
+    <v-data-table-server
+      :headers="headers"
+      :items="roles"
+      hover
+      :loading="tableLoading"
+      :items-length="paginate.total"
+      v-model:items-per-page="paginate.per_page"
+      @update:itemsPerPage="loadRoles"
+      @update:page="loadRoles"
+    >
+      <template #top>
+        <v-row>
+          <v-col cols="12" md="4" class="d-flex align-center">
+            <v-text-field
+              density="compact"
+              hide-details="auto"
+              placeholder="Pesquisar por nome..."
+              append-inner-icon="mdi-magnify"
+              variant="outlined"
+              v-model="search"
+              @input="searchDebounce"
+            ></v-text-field>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="12" md="2" class="d-flex align-center justify-end">
+          </v-col>
+        </v-row>
+      </template>
+      <template #item.name="{ item }">
+        <RouterLink
+          :to="{ name: 'management.acl.edit', params: { id: item.id } }"
+        >
+          {{ item.name }}
+        </RouterLink>
+      </template>
+      <template #item.is_default="{ item }">
+        <span>{{ item.is_default ? "Sim" : "Não" }}</span>
+      </template>
+      <template #item.actions="{ item }">
+        <v-menu
+          location="right"
+          v-if="authorization.acl('acl.update|acl.delete')"
+        >
+          <template v-slot:activator="{ props }">
+            <v-btn
+              icon="mdi-dots-horizontal"
+              variant="plain"
+              v-bind="props"
+            ></v-btn>
+          </template>
+          <v-list>
+            <template v-for="action in tableActions">
+              <v-list-item
+                @click="action.action({ ...item })"
+                v-if="action.show ? action.show(item) : true"
+              >
+                <v-list-item-title>{{ action.title }}</v-list-item-title>
+              </v-list-item>
             </template>
-            <v-list>
-              <template v-for="action in tableActions">
-                <v-list-item
-                  @click="action.action({ ...item })"
-                  v-if="action.show ? action.show(item) : true"
-                >
-                  <v-list-item-title>{{ action.title }}</v-list-item-title>
-                </v-list-item>
-              </template>
-            </v-list>
-          </v-menu>
-        </template>
-      </v-data-table-server>
-    </template>
-  </LayoutView>
+          </v-list>
+        </v-menu>
+      </template>
+    </v-data-table-server>
+  </View>
 </template>
 <script setup lang="ts">
 // import { errorMessage, successMessage } from '@/helpers/alert';
-import LayoutView from "@/components/LayoutView.vue";
+import View from "@/components/View.vue";
 import { debounce } from "@/helpers/function";
 import {
   deleteRole,
@@ -87,7 +87,6 @@ import useAlertStore from "@/stores/alert";
 import { useSystemStore } from "@/stores/system";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-
 const loading = ref<boolean>(false);
 const tableLoading = ref<boolean>(false);
 const search = ref<string>("");
@@ -107,22 +106,22 @@ const headers: any[] = [
   {
     title: "Nome",
     value: "name",
-    width: '28%'
+    width: "28%",
   },
   {
     title: "Nível",
     value: "level",
-    width: '20%'
+    width: "20%",
   },
   {
     title: "Qtd. Permissões",
     value: "scopes_count",
-    width: '20%'
+    width: "20%",
   },
   {
     title: "Padrão",
     value: "is_default",
-    width: '20%'
+    width: "20%",
   },
   {
     value: "actions",

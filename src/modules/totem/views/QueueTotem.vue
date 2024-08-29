@@ -1,129 +1,209 @@
 <template>
-  <LayoutView icon="mdi-format-list-bulleted" title="Gerenciamento de filas">
-    <template #content>
-      <v-row>
-        <v-col cols="12" class="d-flex justify-center flex-column align-center">
-          <v-expansion-panels v-model="expansion">
-            <queue-totem-panel v-for="(data, i) in items" v-model="items[i]" :form="formData">
-              <template #item:table>
-                <v-data-table :items="items[i].attendance_hours" :headers="attendanceHourHeaders" show-select
-                  :item-value="(item) => item" v-model="attendanceTypesSelected" no-data-text="">
-                  <template #top>
-                    <v-toolbar density="compact">
-                      <v-expand-x-transition class="position-absolute">
-                        <v-btn class="mx-1" icon="mdi-delete" variant="text" color="primary" v-if="data.attendance_hours.length &&
-                          attendanceTypesSelected.length && authorization.acl(permission)
-                          " @click="removeSelectedAttendanceHours">
-                        </v-btn>
-                      </v-expand-x-transition>
-
-                      <div class="w-100 text-center font-weight-medium text-subtitle-2">
-                        Horários de Atendimento
-                      </div>
-                    </v-toolbar>
-                  </template>
-
-                  <template #item.weekday_iso="{ item }: any">
-                    {{ getWeekDayLabel(item.weekday_iso) }}
-                  </template>
-
-                  <template #item.actions="{ item }">
-                    <v-menu v-if="authorization.acl(permission)">
-                      <template #activator="{ props }">
-                        <v-btn icon="mdi-dots-horizontal" v-bind="props" variant="text" size="small">
-                        </v-btn>
-                      </template>
-
-                      <v-list>
-                        <v-list-item link @click="option.action(item)" v-for="option in options">
-                          <v-list-item-title>
-                            {{ option.title }}
-                          </v-list-item-title>
-                        </v-list-item>
-                      </v-list>
-                    </v-menu>
-                  </template>
-
-                  <template #bottom>
-                    <div class="d-flex justify-center mt-4">
-                      <v-btn v-if="authorization.acl(permission)" color="secondary" @click="attendanceHourDialog = true">
-                        Adicionar novo horário
+  <View icon="mdi-format-list-bulleted" title="Gerenciamento de filas">
+    <v-row>
+      <v-col cols="12" class="d-flex justify-center flex-column align-center">
+        <v-expansion-panels v-model="expansion">
+          <queue-totem-panel
+            v-for="(data, i) in items"
+            v-model="items[i]"
+            :form="formData"
+          >
+            <template #item:table>
+              <v-data-table
+                :items="items[i].attendance_hours"
+                :headers="attendanceHourHeaders"
+                show-select
+                :item-value="(item: any) => item"
+                v-model="attendanceTypesSelected"
+                no-data-text=""
+              >
+                <template #top>
+                  <v-toolbar density="compact">
+                    <v-expand-x-transition class="position-absolute">
+                      <v-btn
+                        class="mx-1"
+                        icon="mdi-delete"
+                        variant="text"
+                        color="primary"
+                        v-if="
+                          data.attendance_hours.length &&
+                          attendanceTypesSelected.length &&
+                          authorization.acl(permission)
+                        "
+                        @click="removeSelectedAttendanceHours"
+                      >
                       </v-btn>
+                    </v-expand-x-transition>
+
+                    <div
+                      class="w-100 text-center font-weight-medium text-subtitle-2"
+                    >
+                      Horários de Atendimento
                     </div>
-                  </template>
-                </v-data-table>
-              </template>
+                  </v-toolbar>
+                </template>
 
-              <template #item:attendance_types="{ props, on }">
-                <v-autocomplete v-bind="props" v-on="on" v-model="data.attendance_types">
-                  <template #append-inner>
-                    <v-btn icon='mdi-plus' v-if="authorization.acl('attendance_type.create')" color="primary"
-                      variant="text" @click.prevent="openNewAttendanceTypeDialog">
+                <template #item.weekday_iso="{ item }: any">
+                  {{ getWeekDayLabel(item.weekday_iso) }}
+                </template>
+
+                <template #item.actions="{ item }">
+                  <v-menu v-if="authorization.acl(permission)">
+                    <template #activator="{ props }">
+                      <v-btn
+                        icon="mdi-dots-horizontal"
+                        v-bind="props"
+                        variant="text"
+                        size="small"
+                      >
+                      </v-btn>
+                    </template>
+
+                    <v-list>
+                      <v-list-item
+                        link
+                        @click="option.action(item)"
+                        v-for="option in options"
+                      >
+                        <v-list-item-title>
+                          {{ option.title }}
+                        </v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </template>
+
+                <template #bottom>
+                  <div class="d-flex justify-center mt-4">
+                    <v-btn
+                      v-if="authorization.acl(permission)"
+                      color="secondary"
+                      @click="attendanceHourDialog = true"
+                    >
+                      Adicionar novo horário
                     </v-btn>
-                  </template>
+                  </div>
+                </template>
+              </v-data-table>
+            </template>
 
-                  <template #chip="{ props, item: { raw } }">
-                    <v-chip v-bind="props" prepend-icon="mdi-connection" @click="editAttendanceType(raw)">
-                      {{ raw.integration_id }} -
-                      {{ raw.data.name }}
-                    </v-chip>
-                  </template>
-                </v-autocomplete>
-              </template>
+            <template #item:attendance_types="{ props, on }">
+              <v-autocomplete
+                v-bind="props"
+                v-on="on"
+                v-model="data.attendance_types"
+              >
+                <template #append-inner>
+                  <v-btn
+                    icon="mdi-plus"
+                    v-if="authorization.acl('attendance_type.create')"
+                    color="primary"
+                    variant="text"
+                    @click.prevent="openNewAttendanceTypeDialog"
+                  >
+                  </v-btn>
+                </template>
 
-              <div class="d-flex justify-end mt-2">
-                <v-btn v-if="authorization.acl(permission)" color="error" @click="openDeleteDialog(data)">
-                  Remover
-                </v-btn>
-              </div>
-            </queue-totem-panel>
-          </v-expansion-panels>
+                <template #chip="{ props, item: { raw } }">
+                  <v-chip
+                    v-bind="props"
+                    prepend-icon="mdi-connection"
+                    @click="editAttendanceType(raw)"
+                  >
+                    {{ raw.integration_id }} -
+                    {{ raw.data.name }}
+                  </v-chip>
+                </template>
+              </v-autocomplete>
+            </template>
 
-          <div class="mt-4">
-            <v-badge color="info" v-model="allQueueIsAdded" v-if="authorization.acl('totem.queue.create')">
-              <template #badge>
-                <v-tooltip>
-                  <template #activator="{ props }">
-                    <v-icon icon="mdi-information-variant" v-bind="props" />
-                  </template>
-
-                  <p>Todas as filas já foram mapeadas para este totem</p>
-                </v-tooltip>
-              </template>
-              <v-btn class="mx-auto" color="secondary" :disabled="allQueueIsAdded" @click="nextItem">
-                Adicionar configuração da fila
+            <div class="d-flex justify-end mt-2">
+              <v-btn
+                v-if="authorization.acl(permission)"
+                color="error"
+                @click="openDeleteDialog(data)"
+              >
+                Remover
               </v-btn>
-            </v-badge>
-          </div>
-        </v-col>
+            </div>
+          </queue-totem-panel>
+        </v-expansion-panels>
 
-        <v-col class="d-flex align-end justify-end">
-          <v-btn class="mr-4" color="error" @click="redirectToTotemDetail" :disabled="isLoading">
-            Cancelar
-          </v-btn>
+        <div class="mt-4">
+          <v-badge
+            color="info"
+            v-model="allQueueIsAdded"
+            v-if="authorization.acl('totem.queue.create')"
+          >
+            <template #badge>
+              <v-tooltip>
+                <template #activator="{ props }">
+                  <v-icon icon="mdi-information-variant" v-bind="props" />
+                </template>
 
-          <v-btn color="primary" @click="save" :disabled="disableSaveButton" :loading="isLoading"
-            v-if="authorization.acl('totem.queue.create|totem.queue.update')">
-            Salvar
-          </v-btn>
-        </v-col>
-      </v-row>
-    </template>
-  </LayoutView>
+                <p>Todas as filas já foram mapeadas para este totem</p>
+              </v-tooltip>
+            </template>
+            <v-btn
+              class="mx-auto"
+              color="secondary"
+              :disabled="allQueueIsAdded"
+              @click="nextItem"
+            >
+              Adicionar configuração da fila
+            </v-btn>
+          </v-badge>
+        </div>
+      </v-col>
 
-  <TotemAttendanceTypeDialog :attendanceTypes="currentQueueTotem.attendance_types" v-model="attendanceTypeDialog"
-    v-model:attendanceType="attendanceType" @update="addAttendanceType" @close="removeLastAttendanceType" />
+      <v-col class="d-flex align-end justify-end">
+        <v-btn
+          class="mr-4"
+          color="error"
+          @click="redirectToTotemDetail"
+          :disabled="isLoading"
+        >
+          Cancelar
+        </v-btn>
 
-  <TotemAttendanceHourDialog :attendanceHours="currentQueueTotem.attendance_hours" v-model="attendanceHourDialog"
-    v-model:attendanceHour="attendanceHour" @update="addAttendanceHour" />
+        <v-btn
+          color="primary"
+          @click="save"
+          :disabled="disableSaveButton"
+          :loading="isLoading"
+          v-if="authorization.acl('totem.queue.create|totem.queue.update')"
+        >
+          Salvar
+        </v-btn>
+      </v-col>
+    </v-row>
+  </View>
 
-  <AttendanceTypeDialog v-model="newAttendanceTypeDialog" @submit="loadAttendanceTypes"
-    v-model:item="newAttendanceType" />
+  <TotemAttendanceTypeDialog
+    :attendanceTypes="currentQueueTotem.attendance_types"
+    v-model="attendanceTypeDialog"
+    v-model:attendanceType="attendanceType"
+    @update="addAttendanceType"
+    @close="removeLastAttendanceType"
+  />
+
+  <TotemAttendanceHourDialog
+    :attendanceHours="currentQueueTotem.attendance_hours"
+    v-model="attendanceHourDialog"
+    v-model:attendanceHour="attendanceHour"
+    @update="addAttendanceHour"
+  />
+
+  <AttendanceTypeDialog
+    v-model="newAttendanceTypeDialog"
+    @submit="loadAttendanceTypes"
+    v-model:item="newAttendanceType"
+  />
 </template>
 
 <script lang="ts" setup>
-import LayoutView from "@/components/LayoutView.vue";
 import { getQueues } from "@/modules/queue/repositories/queue.repository";
+import AttendanceTypeDialog from "@/modules/totem/components/dialog/AttendanceTypeDialog.vue";
 import { getAttendanceTypes } from "@/modules/totem/repositories/attendance-type.repository";
 import {
   deleteQueueTotem,
@@ -137,11 +217,10 @@ import QueueTotemPanel from "../components/QueueTotemPanel.vue";
 import TotemAttendanceHourDialog from "../components/TotemAttendanceHourDialog.vue";
 import TotemAttendanceTypeDialog from "../components/TotemAttendanceTypeDialog.vue";
 
-import AttendanceTypeDialog from '@/modules/totem/components/dialog/AttendanceTypeDialog.vue';
-
-import defaultData from '@/modules/totem/default-values';
+import defaultData from "@/modules/totem/default-values";
 import { useRoute, useRouter } from "vue-router";
 
+import View from "@/components/View.vue";
 import authorization from "@/plugins/authorization";
 
 const { setBreadcrumbs } = useSystemStore();
@@ -383,8 +462,10 @@ function save() {
 }
 
 const permission = computed(() => {
-  return !currentQueueTotem.value?.id ? 'totem.queue.create' : 'totem.queue.update';
-})
+  return !currentQueueTotem.value?.id
+    ? "totem.queue.create"
+    : "totem.queue.update";
+});
 
 function editAttendanceType(item: AttendanceType) {
   if (!authorization.acl(permission.value)) return;
@@ -556,8 +637,8 @@ function loadAttendanceTypes() {
           attendance_type_id: item.id,
           integration_id: null,
           props: {
-            disabled: !authorization.acl('totem.queue.create')
-          }
+            disabled: !authorization.acl("totem.queue.create"),
+          },
         };
       });
     })
@@ -566,8 +647,8 @@ function loadAttendanceTypes() {
     });
 }
 
-const newAttendanceTypeDialog = ref(false)
-const newAttendanceType = ref(structuredClone(defaultData.attendanceType))
+const newAttendanceTypeDialog = ref(false);
+const newAttendanceType = ref(structuredClone(defaultData.attendanceType));
 function openNewAttendanceTypeDialog() {
   newAttendanceTypeDialog.value = true;
 }

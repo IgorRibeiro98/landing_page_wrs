@@ -1,50 +1,64 @@
 <template>
-  <LayoutView title="Tipo de Atendimento" icon="mdi-sitemap">
+  <View title="Tipo de Atendimento" icon="mdi-sitemap">
     <template #action>
-      <v-btn color="primary" flat @click="dialog = true" v-if="authorization.acl('attendance_type.view')"> Novo tipo de atendimento </v-btn>
-    </template>
-
-    <template #content>
-      <v-data-table
-        :headers="headers"
-        :items="attendanceTypes"
-        :loading="isLoading"
-        :items-per-page="-1"
-        @dblclick:row="setAttendanceType"
+      <v-btn
+        color="primary"
+        flat
+        @click="dialog = true"
+        v-if="authorization.acl('attendance_type.view')"
       >
-        <template #item.icon="{ item }">
-          <div class="d-flex justify-start">
-            <img :src="item.icon" height="30" />
-          </div>
-        </template>
-
-        <template #bottom> </template>
-
-        <template #[`item.actions`]="{ item }">
-          <v-menu>
-            <template #activator="{ props }">
-              <v-btn icon="mdi-dots-horizontal" variant="text" v-bind="props" v-if="authorization.acl('attendance_type.update|attendance_type.delete')">
-              </v-btn>
-            </template>
-
-            <v-list>
-              <template v-for="option in options">
-                <v-list-item
-                  v-if="authorization.acl(option.acl)"
-                  link
-                  @click="option.action(item)"
-                >
-                  <v-list-item-title>
-                    {{ option.title }}
-                  </v-list-item-title>
-                </v-list-item>
-              </template>
-            </v-list>
-          </v-menu>
-        </template>
-      </v-data-table>
+        Novo tipo de atendimento
+      </v-btn>
     </template>
-  </LayoutView>
+
+    <v-data-table
+      :headers="headers"
+      :items="attendanceTypes"
+      :loading="isLoading"
+      :items-per-page="-1"
+      @dblclick:row="setAttendanceType"
+    >
+      <template #item.icon="{ item }">
+        <div class="d-flex justify-start">
+          <img :src="item.icon" height="30" />
+        </div>
+      </template>
+
+      <template #bottom> </template>
+
+      <template #[`item.actions`]="{ item }">
+        <v-menu>
+          <template #activator="{ props }">
+            <v-btn
+              icon="mdi-dots-horizontal"
+              variant="text"
+              v-bind="props"
+              v-if="
+                authorization.acl(
+                  'attendance_type.update|attendance_type.delete'
+                )
+              "
+            >
+            </v-btn>
+          </template>
+
+          <v-list>
+            <template v-for="option in options">
+              <v-list-item
+                v-if="authorization.acl(option.acl)"
+                link
+                @click="option.action(item)"
+              >
+                <v-list-item-title>
+                  {{ option.title }}
+                </v-list-item-title>
+              </v-list-item>
+            </template>
+          </v-list>
+        </v-menu>
+      </template>
+    </v-data-table>
+  </View>
 
   <AttendanceTypeDialog
     v-model="dialog"
@@ -54,12 +68,10 @@
 </template>
 
 <script lang="ts" setup>
-import LayoutView from "@/components/LayoutView.vue";
+import authorization from "@/plugins/authorization";
 import useAlertStore from "@/stores/alert";
 import useSystemStore from "@/stores/system";
 import { onMounted, ref, type Ref } from "vue";
-
-import authorization from "@/plugins/authorization";
 
 import AttendanceTypeDialog from "@/modules/totem/components/dialog/AttendanceTypeDialog.vue";
 
@@ -73,6 +85,7 @@ import {
   getAttendanceTypes,
 } from "@/modules/totem/repositories/attendance-type.repository";
 
+import View from "@/components/View.vue";
 import defaultData from "@/modules/totem/default-values";
 
 function setAttendanceType(
@@ -98,7 +111,7 @@ const headers: any = ref([
 const options = ref<any>([
   {
     title: "Editar",
-    acl: 'attendance_type.update',
+    acl: "attendance_type.update",
     action: (item: AttendanceTypeData) => {
       data.value = { ...item };
       dialog.value = true;
@@ -106,7 +119,7 @@ const options = ref<any>([
   },
   {
     title: "Excluir",
-    acl: 'attendance_type.delete',
+    acl: "attendance_type.delete",
     action: (item: AttendanceTypeData) => {
       openConfirmAlert(
         {

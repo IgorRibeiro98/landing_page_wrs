@@ -4,7 +4,7 @@
         <v-btn color="primary" prepend-icon="mdi-play" @click="$router.push({
            name: 'totem.run',
           params: { id: totem.id }
-        })">
+        })" class="mr-4">
           Executar
         </v-btn>
     </template>
