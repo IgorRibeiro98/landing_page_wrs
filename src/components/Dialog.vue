@@ -8,14 +8,14 @@
       class="fill-height"
     >
       <v-card :loading="loading" height="100%">
-        <v-card-title class="pa-4 pb-0">
+        <v-card-title class="pa-4">
           <slot name="title">
             <div class="d-flex align-center">
               <span>
                 {{ form?.title || title }}
               </span>
               <v-spacer />
-              <v-btn variant="plain" icon="mdi-close" @click="handleClose">
+              <v-btn density="comfortable" v-if="!hideClose" variant="plain" icon="mdi-close" @click="handleClose">
               </v-btn>
             </div>
           </slot>
@@ -73,6 +73,7 @@ interface Props {
   loading?: boolean;
   cancelReset?: boolean;
   hideCancel?: boolean;
+  hideClose?: boolean;
   hideActions?: boolean;
 }
 
@@ -87,6 +88,7 @@ interface Emit {
 const props = withDefaults(defineProps<Props>(), {
   cancelReset: false,
   hideActions: false,
+  hideClose: false,
 });
 const emit = defineEmits<Emit>();
 const formRef = ref();

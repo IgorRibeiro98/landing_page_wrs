@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { computed, ref } from 'vue';
 
 import { introspect } from '@/modules/auth/repositories/auth.repository';
+import authorization from "@/plugins/authorization";
 
 export const useAuthStore = defineStore('user', () => {
 
@@ -27,6 +28,10 @@ export const useAuthStore = defineStore('user', () => {
 
     function setAuthUser(user: User) {
         localStorage.setItem('user', JSON.stringify(user));
+
+        if (user.slugs) {
+            authorization.setScopesByUser(user);
+        }
         authUser.value = user
     }
 

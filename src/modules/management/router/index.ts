@@ -1,4 +1,3 @@
-import { Slugs } from './../../../router/index';
 import { layouts } from '@/router';
 import { type RouteRecordRaw } from 'vue-router';
 

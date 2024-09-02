@@ -143,10 +143,7 @@ function save() {
     });
 }
 
-watch(dialog, (value) => {
-  if (value) {
+watch(() => store.authUser.id, () => {
     user.value = { ...store.authUser };
-    console.log(user)
-  }
 }, { immediate: true });
 </script>

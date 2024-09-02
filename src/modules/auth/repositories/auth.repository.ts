@@ -17,9 +17,9 @@ export function loginPopUp(url: string): Window {
 
     return window.open(url, '_blank', `
         scrollbars=yes,
-        width=${w / systemZoom}, 
-        height=${h / systemZoom}, 
-        top=${top}, 
+        width=${w / systemZoom},
+        height=${h / systemZoom},
+        top=${top},
         left=${left}
     `)!;
 }
