@@ -68,12 +68,15 @@
   </v-row>
 </template>
 <script setup lang="ts">
-import { changeTenant } from "@/helpers";
+import { downloadText } from "@/helpers/string";
 import TenantInfo from "@/modules/tenant/components/TenantInfo.vue";
 import TenantLogo from "@/modules/tenant/components/TenantLogo.vue";
 import TenantTheme from "@/modules/tenant/components/TenantTheme.vue";
 import { createTenant } from "@/modules/tenant/repositories/tenant.repository";
+import router from "@/router";
 import useAlertStore from "@/stores/alert";
+import useAuthStore from "@/stores/user";
+import { storeToRefs } from "pinia";
 import type { Component } from "vue";
 import { onMounted, ref } from "vue";
 import { useTheme } from "vuetify";
@@ -85,6 +88,7 @@ interface Item {
 
 const theme = useTheme();
 const { openAlert } = useAlertStore();
+const { authUser } = storeToRefs(useAuthStore());
 
 const tenant = ref<Tenant>({
   id: 0,
@@ -164,7 +168,19 @@ const create = () => {
       formData.append("theme", JSON.stringify(tenant.value.theme));
       createTenant(formData)
         .then((resp) => {
-          changeTenant(tenant.value.subdomain);
+          downloadText(
+            `${tenant.value.name}-keys.txt`,
+            `client_id=${resp.data.client.id} \nclient_secret=${resp.data.client.secret}`,
+          );
+          const tenantToPush = resp.data;
+          delete tenantToPush.client;
+
+          authUser.value.tenants!.push(tenantToPush);
+          openAlert(
+            "Tenant criado com sucesso",
+            "As credenciais do cliente foram baixadas, guarde-as em um local seguro."
+          );
+          router.push({ name: "tenant.view" });
         })
         .catch((error) => {
           openAlert("Erro ao carregar totens", error);
