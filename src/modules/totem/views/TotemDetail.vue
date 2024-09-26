@@ -1,12 +1,24 @@
 <template>
-  <View :title="totem.name" enable-action :actions="actions" :description="totem.description">
+  <View
+    :title="totem.name"
+    enable-action
+    :actions="actions"
+    :description="totem.description"
+  >
     <template #action-prepend>
-        <v-btn color="primary" prepend-icon="mdi-play" @click="$router.push({
-           name: 'totem.run',
-          params: { id: totem.id }
-        })" class="mr-4">
-          Executar
-        </v-btn>
+      <v-btn
+        color="primary"
+        prepend-icon="mdi-play"
+        @click="
+          $router.push({
+            name: 'totem.run',
+            params: { id: totem.id },
+          })
+        "
+        class="mr-4"
+      >
+        Executar
+      </v-btn>
     </template>
     <v-row>
       <v-col cols="12">
@@ -31,6 +43,14 @@
         <div v-if="totem.screens.length === 0">Não há telas</div>
         <TotemScreensTable v-else :screens="totem.screens" />
       </v-col>
+      <v-col cols="12">
+        <div class="d-flex align-center">
+          <h2>Logs</h2>
+          <v-spacer></v-spacer>
+          total: {{ totem.queues.length }}
+        </div>
+        <TotemLogsTable hide-totem-header :filters="{ totem_id: totem.id }" />
+      </v-col>
     </v-row>
   </View>
 </template>
@@ -44,6 +64,7 @@ import { computed, onMounted, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 
 import useSystemStore from "@/stores/system";
+import TotemLogsTable from "../components/TotemLogsTable.vue";
 
 const { setBreadcrumbs } = useSystemStore();
 const { openAlert } = useTotemStore();
@@ -63,14 +84,14 @@ const totem = ref<Totem>({
 const actions = reactive([
   {
     title: "Gerenciar Filas",
-    slug: 'totem.queue.view',
+    slug: "totem.queue.view",
     to: {
       name: "queue.detail",
     },
   },
   {
     title: "Gerenciar telas",
-    slug: 'totem.screen.view',
+    slug: "totem.screen.view",
     to: {
       name: "screen.totem.manager",
       params: {
@@ -95,7 +116,9 @@ function loadTotem() {
       },
     },
     {
-      title: computed(() => totem.value.id ? totem.value.name : route.params.id),
+      title: computed(() =>
+        totem.value.id ? totem.value.name : route.params.id
+      ),
       to: {
         name: "totem.detail",
       },

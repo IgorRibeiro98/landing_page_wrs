@@ -711,3 +711,9 @@ export function deleteScreenTotem(screen: ScreenTotem) {
 export function deleteScreenFieldTotem(screen: ScreenTotem, field: ScreenTotemField) {
   return axios.delete(`/totem/${screen.totem_id}/screen/${screen.screen_id}/field/${field.field_id}`);
 }
+
+export function getLogs(params: any) {
+  return axios.get(`/totem/logs`, {
+    params
+  });
+}
