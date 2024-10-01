@@ -10,7 +10,7 @@ export const capitalizeFirstLetter = (str: string): string => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export const formatDate = (date: Date, format: string): string => {
+export const formatDate = (date: Date, format: string = 'dd/mm/yyyy'): string => {
   const map: { [key: string]: string } = {
     'dd': (date.getDate()).toString().padStart(2, '0'),
     'mm': (date.getMonth() + 1).toString().padStart(2, '0'), // meses começam do 0 em JavaScript

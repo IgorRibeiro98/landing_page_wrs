@@ -19,9 +19,8 @@ import { appBarItems, navigationDrawerItems } from '@/layouts/AppMenuItems';
 import { RouterView } from "vue-router";
 
 const drawerItems = [
-  ...appBarItems.map((item: DrawerItem) => {item.onlyMobile = true; return item}),
+  ...appBarItems.map((item: DrawerItem) => { item.onlyMobile = true; return item }),
   ...navigationDrawerItems
 ];
-console.log(drawerItems);
 </script>
 <style scoped lang="scss"></style>

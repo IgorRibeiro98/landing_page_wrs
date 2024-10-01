@@ -87,14 +87,14 @@ declare global {
     establishment_id: string | number
   }
   interface Ticket extends Partial<TicketPayload> {
-      establishment: {
-          id: number,
-          name: string
-          acronym: string
-      },
-      password: number,
-      password_id: number,
-      prefix: string
+    establishment: {
+      id: number,
+      name: string
+      acronym: string
+    },
+    password: number,
+    password_id: number,
+    prefix: string
   }
   //--------------------------------------------------------------------------------
 
@@ -418,5 +418,24 @@ declare global {
 
   interface TotemFilter {
     site_id: string | number | null
+  }
+
+  interface Agent {
+    id: number
+    serial: string
+    tenant_id: number
+    tenant: Tenant
+    name: string
+    status_id: number
+    status: status
+    validated_at: string | null
+    created_at: string
+    updated_at: string
+  }
+
+  interface Status {
+    id: number
+    name: string
+    slug: string
   }
 }

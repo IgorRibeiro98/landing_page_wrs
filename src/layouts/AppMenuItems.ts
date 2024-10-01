@@ -49,5 +49,13 @@ export const navigationDrawerItems = [
     route: {
       name: 'management.users',
     }
+  },
+  {
+    icon: 'mdi-monitor-multiple',
+    title: 'Agentes',
+    acl: 'agent.view',
+    route: {
+      name: 'management.agent',
+    }
   }
 ]
