@@ -49,7 +49,7 @@
           <v-spacer></v-spacer>
           total: {{ totem.queues.length }}
         </div>
-        <TotemLogsTable hide-totem-header :filters="{ totem_id: totem.id }" />
+        <TotemLogsTable :hide-totem-header="true" :filters="{ totem_id: totem.id }" />
       </v-col>
     </v-row>
   </View>

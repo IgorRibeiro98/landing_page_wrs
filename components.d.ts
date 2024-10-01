@@ -18,6 +18,7 @@ declare module 'vue' {
     Form: typeof import('./src/components/FormBuilder/Form.vue')['default']
     IFrameVue: typeof import('./src/components/IFrameVue.vue')['default']
     LayoutView: typeof import('./src/components/LayoutView.vue')['default']
+    MenuOptions: typeof import('./src/components/MenuOptions.vue')['default']
     NavigationDrawer: typeof import('./src/components/NavigationDrawer.vue')['default']
     NotFound: typeof import('./src/components/NotFound.vue')['default']
     Password: typeof import('./src/components/FormBuilder/Password.vue')['default']

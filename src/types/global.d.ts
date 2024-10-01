@@ -333,6 +333,15 @@ declare global {
     [key: string]: any; // Permite qualquer chave
     rules?: Rules
   }
+
+  interface MenuItem<TArgs = any> {
+    title: string;
+    action?: (args: TArgs) => void;
+    to?: any;
+    acl?: string;
+    show?: any;
+  }
+
   interface FormItem {
     title?: string
     label: string
