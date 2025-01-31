@@ -98,20 +98,7 @@ const form = ref<FormItem[]>([
           : [];
       }),
     },
-  },
-  {
-    component: "VTextField",
-    value: "provider_uri",
-    label: "Url da API ERP do parceiro",
-    props: {
-      rules: "url",
-    },
-    required: true,
-    cols: {
-      cols: 6,
-      md: 12,
-    },
-  },
+  }
 ]);
 </script>
 <style lang="scss" scoped></style>

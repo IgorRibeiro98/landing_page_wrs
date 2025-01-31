@@ -17,7 +17,6 @@
     "typeRoots": ["src/types"],
     "paths": {
       "@/*": ["src/*"],
-      "@patient/*": ["src/modules/patient/*"],
     }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "env.d.ts"],

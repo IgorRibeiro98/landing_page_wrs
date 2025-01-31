@@ -8,7 +8,6 @@ import { computed, ref } from "vue";
 import { resetUserPassword } from "../../repositories/user.repository";
 
 interface Props {
-  value: boolean;
   user: User;
 }
 
@@ -19,7 +18,9 @@ interface Emit {
 const props = defineProps<Props>();
 const emit = defineEmits<Emit>();
 
-const value = defineModel();
+const value = defineModel<boolean>({
+  default: false,
+});
 const userPasswords = ref({
   password: "",
   password_confirmation: "",
@@ -30,7 +31,7 @@ const showConfirmPassword = ref(false);
 const { openAlert } = useAlertStore();
 const loading = ref(false);
 
-const form = computed(() => {
+const form = computed(():FormDialog => {
   return {
     title: "Resetar senha",
     description: `Vamos resetar a senha de <b>${props.user.name}</b>, o mesmo terá que altera-la ao logar novamente.`,

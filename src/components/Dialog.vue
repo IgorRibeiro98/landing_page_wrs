@@ -15,7 +15,7 @@
                 {{ form?.title || title }}
               </span>
               <v-spacer />
-              <v-btn density="comfortable" v-if="!hideClose" variant="plain" icon="mdi-close" @click="handleClose">
+              <v-btn density="comfortable" v-if="!hideClose && !persistent" variant="plain" icon="mdi-close" @click="handleClose">
               </v-btn>
             </div>
           </slot>
@@ -75,6 +75,7 @@ interface Props {
   hideCancel?: boolean;
   hideClose?: boolean;
   hideActions?: boolean;
+  persistent?: boolean;
 }
 
 interface Emit {
@@ -89,6 +90,7 @@ const props = withDefaults(defineProps<Props>(), {
   cancelReset: false,
   hideActions: false,
   hideClose: false,
+  persistent: false,
 });
 const emit = defineEmits<Emit>();
 const formRef = ref();

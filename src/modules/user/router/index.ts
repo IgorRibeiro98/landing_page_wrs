@@ -7,12 +7,8 @@ const routes: RouteRecordRaw[] = [
         component: () => layouts.default(),
         meta: {
             title: 'Usuário',
-            slugs: {
-                acl: "totem.view"
-            },
             guards: [
                 'auth',
-                'acl',
             ]
         },
         children: [

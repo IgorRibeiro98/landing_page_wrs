@@ -40,7 +40,7 @@ onMounted(() => {
 
   if (localStorage.accessToken) {
     router.push({
-      name: "totem.view",
+      name: "home",
     });
 
     return;
@@ -57,7 +57,7 @@ onMounted(() => {
   })
     .then(() => {
       router.push({
-        name: "totem.view",
+        name: "home",
       });
     })
     .catch(() => {

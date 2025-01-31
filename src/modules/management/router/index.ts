@@ -55,17 +55,6 @@ const routes: RouteRecordRaw[] = [
                         acl: "user.view"
                     },
                 }
-            },
-            {
-                path: 'agent',
-                name: 'management.agent',
-                component: () => import('@/modules/management/views/agent/Agents.vue'),
-                meta: {
-                    guards: ['acl'],
-                    slugs: {
-                        acl: "agent.view"
-                    },
-                }
             }
         ],
     }

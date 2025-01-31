@@ -93,7 +93,6 @@ const { authUser } = storeToRefs(useAuthStore());
 const tenant = ref<Tenant>({
   id: 0,
   name: "",
-  provider_uri: "",
   logo: "",
   theme: {
     colors: {
@@ -162,7 +161,6 @@ const create = () => {
       loading.value = true;
       const formData = new FormData();
       formData.append("name", tenant.value.name);
-      formData.append("provider_uri", tenant.value.provider_uri);
       formData.append("subdomain", tenant.value.subdomain);
       formData.append("logo", tenant.value.logo);
       formData.append("theme", JSON.stringify(tenant.value.theme));

@@ -20,7 +20,7 @@ export const useAuthStore = defineStore('user', () => {
         tenants: []
     }
 
-    const authUser = ref(JSON.parse(localStorage.getItem('user') || JSON.stringify(emptyUser)) as User);
+    const authUser = ref<User>(JSON.parse(localStorage.getItem('user') || JSON.stringify(emptyUser)) as User);
 
     const user = computed(() => {
         return authUser.value;

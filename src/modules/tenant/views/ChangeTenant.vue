@@ -54,7 +54,7 @@ onMounted(async () => {
     .then(() => {
       isLoading.value = false
       console.log(userStore.user)
-      router.push({ name: 'totem.view' })
+      router.push({ name: 'home' })
     })
     .catch(() => {
       isLoading.value = false

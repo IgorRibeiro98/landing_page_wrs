@@ -56,6 +56,11 @@ export function introspect() {
     return client.get('me')
 }
 
+
+export function changeTenant(id: string) {
+  return client.post(`me/tenant/change/${id}`);
+}
+
 export function update(body: {
     name: string,
     password: string

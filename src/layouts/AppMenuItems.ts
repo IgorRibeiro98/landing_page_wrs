@@ -1,28 +1,17 @@
-export const appBarItems = [
-  {
-    title: "Totens",
-    icon: "mdi-monitor-vertical",
-    acl: "totem.view",
-    route: {
-      name: "totem.view",
-    },
-  },
-  {
-    title: "Filas",
-    icon: "mdi-format-list-bulleted",
-    acl: "queue.view",
-    route: {
-      name: "queue.view",
-    },
-  },
-  {
-    icon: "mdi-sitemap-outline",
-    title: "Tipos de Atendimento",
-    acl: "attendance_type.view",
-    route: {
-      name: "attendance-type.view",
-    },
-  },
+export const appBarItems: {
+  title: string
+  icon: string
+  acl: string
+  route: any
+}[] = [
+  // {
+  //   title: "Totens",
+  //   icon: "mdi-monitor-vertical",
+  //   acl: "totem.view",
+  //   route: {
+  //     name: "totem.view",
+  //   },
+  // },
 ]
 
 export const navigationDrawerItems = [
@@ -50,12 +39,4 @@ export const navigationDrawerItems = [
       name: 'management.users',
     }
   },
-  {
-    icon: 'mdi-monitor-multiple',
-    title: 'Agentes',
-    acl: 'agent.view',
-    route: {
-      name: 'management.agent',
-    }
-  }
 ]

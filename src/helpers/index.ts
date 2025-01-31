@@ -1,7 +1,24 @@
-export function changeTenant(newSubdomain: string): void {
+import { changeTenant as change } from "@/modules/auth/repositories/auth.repository";
+
+import useAlertStore from "@/stores/alert";
+
+export function changeTenant(tenant: Tenant)   {
+  const { openAlert } = useAlertStore();
+
+  const newSubdomain = tenant.subdomain;
+
+  return change(tenant.id)
+    .then(() => {
+      changeTenantLegacy(newSubdomain);
+    })
+    .catch(err => {
+      openAlert('Erro ao trocar de tenant', err);
+    })
+}
+
+function changeTenantLegacy(newSubdomain: string) {
   const url = new URL(window.location.href)
   const containHash = window.location.href.includes('#/');
-
 
   const [subdomain, domain] = url.hostname.split('.')
 

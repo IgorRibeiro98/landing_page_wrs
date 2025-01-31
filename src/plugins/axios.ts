@@ -18,16 +18,6 @@ const client: AxiosInstance = axios.create({
   },
 });
 
-/**
- * @todo trocar para o .env
- */
-export const agent: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_APP_AGENT_URL ?? "http://localhost:8080",
-  headers: {
-    Accept: "application/json",
-  },
-});
-
 client.interceptors.request.use(
   async (config) => {
     const accessToken = localStorage.getItem("accessToken") as string;

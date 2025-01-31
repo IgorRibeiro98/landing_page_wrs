@@ -38,7 +38,6 @@
 </template>
 <script setup lang="ts">
 import VirtualKeyboard from '@/components/VirtualKeyboard.vue';
-import Init from '@patient/views/totem/Init.vue';
 import { computed, onMounted, ref, shallowRef } from 'vue';
 import { useTheme } from 'vuetify';
 import { VBtn } from 'vuetify/components/VBtn';
@@ -65,13 +64,13 @@ const showAdvanced = ref(false)
 
 const theme = useTheme()
 
-const colorItem = ref<any>({ name: 'Primária', value: 'primary', show: true, component: shallowRef(Init), props: {} })
+const colorItem = ref<any>({ name: 'Primária', value: 'primary', show: true, component:  shallowRef(VBtn), props: {} })
 
 const themeList = computed(() => {
     return [
-        { name: 'Primária', value: 'primary', show: true, component: shallowRef(Init), props: {} },
-        { name: 'Secundária', value: 'secondary', show: true, component: shallowRef(Init), props: {} },
-        { name: 'Cor da navegação lateral', value: 'nav-color', show: true, component: shallowRef(Init), props: {} },
+        { name: 'Primária', value: 'primary', show: true, component: shallowRef(VBtn), props: { color: 'primary' } },
+        { name: 'Secundária', value: 'secondary', show: true, component: shallowRef(VBtn), props: { color: 'secondary' } },
+        { name: 'Cor da navegação lateral', value: 'nav-color', show: true, component: shallowRef(VBtn), props: {} },
         { name: 'Teclado', value: 'keyboard', show: true, component: shallowRef(VirtualKeyboard), props: { alwaysVisible: true } },
         { name: 'Erro', value: 'error', show: showAdvanced.value, component: shallowRef(VBtn), props: { color: '#B00020', text: 'Hello World', size: 'x-large' } },
         { name: 'Info', value: 'info', show: showAdvanced.value, component: shallowRef(VBtn), props: { color: '#2196F3', text: 'Hello World', size: 'x-large' } },

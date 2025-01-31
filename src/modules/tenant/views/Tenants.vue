@@ -52,12 +52,12 @@
       </template>
       <template #[`item.subdomain`]="{ item }">
         <div class="d-flex align-center">
-          <a
-            target="_blank"
-            :href="getTenantLink(item.subdomain).concat('/#/totem')"
+          <span
+            class="link"
+            @click="updateTenant(item)"
             >{{ getTenantLink(item.subdomain) }}
             <v-icon size="15" icon="mdi-open-in-new" class="ml-2"></v-icon
-          ></a>
+          ></span>
         </div>
       </template>
       <template #item.actions="{ item }">
@@ -83,6 +83,7 @@
         </v-menu>
       </template>
     </v-data-table-server>
+    <Loading v-model="loadingChangeTenant" text="Alternando conta..." ></Loading>
   </View>
 </template>
 
@@ -100,21 +101,24 @@ import useAlertStore from "@/stores/alert";
 import useAuthStore from "@/stores/user";
 import { onMounted, Ref, ref } from "vue";
 import { useRouter } from "vue-router";
+import Loading from "@/components/Loading.vue";
+
 import {
   deleteTenant,
   paginateTenants,
 } from "../repositories/tenant.repository";
+import { changeTenant } from "@/helpers";
 
 const headers = ref([
-  { title: "Nome", value: "name", width: "23%" },
-  { title: "Subdomínio", value: "subdomain", width: "20%" },
-  { title: "Url do agente", value: "provider_uri", width: "20%" },
+  { title: "Nome", value: "name", width: "33%" },
+  { title: "Subdomínio", value: "subdomain", width: "30%" },
   { title: "Qtd. Usuários", value: "users_count", width: "10%" },
   { title: "Criado em", value: "created_at", width: "20%" },
   { title: "", value: "actions", sortable: false, width: "7%" },
 ]);
 
 const loading = ref(false);
+const loadingChangeTenant = ref(false);
 
 const paginate = ref({
   current_page: 1,
@@ -167,6 +171,12 @@ function loadTenants() {
     });
 }
 
+function updateTenant(tenant: Tenant) {
+  loadingChangeTenant.value = true;
+
+  changeTenant(tenant)
+    .finally(() => loadingChangeTenant.value = false);
+}
 function getTenantLink(subdomain: string) {
   try {
     const port = import.meta.env.VITE_APP_PORT;

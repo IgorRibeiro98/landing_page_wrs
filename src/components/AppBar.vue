@@ -34,6 +34,8 @@
     <template #append>
       <div class="d-flex align-center ga-4">
         <v-select
+          :loading="loadingChangeTenant"
+          v-if="authUser.tenants ? authUser.tenants.length > 1 : false"
           style="min-width: 200px"
           hideDetails="auto"
           density="compact"
@@ -119,7 +121,11 @@ const currentTenant = computed({
     return authUser.value.tenants?.find((tenant) => subdomain == tenant.subdomain);
   },
   set(value: any) {
-    changeTenant(value.subdomain);
+    loadingChangeTenant.value = true;
+    changeTenant(value)
+      .finally(() => {
+        loadingChangeTenant.value = false;
+      });
   },
 });
 
@@ -127,6 +133,7 @@ const tenantStore = useTenantStore();
 
 const theme = useTheme();
 const loadingLogout = ref(false);
+const loadingChangeTenant = ref(false);
 
 const logo = computed<any>(() => {
   return tenantStore.tenant.logo ?? appLogo;

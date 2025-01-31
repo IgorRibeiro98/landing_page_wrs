@@ -28,15 +28,13 @@ interface ModuleMap {
 export const layouts = {
   default: () => import('@/layouts/Default.vue'),
   blank: () => import('@/layouts/Blank.vue'),
-  totem: () => import('@/layouts/Totem.vue'),
-  queue: () => import('@/layouts/Queue.vue'),
 }
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
     redirect: {
-      name: 'totem.view'
+      name: 'home'
     }
   },
   {

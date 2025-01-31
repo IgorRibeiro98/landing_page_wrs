@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import Role from '@/modules/management/components/acl/Role.vue';
 import { getRole, updateRole } from '@/modules/management/repositories/acl.repository';
-import Loading from '@/modules/patient/components/Loading.vue';
+import Loading from '@/components/Loading.vue';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 

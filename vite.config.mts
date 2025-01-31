@@ -37,7 +37,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      '@patient': fileURLToPath(new URL('./src/modules/patient', import.meta.url)),
     },
     extensions: [
       '.js',

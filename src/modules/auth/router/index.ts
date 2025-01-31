@@ -4,7 +4,7 @@ import { type RouteRecordRaw } from 'vue-router';
 const routes: RouteRecordRaw[] = [
     {
         path: '/auth',
-        component: () => layouts.totem(),
+        component: () => layouts.default(),
         children: [
             {
                 path: 'callback',

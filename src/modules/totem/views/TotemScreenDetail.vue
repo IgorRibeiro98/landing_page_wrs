@@ -1,3 +1,0 @@
-<template>
-  Tela em desenvolvimento...
-</template>
