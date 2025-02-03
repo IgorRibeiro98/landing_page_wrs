@@ -12,5 +12,4 @@ services:
 networks:
   app:
     name: autoatendimento
-    external: true
     driver: bridge

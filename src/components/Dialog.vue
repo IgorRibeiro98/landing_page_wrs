@@ -65,7 +65,7 @@
 </template>
 <script lang="ts" setup>
 import Form from "@/components/FormBuilder/Form.vue";
-import { computed, defineExpose, ref } from "vue";
+import { computed, ref } from "vue";
 interface Props {
   modelValue: boolean;
   title?: string;
