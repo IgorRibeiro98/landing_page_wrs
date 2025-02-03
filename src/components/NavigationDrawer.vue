@@ -1,6 +1,17 @@
 <template>
-    <v-navigation-drawer v-model="drawer" :rail="rail" :permanent="!mobile" :temporary="mobile" color="nav-color"
-        class="position-fixed">
+    <v-navigation-drawer v-model="drawer" :rail="rail" :permanent="!mobile" :temporary="mobile" color="nav-color" order="0"
+        >
+        <template #prepend>
+            <v-img
+            aspect-ratio="16/9"
+            @click="$router.push({ path: '/' })"
+            class="pointer mx-auto"
+            :src="logo"
+            width="150"
+            height="60"
+         ></v-img>
+        </template>
+
         <v-list density="compact" nav v-if="!mobile">
             <v-list-item @click="$router.push({ name: 'user.self' })">
                 <template #prepend>
@@ -25,6 +36,7 @@
     </v-navigation-drawer>
 </template>
 <script setup lang="ts">
+import appLogo from "@/assets/logo.png";
 import Avatar from "@/components/Avatar.vue";
 import authorization from "@/plugins/authorization";
 import useSystemStore from "@/stores/system";
@@ -34,12 +46,15 @@ import { computed, onBeforeMount, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useDisplay } from 'vuetify';
 import DrawerItem from "./DrawerItem.vue";
+import useTenantStore from "@/modules/tenant/store";
 
 interface Props {
     items: DrawerItem[];
 }
 
 defineProps<Props>();
+
+const tenantStore = useTenantStore();
 
 const rail = ref(true);
 const navDrawerLeftPosition = computed<string>(() => {
@@ -56,6 +71,10 @@ const logoutItem = ref({
     route: {
         name: "auth.logout",
     },
+});
+
+const logo = computed<any>(() => {
+  return tenantStore.tenant.logo ?? appLogo;
 });
 
 const route = useRoute();

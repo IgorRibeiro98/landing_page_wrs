@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar color="nav-color" class="position-fixed" elevation="0">
+  <v-app-bar color="nav-color" elevation="0" order="1">
     <template #prepend>
       <v-btn
         icon="mdi-menu"
@@ -7,13 +7,6 @@
         v-if="$vuetify.display.mobile"
         @click="drawer = true"
       ></v-btn>
-      <v-img
-        aspect-ratio="16/9"
-        @click="$router.push({ path: '/' })"
-        class="pointer mx-4"
-        :src="logo"
-        width="30"
-      ></v-img>
       <v-slide-group show-arrows v-if="!$vuetify.display.mobile">
         <v-slide-group-item
           v-for="item in appBarItems"
