@@ -5,7 +5,7 @@
  */
 
 // https://vuetifyjs.com/features/sass-variables/`
-@use 'vuetify/settings' with ($body-font-family: 'Poppins',
+@use 'vuetify/settings' with ($body-font-family: 'sans-serif',
 );
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -195,4 +195,13 @@ input[type="number"] {
 
 .stop-pointer-events {
     pointer-events: none;
+}
+
+$font-size-h1: clamp(1.5em, 3vw, 2em) !important; // Novo valor ajustado
+
+.text-h1 {
+    font-size: $font-size-h1;
+    font-weight: 700; // Ajuste conforme necessário
+    line-height: 1.2; // Ajuste conforme necessário
+    color: var(--v-primary-base); // Ajuste conforme necessário
 }
