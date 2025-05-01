@@ -220,6 +220,7 @@ $font-size-h3: clamp(1.4rem, 2.5vw, 4rem) !important; // Novo valor ajustado
     font-size: $font-size-h3;
     font-weight: 600; // Ajuste conforme necessário
     color: var(--v-primary-base); // Ajuste conforme necessário
+    margin-bottom: 1rem; // Ajuste conforme necessário
 }
 
 ::-webkit-scrollbar {
@@ -249,4 +250,8 @@ $font-size-h3: clamp(1.4rem, 2.5vw, 4rem) !important; // Novo valor ajustado
 
 .h-100vh {
     height: 100vh;
+}
+
+p {
+    padding: 14px 0px;
 }
