@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'h-100': !mobile }">
+  <div :class="{ 'h-100vh': !mobile }">
     <v-row justify="center" class="pa-4">
       <v-col cols="12" class="text-right">
         <h1 class="font-weight-bold text-h1 mb-15" style="line-height: 80%;">
@@ -13,13 +13,11 @@
               width="100%"></v-img>
           </v-carousel-item>
           <template #prev="{ props }">
-            <v-btn icon color="white" v-bind="props">
-              <v-icon>mdi-chevron-left</v-icon>
+            <v-btn color="white" v-bind="props" icon="mdi-chevron-left">
             </v-btn>
           </template>
           <template #next="{ props }">
-            <v-btn icon color="white" v-bind="props">
-              <v-icon>mdi-chevron-right</v-icon>
+            <v-btn color="white" v-bind="props" icon="mdi-chevron-right">
             </v-btn>
           </template>
         </v-carousel>
@@ -36,10 +34,36 @@
       </v-col>
     </v-row>
   </div>
+  <div class="bg-white">
+    <v-row class="pa-4">
+      <v-col>
+        <h2 class="text-h2">
+          Nossos <br> projetos
+        </h2>
+      </v-col>
+    </v-row>
+  </div>
+  <v-row justify="space-evenly" class="py-4">
+    <v-col cols="12" md="3" class="d-flex flex-column align-end">
+      <v-img src="https://picsum.photos/800/300?random=1" height="400" width="100%" cover></v-img>
+    </v-col>
+    <v-col cols="12" md="6" class="d-flex align-center">
+      <div>
+        <h3 class="text-h3">
+          Pronto para criar sua visão?
+        </h3>
+        <p>
+          Tudo começa com uma ideia. Talvez você queira abrir um negócio. Talvez você queira transformar um passatempo
+          em
+          algo mais sério. Ou talvez você tenha um projeto criativo para compartilhar com o mundo.
+        </p>
+        <v-btn class="mt-4">Entre em contato</v-btn>
+      </div>
+    </v-col>
+  </v-row>
 </template>
 <script setup lang="ts">
 import { useDisplay } from "vuetify";
-import { computed } from "vue";
 
 const { mobile } = useDisplay();
 

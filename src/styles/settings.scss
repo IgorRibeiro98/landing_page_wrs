@@ -197,8 +197,8 @@ input[type="number"] {
 }
 
 $font-size-h1: clamp(3rem, 5vw, 12rem) !important; // Novo valor ajustado
-$font-size-h2: clamp(2.5rem, 5vw, 7rem) !important; // Novo valor ajustado
-$font-size-h3: clamp(2rem, 4vw, 7rem) !important; // Novo valor ajustado
+$font-size-h2: clamp(2rem, 5vw, 7rem) !important; // Novo valor ajustado
+$font-size-h3: clamp(1.4rem, 2.5vw, 4rem) !important; // Novo valor ajustado
 
 .text-h1 {
     font-size: $font-size-h1;
@@ -209,7 +209,7 @@ $font-size-h3: clamp(2rem, 4vw, 7rem) !important; // Novo valor ajustado
 }
 
 .text-h2 {
-    font-size: $font-size-h3;
+    font-size: $font-size-h2;
     font-weight: 600; // Ajuste conforme necessário
     line-height: 1.3; // Ajuste conforme necessário
     color: var(--v-primary-base); // Ajuste conforme necessário
@@ -218,8 +218,7 @@ $font-size-h3: clamp(2rem, 4vw, 7rem) !important; // Novo valor ajustado
 
 .text-h3 {
     font-size: $font-size-h3;
-    font-weight: 500; // Ajuste conforme necessário
-    line-height: 1.4; // Ajuste conforme necessário
+    font-weight: 600; // Ajuste conforme necessário
     color: var(--v-primary-base); // Ajuste conforme necessário
 }
 
@@ -246,4 +245,8 @@ $font-size-h3: clamp(2rem, 4vw, 7rem) !important; // Novo valor ajustado
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(var(--v-theme-secondary), 0.5)
+}
+
+.h-100vh {
+    height: 100vh;
 }
