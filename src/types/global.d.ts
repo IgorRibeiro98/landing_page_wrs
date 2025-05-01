@@ -88,4 +88,11 @@ declare global {
     items?: DrawerItem[]
     onlyMobile?: boolean
   }
+
+  interface infoData {
+    title: string
+    description: string
+    icon: string
+    img: any
+  }
 }
