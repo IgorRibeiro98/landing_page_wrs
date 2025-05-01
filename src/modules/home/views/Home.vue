@@ -30,17 +30,20 @@
         <h2 class="text-h2">
           Nossos <br> serviços
         </h2>
-
+      </v-col>
+      <v-col cols="12" md="3" v-for="(item) in infoData">
+        <InfoCard :info-data="item" />
       </v-col>
     </v-row>
   </div>
   <div class="bg-white">
     <v-row class="pa-4">
-      <v-col>
+      <v-col cols="12">
         <h2 class="text-h2">
           Nossos <br> projetos
         </h2>
       </v-col>
+
     </v-row>
   </div>
   <v-row justify="space-evenly" class="py-4">
@@ -63,8 +66,32 @@
   </v-row>
 </template>
 <script setup lang="ts">
+import { ref, computed } from "vue";
 import { useDisplay } from "vuetify";
-
+import InfoCard from "@/modules/home/components/InfoCard.vue";
 const { mobile } = useDisplay();
 
+const infoData = ref<InfoData[]>([
+  {
+    title: "Decks e pátios",
+    description: "Construímos a casa dos seus sonhos com qualidade e segurança.",
+    icon: "mdi-home",
+  },
+  {
+    title: "Áreas externas",
+    description: "Tudo começa com uma ideia. Talvez você queira abrir um negócio.",
+    icon: "mdi-wrench",
+  },
+  {
+    title: "Adições personalizadas",
+    description: "Tudo começa com uma ideia. Talvez você queira abrir um negócio.",
+    icon: "mdi-hammer-screwdriver",
+  },
+  {
+    title: "Construção verde",
+    description: "Tudo começa com uma ideia. Talvez você queira abrir um negócio.",
+    icon: "mdi-hammer-screwdriver",
+  },
+
+]);
 </script>

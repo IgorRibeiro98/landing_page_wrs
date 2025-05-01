@@ -1,10 +1,13 @@
 <template>
-    <v-card>
+    <v-card width="100%" height="100%">
         <v-card-title>
-            <v-img :src="infoData.img"></v-img>
+            <v-icon class="text-h2">
+                {{ infoData.icon }}
+            </v-icon>
         </v-card-title>
+        <v-card-text class="py-10"></v-card-text>
         <v-card-text>
-            <h6>{{ infoData.title }}</h6>
+            <h2>{{ infoData.title }}</h2>
             <p>{{ infoData.description }}</p>
         </v-card-text>
     </v-card>
@@ -15,5 +18,7 @@ import { ref } from 'vue';
 interface Props {
     infoData: InfoData
 }
+
+const props = defineProps<Props>();
 </script>
 <style scoped lang="scss"></style>

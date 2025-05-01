@@ -89,10 +89,10 @@ declare global {
     onlyMobile?: boolean
   }
 
-  interface infoData {
+  interface InfoData {
     title: string
     description: string
     icon: string
-    img: any
+    img?: any
   }
 }
