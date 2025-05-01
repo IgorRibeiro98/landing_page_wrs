@@ -44,7 +44,7 @@ const routes: RouteRecordRaw[] = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory('landing_page_wrs'),
   routes
 })
 

@@ -25,3 +25,4 @@ pnpm-debug.log*
 .env
 .env.production
 electron/setting.json
+.vite
