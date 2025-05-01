@@ -1,49 +1,24 @@
-name: Deploy
+name: Automation Deploy
 
-on:
-  workflow_dispatch:
-    inputs:
-        tag:
-          description: 'Tag para deploy'
-          required: true
+on: 
+  push:
+    branches: 
+      - master
 jobs:
   build:
-    name: Build ${{ github.event.inputs.tag }}
-    strategy:
-      matrix: 
-        node-version: [20.14.0]
-        
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{matrix.node-version}}
-
-      - name: Create .env file
-        run: |
-          echo "VITE_APP_CLIENT_ID=${{ secrets.VITE_APP_CLIENT_ID}}" > .env.production
-          echo "VITE_APP_API=${{ secrets.VITE_APP_API}}" >> .env.production
-          echo "VITE_APP_HOST=${{ secrets.VITE_APP_HOST}}" >> .env.production
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build
-        run: npm run build
-
-      - name: Deploy
-        run: |
-          git config --global user.email "japostulo@gmail.com"
-          git config --global user.name "Deploy"
-          git checkout --orphan temp
-          git reset --hard
-          mv electron/dist .
-          git add dist
-          git commit -m "deploy"
-          git tag ${{ github.event.inputs.tag }}
-          git push origin ${{ github.event.inputs.tag }}
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: echo
+    - run: npm install && npm run build
+    - run: git config --global user.email "igor.ribeiro98@outlook.com" && git config --global user.name "Automation"
+    - run: cd dist && echo "dominiodoigao" > CNAME && git init && git add -A && git commit -m 'deploy' && git push -f https://IgorRibeiro98:${{ secrets.GITHUB_TOKEN }}@github.com/IgorRibeiro98/landing_page_wrs.git master:gh-pages      
+ 
