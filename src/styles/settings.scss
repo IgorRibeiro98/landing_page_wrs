@@ -5,10 +5,9 @@
  */
 
 // https://vuetifyjs.com/features/sass-variables/`
-@use 'vuetify/settings' with ($body-font-family: 'sans-serif',
-);
+@use 'vuetify/settings' with ($body-font-family: 'Inter');
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 .v-window__controls {
     button {
@@ -197,9 +196,9 @@ input[type="number"] {
     pointer-events: none;
 }
 
-$font-size-h1: clamp(3em, 7vw, 50em) !important; // Novo valor ajustado
-$font-size-h2: clamp(2.5em, 5vw, 50em) !important; // Novo valor ajustado
-$font-size-h3: clamp(2em, 4vw, 50em) !important; // Novo valor ajustado
+$font-size-h1: clamp(3rem, 5vw, 12rem) !important; // Novo valor ajustado
+$font-size-h2: clamp(2.5rem, 5vw, 7rem) !important; // Novo valor ajustado
+$font-size-h3: clamp(2rem, 4vw, 7rem) !important; // Novo valor ajustado
 
 .text-h1 {
     font-size: $font-size-h1;
@@ -222,4 +221,29 @@ $font-size-h3: clamp(2em, 4vw, 50em) !important; // Novo valor ajustado
     font-weight: 500; // Ajuste conforme necessário
     line-height: 1.4; // Ajuste conforme necessário
     color: var(--v-primary-base); // Ajuste conforme necessário
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar:horizontal {
+    height: 6px;
+
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.0)
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--v-theme-secondary), 0.6);
+    border-radius: 6px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(var(--v-theme-secondary), 0.5)
 }
