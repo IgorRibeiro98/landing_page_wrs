@@ -4,6 +4,8 @@ on:
   push:
     branches: 
       - master
+env:
+  env_var: ${{ vars.WRS_ENV }}
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,7 +19,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: echo
+    - name: Create .env file
+      run: |
+        echo "VITE_APP_TITLE=${{ env.VITE_APP_TITLE }}" >> .env
     - run: npm install && npm run build
     - run: git config --global user.email "igor.ribeiro98@outlook.com" && git config --global user.name "Automation"
     - run: cd dist && echo "dominiodoigao" > CNAME && git init && git add -A && git commit -m 'deploy' && git push -f https://IgorRibeiro98:${{ secrets.GITHUB_TOKEN }}@github.com/IgorRibeiro98/landing_page_wrs.git master:gh-pages      
