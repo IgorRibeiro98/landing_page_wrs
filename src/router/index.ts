@@ -1,6 +1,7 @@
 import { setPageTitle } from '@/helpers/page';
 import guards from '@/router/guards';
 import { useSystemStore } from '@/stores/system';
+import { createWebHistory } from 'vue-router';
 import { RouteMeta, RouteRecordRaw as RouteRecord, createRouter, createWebHashHistory } from 'vue-router';
 
 export type Slugs = {
@@ -45,7 +46,7 @@ const routes: RouteRecordRaw[] = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 })
 
