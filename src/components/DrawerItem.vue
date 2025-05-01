@@ -1,7 +1,7 @@
 <template>
     <v-list-group v-if="item.items" :fluid="rail">
         <template #activator="{ props }">
-            <v-list-item :title="item.title" v-if="item.acl ? authorization.acl(item.acl) : true" v-bind="props"
+            <v-list-item :title="item.title" v-bind="props"
                 :active="checkActive(item.route.name)">
                 <v-tooltip v-if="rail" activator="parent" location="top" content-class="bg-nav-color">
                     <span>
@@ -23,7 +23,7 @@
         <DrawerItem :item="sub" v-for="sub in item.items" :rail="rail" />
     </v-list-group>
     <v-list-item :active="checkActive(item.route.name)" :title="item.title" @click="$router.push(item.route)"
-        value="home" v-else-if="item.acl ? authorization.acl(item.acl) : true" v-bind="$attrs">
+        value="home" v-bind="$attrs">
         <v-tooltip v-if="rail" activator="parent" location="top" content-class="bg-nav-color">
             <span>
                 {{ item.title }}
@@ -44,7 +44,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
-import authorization from "../plugins/authorization";
 
 interface Props {
     item: DrawerItem;

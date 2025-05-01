@@ -20,25 +20,6 @@ declare global {
     [key: string]: any;
   }
 
-  interface Tenant {
-    id: string;
-    name: string;
-    logo: string | File;
-    theme: ThemeDefinition;
-    subdomain: string;
-    updated_at: string;
-    created_at: string;
-  }
-
-  interface Role {
-    id: string,
-    name: string,
-    is_default: boolean,
-    scopes: Scope[] | string[]
-    level: number,
-    users?: any[]
-  }
-
   type FormComponent = 'VAutocomplete' | 'VTextField' | 'VTextarea' | 'VFileInput' | 'RichText' | 'VSwitch'
   type FnRule = (value: any) => string | boolean
   type PromiseRule = (value: any) => Promise<string | boolean | undefined>
@@ -100,41 +81,11 @@ declare global {
     to: RouteLocationRaw
   }
 
-  interface Scope {
-    id: string
-    name: string
-    slug: string
-  }
-
-  interface ScopeCategory {
-    id: string,
-    name: string,
-    scopes: Scope[] | string[]
-  }
-
-  interface User {
-    id: number
-    name: string
-    email: string
-    email_verified_at?: string | null
-    first_login?: boolean
-    tenant_id: string | null
-    created_at: string
-    updated_at: string
-    scopes_count: number
-    slugs: string[],
-    role_id?: number | null,
-    role: Omit<Role, 'level' | 'is_default', 'users'>
-    tenants?: Tenant[]
-    password?: string
-  }
-
   interface DrawerItem {
     icon: string
     title: string
     route: any,
     items?: DrawerItem[]
-    acl?: string,
     onlyMobile?: boolean
   }
 }

@@ -16,8 +16,7 @@
       <v-col cols="auto" class="ml-auto d-flex align-center">
         <v-btn
           v-if="
-            btnActionText &&
-            (btnActionAcl ? authorization.acl(btnActionAcl) : true)
+            btnActionText
           "
           :text="btnActionText"
           @click="emit('click:btnAction')"
@@ -29,7 +28,6 @@
           <v-menu v-if="enableAction">
             <template #activator="{ props }">
               <v-btn
-                v-if="authorization.acl(slugs)"
                 :icon="actionsIcon"
                 v-bind="props"
               ></v-btn>
@@ -39,7 +37,6 @@
                 <v-list-item
                   :to="action.to"
                   @click="action.click"
-                  v-if="authorization.acl(action.slug)"
                 >
                   <v-list-item-title>{{ action.title }}</v-list-item-title>
                 </v-list-item>
@@ -62,7 +59,6 @@
   </v-sheet>
 </template>
 <script lang="ts" setup>
-import authorization from "@/plugins/authorization";
 import { computed } from "vue";
 
 interface Emit {

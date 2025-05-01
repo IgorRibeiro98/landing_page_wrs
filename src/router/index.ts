@@ -3,15 +3,12 @@ import guards from '@/router/guards';
 import { useSystemStore } from '@/stores/system';
 import { RouteMeta, RouteRecordRaw as RouteRecord, createRouter, createWebHashHistory } from 'vue-router';
 
-export type AuthorizaGuard = 'acl';
-export type Guard = 'auth' | AuthorizaGuard;
 export type Slugs = {
   acl?: string;
 }
 
 export interface Meta extends RouteMeta {
   title?: string;
-  guards?: Guard[];
   slugs?: Slugs;
 }
 
@@ -61,15 +58,6 @@ router.beforeEach((to, from) => {
     setPageTitle(meta.title);
   }
 
-  if (meta.guards?.length) {
-    for (const guard of meta.guards) {
-      const result = guards[guard](to, from);
-      if (result === true) continue;
-
-      if (result === false) return { name: from.name || 'not-found', query: { guardError: guard} };
-      return result;
-    }
-  }
   return true;
 
 })

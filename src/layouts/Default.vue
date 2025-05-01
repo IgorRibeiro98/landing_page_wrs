@@ -1,10 +1,9 @@
 <template>
   <AppBar />
-  <NavigationDrawer :items="drawerItems" />
+  <NavigationDrawer :items="drawerItems" v-if="false"/>
   <v-main>
     <v-container fluid class="d-flex flex-column overflow-auto h-100">
       <Breadcrumb class="mb-4"></Breadcrumb>
-
       <div class="flex-grow-1">
         <RouterView />
       </div>

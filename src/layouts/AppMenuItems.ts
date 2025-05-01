@@ -16,27 +16,10 @@ export const appBarItems: {
 
 export const navigationDrawerItems = [
   {
-    icon: 'mdi-city-variant-outline',
-    title: 'Tenant',
-    acl: 'tenant.view',
+    icon: 'mdi-face-agent',
+    title: 'Igor bobão',
     route: {
-      name: 'tenant.view',
-    }
-  },
-  {
-    icon: 'mdi-shield-key-outline',
-    title: 'ACL',
-    acl: 'acl.view',
-    route: {
-      name: 'management.acl',
-    }
-  },
-  {
-    icon: 'mdi-account-supervisor',
-    title: 'Usuários',
-    acl: 'user.view',
-    route: {
-      name: 'management.users',
+      name: 'home',
     }
   },
 ]

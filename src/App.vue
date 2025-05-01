@@ -3,8 +3,6 @@
     <v-layout fill-height class="pa-0 ma-0 h-screen overflow-hidden">
       <router-view />
     </v-layout>
-    <Alert />
-    <FirstLogin />
   </v-app>
 </template>
 
@@ -12,13 +10,7 @@
 
 import { onMounted } from "vue";
 
-import FirstLogin from '@/components/FirstLogin.vue';
-
-
 onMounted(async () =>  {
-  // const route = useRouter()
-
-  // bootstrap(route)
 });
 
 </script>

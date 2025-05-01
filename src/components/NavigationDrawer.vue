@@ -12,18 +12,6 @@
          ></v-img>
         </template>
 
-        <v-list density="compact" nav v-if="!mobile">
-            <v-list-item @click="$router.push({ name: 'user.self' })">
-                <template #prepend>
-                    <Avatar :user="user" color="nav-color-accent" size="24" :show-tooltip="rail" />
-                </template>
-                <template #title>
-                    <span class="pl-4 font-weight-semi-bold">
-                        {{ user.name }}
-                    </span>
-                </template>
-            </v-list-item>
-        </v-list>
         <v-divider v-if="!mobile" />
         <v-btn v-if="!mobile" color="nav-color" variant="flat" size="28" class="toggle-rail-drawer"
             :icon="rail ? 'mdi-chevron-right' : 'mdi-chevron-left'" @click.stop="toggleRail"></v-btn>
@@ -37,24 +25,18 @@
 </template>
 <script setup lang="ts">
 import appLogo from "@/assets/logo.png";
-import Avatar from "@/components/Avatar.vue";
-import authorization from "@/plugins/authorization";
 import useSystemStore from "@/stores/system";
-import useAuthStore from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { computed, onBeforeMount, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useDisplay } from 'vuetify';
 import DrawerItem from "./DrawerItem.vue";
-import useTenantStore from "@/modules/tenant/store";
 
 interface Props {
     items: DrawerItem[];
 }
 
 defineProps<Props>();
-
-const tenantStore = useTenantStore();
 
 const rail = ref(true);
 const navDrawerLeftPosition = computed<string>(() => {
@@ -65,23 +47,13 @@ const navDrawerLeftPosition = computed<string>(() => {
 });
 
 
-const logoutItem = ref({
-    icon: "mdi-logout",
-    title: "Sair",
-    route: {
-        name: "auth.logout",
-    },
-});
-
 const logo = computed<any>(() => {
-  return tenantStore.tenant.logo ?? appLogo;
+  return appLogo;
 });
 
 const route = useRoute();
-const userStore = useAuthStore();
 const { drawer } = storeToRefs(useSystemStore());
 
-const { user } = storeToRefs(userStore);
 const { mobile } = useDisplay();
 
 function toggleRail() {
@@ -93,7 +65,7 @@ function mustRender(item: DrawerItem) {
     if (item.onlyMobile) {
         return mobile.value;
     }
-    return item.acl ? authorization.acl(item.acl) : true
+    return true;
 }
 
 watch(mobile, () => {

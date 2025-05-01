@@ -23,13 +23,10 @@
 import { computed, ref, onMounted, onUnmounted } from 'vue'
 
 import appLogo from "@/assets/logo.png";
-import useTenantStore from "@/modules/tenant/store";
 import { capitalizeFirstLetter } from "@/helpers/string";
 
-const tenantStore = useTenantStore();
-
 const logo = computed(() => {
-  return tenantStore.tenant.logo || appLogo;
+  return appLogo;
 });
 
 const hour = ref('')

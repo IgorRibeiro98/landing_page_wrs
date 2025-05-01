@@ -17,7 +17,6 @@
 </template>
 
 <script lang="ts" setup>
-import authorization from "@/plugins/authorization";
 import { computed } from "vue";
 
 interface Props<TArgs = any> {
@@ -40,18 +39,11 @@ const filteredItems = computed<MenuItem[]>(() => {
 
 const showMenu = computed(() => {
   const hasItems = filteredItems.value.length > 0;
-  if (props.acl) {
-    return authorization.acl(props.acl) && hasItems;
-  }
   return hasItems;
 });
 
 function handleShow(item: MenuItem) {
   const validations: boolean[] = [];
-
-  if (item.acl) {
-    validations.push(authorization.acl(item.acl));
-  }
 
   if (item.show) {
     validations.push(item.show);
