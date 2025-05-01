@@ -198,7 +198,7 @@ input[type="number"] {
 
 $font-size-h1: clamp(3rem, 5vw, 12rem) !important; // Novo valor ajustado
 $font-size-h2: clamp(2rem, 5vw, 7rem) !important; // Novo valor ajustado
-$font-size-h3: clamp(1.4rem, 2.5vw, 4rem) !important; // Novo valor ajustado
+$font-size-h3: clamp(2rem, 2vw, 6rem) !important; // Novo valor ajustado
 
 .text-h1 {
     font-size: $font-size-h1;

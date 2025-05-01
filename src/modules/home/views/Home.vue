@@ -72,7 +72,8 @@
           em
           algo mais sério. Ou talvez você tenha um projeto criativo para compartilhar com o mundo.
         </p>
-        <v-btn rounded class="mt-4">Entre em contato</v-btn>
+        <ContactButton></ContactButton>
+
       </div>
     </v-col>
   </v-row>
@@ -104,6 +105,24 @@
         </v-col>
       </v-row>
     </v-container>
+  </div>
+  <div class="bg-primary">
+    <v-row class="pa-4">
+      <v-col cols="12">
+        <h3 class="text-h3">
+          {{ contactData.title }}
+        </h3>
+        <p>
+          {{ contactData.street }}
+        </p>
+        <p>
+          {{ contactData.phone }} <br>
+          {{ contactData.email }}
+        </p>
+        <ContactButton></ContactButton>
+      </v-col>
+
+    </v-row>
   </div>
 </template>
 <script setup lang="ts">
@@ -138,6 +157,13 @@ const infoData = ref<InfoData[]>([
   },
 
 ]);
+
+const contactData = ref({
+  title: "Fale conosco",
+  street: "Rua dos bobos, 0, Diadema, SP 09929-222",
+  phone: "(11) 99999-9999",
+  email: "teste@teste.com.br"
+});
 
 const images = ref([
   'https://picsum.photos/800/300?random=1',
