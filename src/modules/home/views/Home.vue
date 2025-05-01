@@ -27,23 +27,35 @@
   <div class="bg-secondary">
     <v-row class="pa-4">
       <v-col cols="12">
-        <h2 class="text-h2">
+        <h2 class="text-h3">
           Nossos <br> serviços
         </h2>
       </v-col>
       <v-col cols="12" md="3" v-for="(item) in infoData">
         <InfoCard :info-data="item" />
       </v-col>
+      <v-col cols="12" class="mb-10">
+        <ContactButton />
+      </v-col>
     </v-row>
   </div>
   <div class="bg-white">
     <v-row class="pa-4">
       <v-col cols="12">
-        <h2 class="text-h2">
+        <h2 class="text-h3">
           Nossos <br> projetos
         </h2>
       </v-col>
-
+      <v-col cols="12">
+        <v-slide-group v-model="model" class="pa-4" center-active show-arrows>
+          <v-slide-group-item v-for="img in images" v-slot="{ isSelected, toggle }">
+            <v-card width="300" height="400" class="mx-10" @click="toggle">
+              <v-img :src="img" height="100%" width="100%" cover>
+              </v-img>
+            </v-card>
+          </v-slide-group-item>
+        </v-slide-group>
+      </v-col>
     </v-row>
   </div>
   <v-row justify="space-evenly" class="py-4">
@@ -73,12 +85,18 @@
           </h2>
         </v-col>
         <v-col cols="12" md="5">
-          <v-img src="https://picsum.photos/800/300?random=1" height="400" :width="mobile ? '100%': '70%'" cover class="mb-10"></v-img>
+          <v-img src="https://picsum.photos/800/300?random=1" height="400" :width="mobile ? '100%' : '70%'" cover
+            class="mb-10"></v-img>
           <p>
-            Tudo começa com uma ideia. Talvez você queira abrir um negócio. Talvez você queira transformar um passatempo em algo mais sério. Ou talvez você tenha um projeto criativo para divulgar ao mundo. Seja o que for, o modo de contar sua história on-line faz toda a diferença.
+            Tudo começa com uma ideia. Talvez você queira abrir um negócio. Talvez você queira transformar um passatempo
+            em algo mais sério. Ou talvez você tenha um projeto criativo para divulgar ao mundo. Seja o que for, o modo
+            de
+            contar sua história on-line faz toda a diferença.
           </p>
           <p>
-            Não se preocupe em parecer profissional. Seja você mesmo. Existem mais de 1,5 bilhão de sites, mas a sua história é o diferencial que separa você dos outros. Se você ler as palavras em voz alta e não se sentir identificado, isso significa que o texto ainda precisa ser trabalhado.
+            Não se preocupe em parecer profissional. Seja você mesmo. Existem mais de 1,5 bilhão de sites, mas a sua
+            história é o diferencial que separa você dos outros. Se você ler as palavras em voz alta e não se sentir
+            identificado, isso significa que o texto ainda precisa ser trabalhado.
           </p>
         </v-col>
         <v-col cols="12" md="5">
@@ -92,7 +110,10 @@
 import { ref, computed } from "vue";
 import { useDisplay } from "vuetify";
 import InfoCard from "@/modules/home/components/InfoCard.vue";
+import ContactButton from "@/components/ContactButton.vue";
 const { mobile } = useDisplay();
+
+const model = ref(null);
 
 const infoData = ref<InfoData[]>([
   {
@@ -117,7 +138,16 @@ const infoData = ref<InfoData[]>([
   },
 
 ]);
-</script>
-<style>
 
-</style>
+const images = ref([
+  'https://picsum.photos/800/300?random=1',
+  'https://picsum.photos/800/300?random=2',
+  'https://picsum.photos/800/300?random=3',
+  'https://picsum.photos/800/300?random=4',
+  'https://picsum.photos/800/300?random=5',
+  'https://picsum.photos/800/300?random=6',
+  'https://picsum.photos/800/300?random=7',
+  'https://picsum.photos/800/300?random=8',
+])
+</script>
+<style></style>

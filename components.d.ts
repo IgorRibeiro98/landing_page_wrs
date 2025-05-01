@@ -12,6 +12,7 @@ declare module 'vue' {
     Avatar: typeof import('./src/components/Avatar.vue')['default']
     BaseLayout: typeof import('./src/components/BaseLayout.vue')['default']
     BreadCrumb: typeof import('./src/components/BreadCrumb.vue')['default']
+    ContactButton: typeof import('./src/components/ContactButton.vue')['default']
     Dialog: typeof import('./src/components/Dialog.vue')['default']
     DrawerItem: typeof import('./src/components/DrawerItem.vue')['default']
     FirstLogin: typeof import('./src/components/FirstLogin.vue')['default']

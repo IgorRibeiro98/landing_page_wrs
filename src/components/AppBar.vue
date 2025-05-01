@@ -1,22 +1,11 @@
 <template>
   <v-app-bar color="nav-color" elevation="0" order="1">
     <template #prepend>
-      <v-btn
-        icon="mdi-menu"
-        density="comfortable"
-        v-if="$vuetify.display.mobile"
-        @click="drawer = true"
-      ></v-btn>
+      <v-btn icon="mdi-menu" density="comfortable" v-if="$vuetify.display.mobile" @click="drawer = true"></v-btn>
       <v-slide-group show-arrows v-if="!$vuetify.display.mobile">
-        <v-slide-group-item
-          v-for="item in appBarItems"
-          :value="item.route.name"
-        >
-          <v-btn
-            class="text-regular mx-1"
-            @click="$router.push(item.route)"
-            :active="$router.currentRoute.value.name == item.route.name"
-          >
+        <v-slide-group-item v-for="item in appBarItems" :value="item.route.name">
+          <v-btn class="text-regular mx-1" @click="$router.push(item.route)"
+            :active="$router.currentRoute.value.name == item.route.name">
             <v-icon class="mr-1">{{ item.icon }}</v-icon>
             <span v-if="!$vuetify.display.mobile">{{ item.title }}</span>
           </v-btn>
@@ -24,16 +13,11 @@
       </v-slide-group>
     </template>
     <template #append>
+      <ContactButton class="mr-6" />
       <div class="d-flex align-center ga-4">
         <div class="d-flex align-center ga-4" v-if="!$vuetify.display.mobile">
-          <v-btn
-            v-for="action in appBarActions"
-            v-show="action.onlyMobile ? !action.onlyMobile : true"
-            @click="action.action"
-            variant="text"
-            :icon="action.icon"
-            density="comfortable"
-          ></v-btn>
+          <v-btn v-for="action in appBarActions" v-show="action.onlyMobile ? !action.onlyMobile : true"
+            @click="action.action" variant="text" :icon="action.icon" density="comfortable"></v-btn>
         </div>
       </div>
     </template>
@@ -47,6 +31,7 @@ import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useTheme } from "vuetify";
+import ContactButton from "@/components/ContactButton.vue";
 
 const { drawer } = storeToRefs(useSystemStore());
 const router = useRouter();
@@ -78,11 +63,11 @@ interface AppBarActions {
 }
 
 const appBarActions = computed<AppBarActions[]>(() => [
-  {
-    icon: themeIcon.value,
-    title: "Alterar tema",
-    action: toggleTheme,
-  },
+  // {
+  //   icon: themeIcon.value,
+  //   title: "Alterar tema",
+  //   action: toggleTheme,
+  // },
 ]);
 </script>
 <style scoped lang="scss"></style>
