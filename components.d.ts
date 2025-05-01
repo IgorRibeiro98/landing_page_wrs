@@ -9,13 +9,11 @@ declare module 'vue' {
   export interface GlobalComponents {
     Alert: typeof import('./src/components/Alert.vue')['default']
     AppBar: typeof import('./src/components/AppBar.vue')['default']
-    Avatar: typeof import('./src/components/Avatar.vue')['default']
     BaseLayout: typeof import('./src/components/BaseLayout.vue')['default']
     BreadCrumb: typeof import('./src/components/BreadCrumb.vue')['default']
     ContactButton: typeof import('./src/components/ContactButton.vue')['default']
     Dialog: typeof import('./src/components/Dialog.vue')['default']
     DrawerItem: typeof import('./src/components/DrawerItem.vue')['default']
-    FirstLogin: typeof import('./src/components/FirstLogin.vue')['default']
     Form: typeof import('./src/components/FormBuilder/Form.vue')['default']
     IFrameVue: typeof import('./src/components/IFrameVue.vue')['default']
     LayoutView: typeof import('./src/components/LayoutView.vue')['default']

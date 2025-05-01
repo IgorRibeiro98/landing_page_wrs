@@ -118,9 +118,9 @@
     opacity: 0;
 }
 
-$font-size-h1: clamp(1.2em, 2.5vw, 1.6em) !important;
-$font-size-h2: clamp(1.1em, 2.5vw, 1.4em) !important;
-$font-size: clamp(1.3rem, 1.7vw, 2.7rem) !important;
+// $font-size-h1: clamp(1.2em, 2.5vw, 1.6em) !important;
+// $font-size-h2: clamp(1.1em, 2.5vw, 1.4em) !important;
+// $font-size: clamp(1.3rem, 1.7vw, 2.7rem) !important;
 
 .link {
     text-decoration: underline;
@@ -197,7 +197,7 @@ input[type="number"] {
 }
 
 $font-size-h1: clamp(3rem, 5vw, 12rem) !important; // Novo valor ajustado
-$font-size-h2: clamp(2rem, 5vw, 7rem) !important; // Novo valor ajustado
+$font-size-h2: clamp(2rem, 3vw, 7rem) !important; // Novo valor ajustado
 $font-size-h3: clamp(2rem, 2vw, 6rem) !important; // Novo valor ajustado
 
 .text-h1 {
@@ -210,7 +210,7 @@ $font-size-h3: clamp(2rem, 2vw, 6rem) !important; // Novo valor ajustado
 
 .text-h2 {
     font-size: $font-size-h2;
-    font-weight: 600; // Ajuste conforme necessário
+    font-weight: 700; // Ajuste conforme necessário
     line-height: 1.3; // Ajuste conforme necessário
     color: var(--v-primary-base); // Ajuste conforme necessário
     line-height: 90%;
@@ -218,7 +218,7 @@ $font-size-h3: clamp(2rem, 2vw, 6rem) !important; // Novo valor ajustado
 
 .text-h3 {
     font-size: $font-size-h3;
-    font-weight: 600; // Ajuste conforme necessário
+    font-weight: 700; // Ajuste conforme necessário
     color: var(--v-primary-base); // Ajuste conforme necessário
     margin-bottom: 1rem; // Ajuste conforme necessário
 }

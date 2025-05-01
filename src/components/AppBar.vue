@@ -1,17 +1,10 @@
 <template>
   <v-app-bar color="nav-color" elevation="0" order="1">
     <template #prepend>
-      <v-btn icon="mdi-menu" density="comfortable" v-if="$vuetify.display.mobile" @click="drawer = true"></v-btn>
-      <v-slide-group show-arrows v-if="!$vuetify.display.mobile">
-        <v-slide-group-item v-for="item in appBarItems" :value="item.route.name">
-          <v-btn class="text-regular mx-1" @click="$router.push(item.route)"
-            :active="$router.currentRoute.value.name == item.route.name">
-            <v-icon class="mr-1">{{ item.icon }}</v-icon>
-            <span v-if="!$vuetify.display.mobile">{{ item.title }}</span>
-          </v-btn>
-        </v-slide-group-item>
-      </v-slide-group>
+      <v-img :src="logo" width="40" height="40"></v-img>
+      <span class="text-overline font-weight-bold" v-if="!mobile">WRS Serviços de engenharia</span>
     </template>
+    <span class="text-overline font-weight-bold" v-if="mobile">WRS Serviços de engenharia</span>
     <template #append>
       <ContactButton class="mr-6" />
       <div class="d-flex align-center ga-4">
@@ -24,15 +17,17 @@
   </v-app-bar>
 </template>
 <script setup lang="ts">
-import appLogo from "@/assets/logo.png";
+import appLogo from "@/assets/LOGO-WRS.png";
 import { appBarItems } from "@/layouts/AppMenuItems";
 import useSystemStore from "@/stores/system";
 import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
-import { useTheme } from "vuetify";
+import { useTheme, useDisplay } from "vuetify";
 import ContactButton from "@/components/ContactButton.vue";
 
+
+const { mobile } = useDisplay();
 const { drawer } = storeToRefs(useSystemStore());
 const router = useRouter();
 const theme = useTheme();

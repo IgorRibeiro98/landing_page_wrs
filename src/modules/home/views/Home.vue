@@ -47,7 +47,7 @@
         </h2>
       </v-col>
       <v-col cols="12">
-        <v-slide-group v-model="model" class="pa-4" center-active show-arrows>
+        <v-slide-group v-model="model" center-active show-arrows="always">
           <v-slide-group-item v-for="img in images" v-slot="{ isSelected, toggle }">
             <v-card width="300" height="400" class="mx-10" @click="toggle">
               <v-img :src="img" height="100%" width="100%" cover>
